@@ -1,0 +1,49 @@
+{
+    "env": {
+        "node": true,
+        "commonjs": true,
+        "es2021": true,
+        "jest":true
+    },
+    "extends": "standard",
+    "overrides": [],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "plugins": [
+        "standard",
+        "import",
+        "n",
+        "promise"
+    ],
+    "rules": {
+        "max-len": [
+            "error",
+            {
+                "code": 150,
+                "comments": 250
+            }
+        ],
+        "import/no-unresolved": "error",
+        "n/no-unsupported-features/es-builtins": "error",
+        "n/no-unsupported-features/es-syntax": "error",
+        "promise/catch-or-return": "error",
+        "indent": [
+            "error",
+            2
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+
+}

@@ -1,0 +1,13 @@
+const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  ACCEPTED: 202,
+  INVALID: 400,
+  NO_AUTH: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  CONFLICT: 409,
+  SERVER_ERROR: 500
+};
+
+module.exports = { HTTP_STATUS };
