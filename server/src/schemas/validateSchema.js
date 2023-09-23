@@ -1,4 +1,4 @@
-const { HTTP_STATUS } = require('../utils/httpCodes');
+const { HTTP_STATUS } = require('../constants/httpCodes');
 
 const validateSchema = (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body);

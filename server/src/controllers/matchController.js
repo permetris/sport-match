@@ -4,7 +4,7 @@ const Result = require('../models/Result');
 const mongoose = require('mongoose');
 const { ErrorMessages } = require('../errors/ErrorMessages');
 const { NotFoundError } = require('../errors/Errors');
-const { HTTP_STATUS } = require('../utils/httpCodes');
+const { HTTP_STATUS } = require('../constants/httpCodes');
 
 const viewAllMacthes = async (req, res) => {
   await getAll(Match, req, res);

@@ -3,7 +3,7 @@ const User = require('../models/User');
 const Reservation = require('../models/Reservation');
 const { ErrorMessages } = require('../errors/ErrorMessages');
 const { NotFoundError } = require('../errors/Errors');
-const { HTTP_STATUS } = require('../utils/httpCodes.js');
+const { HTTP_STATUS } = require('../constants/httpCodes.js');
 const { successMessages } = require('../utils/successMessages');
 
 const registerUser = async (req, res) => {

@@ -1,6 +1,6 @@
 const { ErrorMessages } = require('../errors/ErrorMessages');
 const { NotFoundError } = require('../errors/Errors');
-const { HTTP_STATUS } = require('../utils/httpCodes');
+const { HTTP_STATUS } = require('../constants/httpCodes');
 
 const exclude = '-updatedAt -createdAt -password -role';
 
