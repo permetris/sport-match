@@ -1,7 +1,7 @@
 const { getAll, deleteOne, createOne, updateOne } = require('./crudController');
 const mongoose = require('mongoose');
 const Reservation = require('../models/Reservation');
-const { ErrorMessages } = require('../errors/errorMessages');
+const { ErrorMessages } = require('../errors/ErrorMessages');
 const { NotFoundError, AuthorizationError } = require('../errors/Errors');
 const { HTTP_STATUS } = require('../utils/httpCodes');
 
