@@ -50,7 +50,7 @@ const userSchema = mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['ADMIN', 'USER']
+    enum: ['ADMIN', 'USER','FIELD_ADMIN']
   },
   isDeleted: {
     type: Boolean,

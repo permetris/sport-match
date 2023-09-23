@@ -3,6 +3,16 @@ const ObjectId = mongoose.Types.ObjectId;
 
 module.exports = [
   {
+    _id: new ObjectId('63eb6abf9792211234cd6a75'),
+    username: 'fadmin1',
+    name: 'Field',
+    surname: 'Admin',
+    email: 'field@admin.com',
+    password: 'password',
+    phone: '+385911111111',
+    role: 'FIELD_ADMIN'
+  },
+  {
     _id: new ObjectId('63eb6abf9792291234cd6a75'),
     username: 'jops12',
     name: 'Josip',
