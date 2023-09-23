@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const { callbackErrorHandler } = require('./errorMiddlewareHandler');
 const { ErrorMessages } = require('../errors/ErrorMessages');
 const { AuthenticationError, AuthorizationError } = require('../errors/Errors');
+const { ROLES } = require("../constants/roles");
 
 const isLoggedIn = callbackErrorHandler(async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -16,7 +17,12 @@ const isLoggedIn = callbackErrorHandler(async (req, res, next) => {
 });
 
 const isAdmin = callbackErrorHandler(async (req, res, next) => {
-  if (req.user.role !== 'ADMIN') throw new AuthorizationError(ErrorMessages.unauthorized);
+  if (req.user.role !== ROLES.ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
+
+  next();
+});
+const isFieldAdmin = callbackErrorHandler(async (req, res, next) => {
+  if (req.user.role !== ROLES.FILED_ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
 
   next();
 });
