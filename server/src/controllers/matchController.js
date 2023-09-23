@@ -2,7 +2,7 @@ const { getAll, deleteOne, updateOne } = require('./crudController');
 const Match = require('../models/Match');
 const Result = require('../models/Result');
 const mongoose = require('mongoose');
-const { ErrorMessages } = require('../errors/errorMessages');
+const { ErrorMessages } = require('../errors/ErrorMessages');
 const { NotFoundError } = require('../errors/Errors');
 const { HTTP_STATUS } = require('../utils/httpCodes');
 
