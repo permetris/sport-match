@@ -15,7 +15,6 @@ const isLoggedIn = callbackErrorHandler(async (req, res, next) => {
 
   return next();
 });
-
 const isAdmin = callbackErrorHandler(async (req, res, next) => {
   if (req.user.role !== ROLES.ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
 
@@ -26,7 +25,11 @@ const isFieldAdmin = callbackErrorHandler(async (req, res, next) => {
 
   next();
 });
+const isAnyAdmin = callbackErrorHandler(async (req,res, next) => {
+  if (req.user.role !== ROLES.FILED_ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
 
+  next();
+})
 const isProfileOwner = callbackErrorHandler(async (req, res, next) => {
   const id = req.params.playerId ? req.params.playerId : req.params.id;
 
