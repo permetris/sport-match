@@ -10,7 +10,38 @@ const createReservation = async (req, res) => {
 };
 
 const viewAllReservations = async (req, res) => {
-  await getAll(Reservation, req, res);
+  const foundReservations = await Reservation.find({}, null, { sort: { time: 1 } }).populate('field')
+    .populate('registeredPlayers', 'username')
+    .populate({
+      path: 'match',
+      populate: {
+        path: 'whiteTeam',
+        select: 'players ',
+        populate: {
+          path: 'players',
+          select: 'username'
+        }
+      }
+    })
+    .populate({
+      path: 'match',
+      populate: {
+        path: 'blackTeam',
+        select: 'players',
+        populate: {
+          path: 'players',
+          select: 'username'
+        }
+      }
+    })
+    .populate({
+      path: 'match',
+      populate: {
+        path: 'result'
+      }
+    }); ;
+  console.log(foundReservations);
+  return res.status(HTTP_STATUS.OK).json(foundReservations);
 };
 
 const viewSingleReservation = async (req, res) => {

@@ -14,7 +14,6 @@ export const RegForm = (props) => {
                 <div className='mb-3'>
                   <Form onSubmit={props.handleSubmit}>
                     <InputGroup className='mb-3'>
-                      <InputGroup.Text>First and last name</InputGroup.Text>
                       <Form.Control
                         aria-label='name'
                         type='text'
@@ -28,6 +27,7 @@ export const RegForm = (props) => {
                         onChange={props.handleChange}
                       />
                       <Form.Control
+                        height={100}
                         aria-label='surname'
                         type='text'
                         required

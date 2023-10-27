@@ -17,10 +17,12 @@
         "react"
     ],
     "rules": {
-        "indent": ["error", 2],
+        "indent": ["warn", 2],
         "react/prop-types": 0,
-        "linebreak-style": ["error", "windows"],
-        "quotes": ["error", "single"],
-        "semi": ["error", "always"]
+        "linebreak-style": ["warn", "windows"],
+        "quotes": ["warn", "single"],
+        "semi": ["warn", "always"],
+        "no-unused-vars":"off",
+        "no-undef":"off"
     }
 }

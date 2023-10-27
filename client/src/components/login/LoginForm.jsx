@@ -23,13 +23,11 @@ export const LoginForm = (props) => {
                         onChange={props.handleChange}
                         placeholder='Enter email' />
                     </FloatingLabel>
-
                     <FloatingLabel
                       label='Password'
                       className='mb-3'
                       controlId='formBasicPassword'
                     >
-
                       <Form.Control
                         type='password'
                         required

@@ -1,4 +1,9 @@
 body {
     background-image: url('./background/background.jpg');
-    background-size: 100%;
+    background-size: cover;
+    background-position: center;
+    
+  }
+  #root {
+    overflow: hidden;
   }
