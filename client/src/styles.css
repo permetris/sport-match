@@ -2,8 +2,13 @@ body {
     background-image: url('./background/background.jpg');
     background-size: cover;
     background-position: center;
+    height: 100%;
     
-  }
-  #root {
-    overflow: hidden;
-  }
+}
+#root {
+  overflow: hidden;
+  height: 100%;
+}
+html{
+  height: 100%;
+}
