@@ -14,7 +14,7 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react", "unused-imports"
     ],
     "rules": {
         "indent": ["warn", 2],
@@ -23,6 +23,7 @@
         "quotes": ["warn", "single"],
         "semi": ["warn", "always"],
         "no-unused-vars":"off",
-        "no-undef":"off"
+        "no-undef":"off",
+        "unused-imports/no-unused-imports": "error"
     }
 }
