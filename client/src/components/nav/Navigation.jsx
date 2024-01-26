@@ -6,6 +6,8 @@ import { toastSuccess, toastError } from '../../hooks/useToastify';
 import { Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { isLoggedIn } from '../../utils/isLoggedIn';
+import { successMessages } from '../../utils/responseMessages';
+
 const sx = {
   marginRight: 1
 };
@@ -23,7 +25,7 @@ const Navigation = () => {
     }
   };
   return (
-    <AppBar position="fixed" sx={{ paddingLeft: '27%', paddingRight: '27%' }}>
+    <AppBar position="fixed" sx={{ paddingLeft: '15%', paddingRight: '15%' }}>
       <Toolbar >
         <Typography variant="h6" style={{ flexGrow: 1 }}>
           Sport Scheduler

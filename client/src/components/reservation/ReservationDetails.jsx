@@ -59,8 +59,8 @@ export const ReservationDetails = () => {
                 <strong>Registered players usernames:</strong>{' '}
                 {reservation.registeredPlayers?.map((player) => player.username).join(', ')}
               </p>
-              { !isPlayerRegistered && <Button className='mt-3 mb-3 me-3' onClick={handleAddPlayer}>Play in this match</Button>}
-              { isPlayerRegistered && <Button className='mt-3 mb-3' onClick={handleRemovePlayer}>Withdraw</Button>}
+              {!isPlayerRegistered && <Button className='mt-3 mb-3 me-3' onClick={handleAddPlayer}>Play in this match</Button>}
+              {isPlayerRegistered && <Button className='mt-3 mb-3' onClick={handleRemovePlayer}>Withdraw</Button>}
             </div>
           )}
         </Card.Body>

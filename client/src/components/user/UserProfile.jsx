@@ -5,6 +5,7 @@ import { httpGetUser, httpUpdateUser } from '../../hooks/requests';
 import { toastError, toastSuccess } from '../../hooks/useToastify';
 import { successMessages } from '../../utils/responseMessages';
 import { UserInfo } from './UserInfo';
+import { isLoggedIn } from '../../utils/isLoggedIn';
 
 export const UserProfile = () => {
   const userId = localStorage.getItem('userid');
@@ -29,7 +30,7 @@ export const UserProfile = () => {
         setUser(userResponse.data.data);
       } catch (err) {
         setIsLoading(false);
-        useToastifyError(err);
+        toastError(err);
       }
     };
     getData();
@@ -37,6 +38,9 @@ export const UserProfile = () => {
       // cleanup
     };
   }, []);
+  if (!isLoggedIn) {
+    return <h1>Not logged in!</h1>;
+  }
 
   return <Container className='align-items-center justify-content-center'>
     {!isLoading && <UserInfo user={user} editUser={editUser} />}

@@ -1,8 +1,13 @@
+/* eslint-disable indent */
 import React from 'react';
 import { Card, CardContent, Typography, CardActions, Button, CardMedia } from '@mui/material';
+import { AccessTimeFilledOutlined, LocationOn } from '@mui/icons-material';
+import PeopleIcon from '@mui/icons-material/People';
+import PlaceholderImage from '../../../images/placeholder.png';
+import { isLoggedIn } from '../../../utils/isLoggedIn';
 
 const ReservationCard = ({ reservation }) => {
-    return <Card key={reservation.id} style={{
+    return <Card style={{
         flex: 1, flexBasis: 'auto', maxWidth: '40%', minWidth: '25%'
     }} >
         <CardMedia
@@ -25,7 +30,7 @@ const ReservationCard = ({ reservation }) => {
             </Typography>
         </CardContent>
         <CardActions>
-            <Button variant='contained'>Enroll</Button>
+            {isLoggedIn() && <Button variant='contained'>Enroll</Button>}
             <Button variant='outlined' color='secondary' size="medium">Details</Button>
         </CardActions>
     </Card>;
