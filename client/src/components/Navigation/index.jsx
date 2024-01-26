@@ -29,7 +29,7 @@ const Navigation = () => {
     <AppBar position="fixed" sx={{ paddingLeft: '15%', paddingRight: '15%' }}>
       <Toolbar >
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Sport Scheduler
+          <Link sx={sx} color="inherit" underline='hover' href='/'>Sport Scheduler</Link>
         </Typography>
 
         <Link href='/'>Home</Link>

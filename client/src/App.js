@@ -13,7 +13,6 @@ import { AddResult } from './components/AddResult/AddResult';
 import { Match } from './components/Match/Match';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles.css';
-import { ReservationDetails } from './components/Reservation/ReservationDetails';
 
 const AppLayout = () => {
   return (
@@ -60,10 +59,6 @@ const router = createBrowserRouter([
       {
         path: 'history',
         element: <UserHistory />
-      },
-      {
-        path: 'reservation/:id',
-        element: <ReservationDetails />
       },
       {
         path: 'match/:id/result',

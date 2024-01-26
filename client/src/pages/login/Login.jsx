@@ -20,6 +20,7 @@ export const Login = () => {
       localStorage.setItem('token', response.headers.authorization);
       localStorage.setItem('role', response.headers.role);
       localStorage.setItem('userid', response.headers.userid);
+      localStorage.setItem('username', response.headers.username);
 
       navigate('/');
     } catch (err) {
