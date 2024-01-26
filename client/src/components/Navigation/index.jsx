@@ -20,6 +20,7 @@ const Navigation = () => {
       localStorage.clear();
       toastSuccess(successMessages.userLoggedOut);
       navigate('/');
+      window.location.reload();
     } catch (err) {
       toastError(err);
     }

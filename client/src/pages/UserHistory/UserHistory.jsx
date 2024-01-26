@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import { MatchItem } from '../../match/MatchItem';
+import { MatchItem } from '../../Match/MatchItem';
 import { httpGetUserHistory } from '../../../hooks/requests';
 import { toastError } from '../../../hooks/useToastify';
 
