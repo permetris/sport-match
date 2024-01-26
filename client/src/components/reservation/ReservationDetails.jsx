@@ -2,7 +2,7 @@ import { useEffect, React, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Card, Button } from 'react-bootstrap';
 import { isLoggedIn } from '../../utils/isLoggedIn';
-import { useToastifyError } from '../../hooks/useToastify';
+import { toastError } from '../../hooks/useToastify';
 import { httpGetReservation } from '../../hooks/requests';
 import { handleAddPlayerClick } from '../../hooks/addPlayer';
 import { handleRemovePlayerClick } from '../../hooks/removePlayer';
@@ -19,7 +19,7 @@ export const ReservationDetails = () => {
         const { data } = await httpGetReservation(id);
         setReservation(data);
       } catch (err) {
-        useToastifyError(err);
+        toastError(err);
       }
     };
     fetchData();

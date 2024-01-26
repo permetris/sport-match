@@ -4,7 +4,7 @@ import { RegForm } from './RegForm';
 import { successMessages } from '../../utils/responseMessages';
 import axios from 'axios';
 import { isLoggedIn } from '../../utils/isLoggedIn';
-import { useToastifyError, useToastifySuccess } from '../../hooks/useToastify';
+import { toastError, toastSuccess } from '../../hooks/useToastify';
 
 export const Registration = () => {
   const navigate = useNavigate();
@@ -28,9 +28,9 @@ export const Registration = () => {
       const request = { ...formData };
       await axios.post(`${process.env.REACT_APP_SERVER_URL}/user`, request);
       navigate('/login');
-      useToastifySuccess(successMessages.userRegistered);
+      toastSuccess(successMessages.userRegistered);
     } catch (err) {
-      useToastifyError(err);
+      toastError(err);
     }
   };
 
@@ -46,7 +46,7 @@ export const Registration = () => {
     </>;
   }
   return (
-    <RegForm formData={formData} handleSubmit={handleSubmit} handleChange={handleChange } />
+    <RegForm formData={formData} handleSubmit={handleSubmit} handleChange={handleChange} />
   );
 };
 

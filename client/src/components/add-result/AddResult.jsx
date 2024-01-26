@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AddResultForm } from './AddResultForm';
 import axios from 'axios';
 import { isLoggedIn } from '../../utils/isLoggedIn';
-import { useToastifyError, useToastifySuccess } from '../../hooks/useToastify';
+import { toastError, toastSuccess } from '../../hooks/useToastify';
 
 export const AddResult = () => {
   const navigate = useNavigate();
@@ -27,10 +27,10 @@ export const AddResult = () => {
           Authorization: token
         }
       });
-      useToastifySuccess('Match results successfully added!');
+      toastSuccess('Match results successfully added!');
       navigate(`/match/${id}`);
     } catch (err) {
-      useToastifyError(err);
+      toastError(err);
     }
   };
 
@@ -46,7 +46,7 @@ export const AddResult = () => {
     </>;
   }
   return (
-    <AddResultForm formData={formData} handleSubmit={handleSubmit} handleChange={handleChange } />
+    <AddResultForm formData={formData} handleSubmit={handleSubmit} handleChange={handleChange} />
   );
 };
 

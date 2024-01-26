@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { MatchItem } from '../../match/MatchItem';
 import { httpGetUserHistory } from '../../../hooks/requests';
-import { useToastifyError } from '../../../hooks/useToastify';
+import { toastError } from '../../../hooks/useToastify';
 
 export const UserHistory = () => {
   const userId = localStorage.getItem('userid');
@@ -15,7 +15,7 @@ export const UserHistory = () => {
 
         setHistory(data);
       } catch (e) {
-        useToastifyError(e);
+        toastError(e);
       }
     };
     getData();

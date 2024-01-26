@@ -3,7 +3,7 @@ import { useState, React } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { LoginForm } from './LoginForm';
-import { useToastifyError } from '../../hooks/useToastify';
+import { toastError } from '../../hooks/useToastify';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export const Login = () => {
 
       navigate('/');
     } catch (err) {
-      useToastifyError(err);
+      toastError(err);
     }
   };
 

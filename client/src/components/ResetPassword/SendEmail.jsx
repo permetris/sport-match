@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { EmailForm } from './EmailForm';
-import { useToastifyError } from '../../hooks/useToastify';
+import { toastError } from '../../hooks/useToastify';
 import axios from 'axios';
 
 export const SendEmail = () => {
@@ -19,7 +19,7 @@ export const SendEmail = () => {
       setData(response.data);
       e.target.reset();
     } catch (err) {
-      useToastifyError(err);
+      toastError(err);
     }
   };
 

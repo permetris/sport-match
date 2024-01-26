@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useToastifySuccess, useToastifyError } from '../../src/hooks/useToastify';
+import { toastSuccess, toastError } from '../../src/hooks/useToastify';
 
 export const handleRemovePlayerClick = async (id, setPlayerRegistered) => {
   const modifyData = async () => {
@@ -14,9 +14,9 @@ export const handleRemovePlayerClick = async (id, setPlayerRegistered) => {
       if (onePlayerRemove) {
         setPlayerRegistered(!onePlayerRemove);
       }
-      useToastifySuccess('Successfully removed from reservation');
+      toastSuccess('Successfully removed from reservation');
     } catch (err) {
-      useToastifyError(err);
+      toastError(err);
     }
   };
   modifyData();

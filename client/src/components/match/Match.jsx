@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { MatchItem } from './MatchItem';
-import { useToastifyError } from '../../hooks/useToastify';
+import { toastError } from '../../hooks/useToastify';
 import { httpGetMatch } from '../../hooks/requests';
 import { useLocation } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ export const Match = () => {
         const { data } = await httpGetMatch(id);
         setMatch(data.data);
       } catch (e) {
-        useToastifyError(e);
+        toastError(e);
       }
     };
     getData();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useToastifyError, useToastifySuccess, useToastifyWarning } from '../../hooks/useToastify';
+import { toastError, toastSuccess, toastWarning } from '../../hooks/useToastify';
 import { ConfirmPasswordForm } from './ResetPasswordModal/ConfirmPasswordForm';
 import { warningMessages, successMessages } from '../../utils/responseMessages';
 import { isLoggedIn } from '../../utils/isLoggedIn';
@@ -18,18 +18,18 @@ export const ResetPassword = (props) => {
 
   const modalSubmitHandler = async () => {
     if (data.newPassword !== data.confirmPassword) {
-      return useToastifyWarning(warningMessages.passwordsDoNotMatch);
+      return toastWarning(warningMessages.passwordsDoNotMatch);
     }
     try {
       await httpPasswordChange({
         password: data.password,
         newPassword: data.newPassword
       }, user);
-      useToastifySuccess(successMessages.passwordUpdated);
+      toastSuccess(successMessages.passwordUpdated);
       localStorage.clear();
       navigate('/login');
     } catch (err) {
-      useToastifyError(err);
+      toastError(err);
     };
   };
   return (
@@ -41,7 +41,7 @@ export const ResetPassword = (props) => {
     >
       <Modal.Header >
         <Modal.Title id='contained-modal-title-vcenter'>
-            Reset password
+          Reset password
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

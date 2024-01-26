@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useToastifySuccess, useToastifyError } from '../../src/hooks/useToastify';
+import { toastSuccess, toastError } from '../../src/hooks/useToastify';
 
 export const handleAddPlayerClick = async (id, setPlayerRegistered) => {
   const modifyData = async () => {
@@ -12,9 +12,9 @@ export const handleAddPlayerClick = async (id, setPlayerRegistered) => {
         }
       });
       setPlayerRegistered(onePlayerAdd);
-      useToastifySuccess('Successfully added to reservation');
+      toastSuccess('Successfully added to reservation');
     } catch (err) {
-      useToastifyError(err);
+      toastError(err);
     }
   };
   modifyData();
