@@ -12,19 +12,20 @@ const cronSchedule = require('./schedules/reservationSchedules');
 
 const app = express();
 const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'access.log'),
-  { flags: 'a' }
+    path.join(__dirname, 'access.log'),
+    { flags: 'a' }
 );
 
 if (process.env.NODE_ENV !== 'development') {
-  cronSchedule.initScheduledJobs();
+    cronSchedule.initScheduledJobs();
 }
 
 app.use(
-  cors({
-    origin: process.env.BASE_URL
-  })
+    cors({
+        origin: process.env.BASE_URL
+    })
 );
+
 app.use(morgan('combined', { stream: accessLogStream }));
 app.use(express.json());
 app.use('/', routes);

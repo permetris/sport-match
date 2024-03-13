@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import { MatchItem } from '../../Match/MatchItem';
-import { httpGetUserHistory } from '../../../hooks/requests';
-import { toastError } from '../../../hooks/useToastify';
+import { MatchItem } from '../../components/Match/MatchItem';
+import { httpGetUserHistory } from '../../hooks/requests';
+import { toastError } from '../../hooks/useToastify';
 
 export const UserHistory = () => {
   const userId = localStorage.getItem('userid');

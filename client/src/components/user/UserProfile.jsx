@@ -1,16 +1,16 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Spinner, Container, Row } from 'react-bootstrap';
 import { httpGetUser, httpUpdateUser } from '../../hooks/requests';
 import { toastError, toastSuccess } from '../../hooks/useToastify';
 import { successMessages } from '../../utils/responseMessages';
 import { UserInfo } from './UserInfo';
 import { isLoggedIn } from '../../utils/isLoggedIn';
+import { useGetUserQuery } from '../../api/slice';
 
 export const UserProfile = () => {
   const userId = localStorage.getItem('userid');
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState({});
+
+  const { data: user, isLoading } = useGetUserQuery();
 
   const editUser = async (editedUser) => {
     try {
