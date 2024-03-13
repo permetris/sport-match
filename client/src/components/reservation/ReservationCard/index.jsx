@@ -6,10 +6,8 @@ import PeopleIcon from '@mui/icons-material/People';
 import PlaceholderImage from '../../../images/placeholder.png';
 import { isLoggedIn } from '../../../utils/isLoggedIn';
 
-const ReservationCard = ({ reservation, enrollSelf }) => {
-    return <Card style={{
-        flex: 1, flexBasis: 'auto', maxWidth: '40%', minWidth: '25%'
-    }} >
+const ReservationCard = ({ reservation }) => {
+    return <Card style={styles.card} >
         <CardMedia
             sx={{ height: 250 }}
             image={PlaceholderImage}
@@ -30,9 +28,18 @@ const ReservationCard = ({ reservation, enrollSelf }) => {
             </Typography>
         </CardContent>
         <CardActions>
-            {isLoggedIn() && <Button variant='contained' disabled={false} onClick={enrollSelf(reservation._id)}>Enroll</Button>}
+            {isLoggedIn() && <Button variant='contained' disabled={false} >Enroll</Button>}
         </CardActions>
     </Card>;
+};
+
+const styles = {
+    card: {
+        flex: 1,
+        flexBasis: 'auto',
+        maxWidth: '40%',
+        minWidth: '25%'
+    }
 };
 
 export default ReservationCard;

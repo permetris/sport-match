@@ -1,7 +1,6 @@
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { ResetPassword } from '../modals/ResetPassword';
-// TODO reset user data fields to proper values after failed update
 export const EditForm = (PropTypes) => {
   const [isEdit, setIsEdit] = useState(false);
   const [showModal, setShowModal] = useState(false);

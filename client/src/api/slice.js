@@ -10,12 +10,19 @@ export const apiSlice = createApi({
   ],
   endpoints: (builder) => ({
     getUser: builder.query({
-      query: (args) => ({
-        url: '/user',
-        params: { ...args }
+      query: (id) => ({
+        url: `/user/${id}`
+      })
+    }),
+    getReservations: builder.query({
+      query: () => ({
+        url: '/reservation'
       })
     })
   })
 });
 
-export const { useGetUserQuery } = apiSlice;
+export const {
+  useGetUserQuery,
+  useGetReservationsQuery
+} = apiSlice;

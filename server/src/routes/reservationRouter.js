@@ -41,7 +41,7 @@ router.get('/',
     }
   }
 */
-  callbackErrorHandler(reservationController.viewAllReservations));
+    callbackErrorHandler(reservationController.viewAllReservations));
 router.post('/',
 /* #swagger.tags = ['Reservation']
 
@@ -107,7 +107,7 @@ router.post('/',
       }
     }
   */
-  isLoggedIn, isAdmin, validateReservation, callbackErrorHandler(reservationController.createReservation));
+    isLoggedIn, isAdmin, validateReservation, callbackErrorHandler(reservationController.createReservation));
 router.get('/filter',
 /* #swagger.tags = ['Reservation']
   #swagger.security = []
@@ -188,7 +188,7 @@ router.get('/filter',
     }
   }
 */
-  validateQuery, callbackErrorHandler(reservationController.filterReservation));
+    validateQuery, callbackErrorHandler(reservationController.filterReservation));
 router.get('/:id',
 /* #swagger.tags = ['Reservation']
 #swagger.security = []
@@ -236,7 +236,7 @@ router.get('/:id',
     }
   }
 */
-  validateId, callbackErrorHandler(reservationController.viewSingleReservation));
+    validateId, callbackErrorHandler(reservationController.viewSingleReservation));
 router.put('/:id',
 /* #swagger.tags = ['Reservation']
 
@@ -302,7 +302,7 @@ router.put('/:id',
       }
     }
 */
-  validateId, isLoggedIn, isAdmin, validateReservation, callbackErrorHandler(reservationController.updateReservation));
+    validateId, isLoggedIn, isAdmin, validateReservation, callbackErrorHandler(reservationController.updateReservation));
 router.put('/:id/add-player/:playerId',
 /* #swagger.tags = ['Reservation']
 #swagger.summary = 'Add a Player to a Reservation'
@@ -357,7 +357,7 @@ router.put('/:id/add-player/:playerId',
     }
   }
   */
-  validateDoubleId, isLoggedIn, isProfileOwner, callbackErrorHandler(reservationController.addPlayerToReservation));
+    validateDoubleId, isLoggedIn, isProfileOwner, callbackErrorHandler(reservationController.addPlayerToReservation));
 router.put('/:id/player-withdraw/:playerId',
 /* #swagger.tags = ['Reservation']
 #swagger.summary = 'Withdraw a Player from Reservation'
@@ -412,7 +412,7 @@ router.put('/:id/player-withdraw/:playerId',
     }
   }
   */
-  validateDoubleId, isLoggedIn, isProfileOwner, callbackErrorHandler(reservationController.removePlayerFromReservation));
+    validateDoubleId, isLoggedIn, isProfileOwner, callbackErrorHandler(reservationController.removePlayerFromReservation));
 router.delete('/:id',
 /* #swagger.tags = ['Reservation']
    #swagger.summary = 'Delete one Reservation'
@@ -467,7 +467,7 @@ router.delete('/:id',
     }
   }
 */
-  validateId, isLoggedIn, isAdmin, callbackErrorHandler(reservationController.deleteReservation));
+    validateId, isLoggedIn, isAdmin, callbackErrorHandler(reservationController.deleteReservation));
 router.put('/cancel/:id',
 /* #swagger.tags = ['Reservation']
 #swagger.summary = 'Cancel one Reservation'
@@ -522,5 +522,5 @@ router.put('/cancel/:id',
     }
   }
   */
-  validateId, isLoggedIn, isAdmin, callbackErrorHandler(reservationController.cancelReservation));
+    validateId, isLoggedIn, isAdmin, callbackErrorHandler(reservationController.cancelReservation));
 module.exports = router;
