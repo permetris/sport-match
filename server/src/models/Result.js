@@ -25,4 +25,4 @@ const resultSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Result', resultSchema);
+module.exports = { ResultModel: mongoose.model('Result', resultSchema), resultSchema };

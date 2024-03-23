@@ -3,9 +3,9 @@ const { ValidationError } = require('../errors/Errors');
 const { ErrorMessages } = require('../errors/ErrorMessages');
 
 const Team = require('./Team');
-const Match = require('./Match');
+const { MatchModel, matchSchema } = require('./Match');
 const Field = require('./Field');
-const User = require('./User');
+const { userSchema } = require('./User');
 
 const reservationSchema = mongoose.Schema({
     field: {
@@ -14,7 +14,7 @@ const reservationSchema = mongoose.Schema({
         required: true
     },
     match: {
-        type: Match
+        type: matchSchema
     },
     time: {
         type: Date,
@@ -25,20 +25,13 @@ const reservationSchema = mongoose.Schema({
             }
         }
     },
-    isCanceled: {
-        type: Boolean,
-        default: false
-    },
-    isFinished: {
-        type: Boolean,
-        default: false
-    },
-    isScheduled: {
-        type: Boolean,
-        default: false
+    status: {
+        type: String,
+        enum: ['scheduled', 'canceled', 'done', 'open'], // Enumerated values for the role property
+        default: 'user' // Default value if not provided
     },
     registeredPlayers: [{
-        type: User
+        type: userSchema
     }]
 },
 {
@@ -70,7 +63,7 @@ reservationSchema.method('createMatch', async function () {
         }
     });
     Promise.all([blackTeam.save(), whiteTeam.save()]).catch(err => console.log(err));
-    const match = new Match({ blackTeam, whiteTeam });
+    const match = new MatchModel({ blackTeam, whiteTeam });
     await match.save();
     this.match = match._id;
     this.isScheduled = true;
@@ -91,4 +84,4 @@ reservationSchema.pre('save', async function (next) {
     if (this.registeredPlayers.length > maxPlayers) throw new ValidationError(ErrorMessages.playerLimit);
 });
 
-module.exports = mongoose.model('Reservation', reservationSchema);
+module.exports = { ReservationModel: mongoose.model('Reservation', reservationSchema), reservationSchema };

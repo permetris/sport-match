@@ -33,4 +33,4 @@ matchSchema.pre('find', function () {
     this.populate('result').populate('whiteTeam').populate('blackTeam');
 });
 
-module.exports = mongoose.model('Match', matchSchema);
+module.exports = { MatchModel: mongoose.model('Match', matchSchema), matchSchema };

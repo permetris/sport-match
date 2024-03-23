@@ -1,16 +1,16 @@
 const { deleteOne, createOne, updateOne } = require('./crudController');
 const mongoose = require('mongoose');
-const Reservation = require('../models/Reservation');
+const { ReservationModel } = require('../models/Reservation');
 const { ErrorMessages } = require('../errors/ErrorMessages');
 const { NotFoundError, AuthorizationError } = require('../errors/Errors');
 const { HTTP_STATUS } = require('../constants/httpCodes');
 
 const createReservation = async (req, res) => {
-    await createOne(Reservation, req, res);
+    await createOne(ReservationModel, req, res);
 };
 
 const viewAllReservations = async (req, res) => {
-    const foundReservations = await Reservation.find({}, null, { sort: { time: 1 } }).populate('field')
+    const foundReservations = await ReservationModel.find({}, null, { sort: { time: 1 } }).populate('field')
         .populate('registeredPlayers', 'username')
         .populate({
             path: 'match',
@@ -47,7 +47,7 @@ const viewAllReservations = async (req, res) => {
 const viewSingleReservation = async (req, res) => {
     const { id } = req.params;
 
-    const viewOneReservation = await Reservation.findOne({ _id: id }, '-color')
+    const viewOneReservation = await ReservationModel.findOne({ _id: id }, '-color')
         .populate('field')
         .populate('registeredPlayers', 'username')
         .populate({
@@ -84,17 +84,17 @@ const viewSingleReservation = async (req, res) => {
 };
 
 const updateReservation = async (req, res) => {
-    await updateOne(Reservation, req, res);
+    await updateOne(ReservationModel, req, res);
 };
 
 const deleteReservation = async (req, res) => {
-    await deleteOne(Reservation, req, res);
+    await deleteOne(ReservationModel, req, res);
 };
 
 const cancelReservation = async (req, res) => {
     const { id } = req.params;
 
-    const dataUpdated = await Reservation.findByIdAndUpdate(id, { isCanceled: true }, {
+    const dataUpdated = await ReservationModel.findByIdAndUpdate(id, { isCanceled: true }, {
         new: true
     });
 
@@ -106,7 +106,7 @@ const cancelReservation = async (req, res) => {
 const addPlayerToReservation = async (req, res) => {
     const player = req.params.playerId;
 
-    const find = await Reservation
+    const find = await ReservationModel
         .findByIdAndUpdate({ _id: req.params.id },
             {
                 $addToSet: { registeredPlayers: mongoose.Types.ObjectId(player) }
@@ -122,7 +122,7 @@ const removePlayerFromReservation = async (req, res) => {
     if (player !== req.user.id) {
         throw new AuthorizationError(ErrorMessages.unauthorized);
     }
-    const find = await Reservation
+    const find = await ReservationModel
         .findByIdAndUpdate({ _id: req.params.id },
             {
                 $pull: { registeredPlayers: mongoose.Types.ObjectId(player) }
@@ -154,7 +154,7 @@ const filterReservation = async (req, res) => {
         findQuery.time = { $gte: startDateTime, $lte: endDateTime };
     }
 
-    const filteredReservation = await Reservation.find(findQuery, exclude);
+    const filteredReservation = await ReservationModel.find(findQuery, exclude);
 
     if (!filteredReservation.length) throw new NotFoundError(ErrorMessages.dataNotFound);
 

@@ -29,4 +29,4 @@ teamSchema.pre('find', async function () {
     });
 });
 
-module.exports = mongoose.model('Team', teamSchema);
+module.exports = { TeamModel: mongoose.model('Team', teamSchema), teamSchema };
