@@ -1,9 +1,8 @@
 import React from 'react';
 import Navigation from './components/Navigation';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import { Login } from './pages/Login/Login';
 import { Registration } from './components/Registration/Registration';
-import { Home } from './pages/Home';
+import { Home } from './pages/Home/index';
 import { UserProfile } from './components/user/UserProfile';
 import { ResetPassword } from './components/ResetPassword/ResetPass';
 import { ToastContainer } from 'react-toastify';
@@ -11,6 +10,7 @@ import { SendEmail } from './components/ResetPassword/SendEmail';
 import { UserHistory } from './pages/UserHistory';
 import { AddResult } from './components/AddResult/AddResult';
 import { Match } from './components/Match/Match';
+import { Login } from './pages/Login/index';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles.css';
 

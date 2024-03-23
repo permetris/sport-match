@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { Wrapper } from '../../components/Wrapper/index';
 import { Container } from '@mui/material';
-import ReservationCard from '../../components/Reservation/ReservationCard';
+import ReservationCard from '../../components/reservation/ReservationCard';
 import { useGetReservationsQuery } from '../../api/slice';
 
 // import { httpAddPlayerToReservation } from '../../hooks/addPlayer';
@@ -18,7 +18,7 @@ export const Home = () => {
       <Container
         elevation={20}
         sx={styles.container}>
-        {response.map(reservation => <ReservationCard key={reservation._id} reservation={reservation} />)}
+        {response?.map(reservation => <ReservationCard key={reservation._id} reservation={reservation} />)}
       </Container>
     </Wrapper >
   );

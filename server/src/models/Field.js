@@ -47,3 +47,4 @@ const fieldSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('Field', fieldSchema);
+module.exports = fieldSchema;

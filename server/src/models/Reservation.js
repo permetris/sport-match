@@ -5,6 +5,7 @@ const { ErrorMessages } = require('../errors/ErrorMessages');
 const Team = require('./Team');
 const Match = require('./Match');
 const Field = require('./Field');
+const User = require('./User');
 
 const reservationSchema = mongoose.Schema({
     field: {
@@ -13,8 +14,7 @@ const reservationSchema = mongoose.Schema({
         required: true
     },
     match: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Match'
+        type: Match
     },
     time: {
         type: Date,
@@ -38,8 +38,7 @@ const reservationSchema = mongoose.Schema({
         default: false
     },
     registeredPlayers: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: User
     }]
 },
 {
