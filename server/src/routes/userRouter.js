@@ -43,7 +43,7 @@ router.get('/',
     }
   }
 */
-  callbackErrorHandler(userController.viewAllUsers));
+    callbackErrorHandler(userController.viewAllUsers));
 router.get('/:id/history',
 /* #swagger.tags = ['User']
    #swagger.summary = 'View history of user'
@@ -98,7 +98,7 @@ router.get('/:id/history',
     }
   }
 */
-  validateId, isLoggedIn, isProfileOwner, callbackErrorHandler(userController.viewHistory));
+    validateId, isLoggedIn, isProfileOwner, callbackErrorHandler(userController.viewHistory));
 router.post('/',
 /* #swagger.tags = ['User']
   #swagger.security = []
@@ -165,8 +165,8 @@ router.post('/',
       }
     }
 */
-  validateUser, callbackErrorHandler(userController.registerUser));
-router.get('/:id',
+    validateUser, callbackErrorHandler(userController.registerUser));
+router.get('/:username',
 /* #swagger.tags = ['User']
   #swagger.security = []
 
@@ -213,7 +213,7 @@ router.get('/:id',
     }
   }
 */
-  validateId, callbackErrorHandler(userController.viewSingleUser));
+    callbackErrorHandler(userController.viewSingleUser));
 router.put('/:id',
 /* #swagger.tags = ['User']
 
@@ -279,7 +279,7 @@ router.put('/:id',
       }
     }
 */
-  validateId, isLoggedIn, isProfileOwner, validateUser, callbackErrorHandler(userController.updateUser));
+    validateId, isLoggedIn, isProfileOwner, validateUser, callbackErrorHandler(userController.updateUser));
 router.delete('/:id',
 /* #swagger.tags = ['User']
    #swagger.summary = 'Delete one User'
@@ -334,6 +334,6 @@ router.delete('/:id',
     }
   }
 */
-  validateId, isLoggedIn, isProfileOwner, callbackErrorHandler(userController.deleteUser));
+    validateId, isLoggedIn, isProfileOwner, callbackErrorHandler(userController.deleteUser));
 
 module.exports = router;

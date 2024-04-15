@@ -10,8 +10,8 @@ export const apiSlice = createApi({
   ],
   endpoints: (builder) => ({
     getUser: builder.query({
-      query: (id) => ({
-        url: `/user/${id}`
+      query: (username) => ({
+        url: `/user/${username}`
       })
     }),
     getReservations: builder.query({

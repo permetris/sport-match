@@ -1,12 +1,19 @@
-const { getOne, createOne, getAll, updateOne } = require('./crudController');
+const { createOne, getAll, updateOne } = require('./crudController');
 const { UserModel } = require('../models/User');
-const {ReservationModel} = require('../models/Reservation');
+const { ReservationModel } = require('../models/Reservation');
 const { ErrorMessages } = require('../errors/ErrorMessages');
 const { NotFoundError } = require('../errors/Errors');
 const { HTTP_STATUS } = require('../constants/httpCodes.js');
 const { successMessages } = require('../utils/successMessages');
+const bcrypt = require('bcrypt');
+
+const exclude = '-updatedAt -createdAt -password -role';
 
 const registerUser = async (req, res) => {
+    const { body } = req;
+    const salt = await bcrypt.genSalt();
+    body.password = await bcrypt.hash(body.password, salt);
+    req.body = body;
     await createOne(UserModel, req, res);
 };
 
@@ -15,7 +22,11 @@ const viewAllUsers = async (req, res) => {
 };
 
 const viewSingleUser = async (req, res) => {
-    await getOne(UserModel, req, res);
+    const { username } = req.params;
+    const dataFound = await UserModel.findOne({ username }, exclude).lean();
+    if (!dataFound) throw new NotFoundError(ErrorMessages.dataNotFound);
+
+    res.status(HTTP_STATUS.OK).json({ success: true, data: dataFound });
 };
 
 const updateUser = async (req, res) => {

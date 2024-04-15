@@ -20,7 +20,7 @@ export const RegForm = (props) => {
                         required
                         minLength={3}
                         maxLength={25}
-                        pattern='/^[a-zA-Z]+$/'
+                        // pattern='/^[a-zA-Z]+$/'
                         placeholder='Enter first name'
                         name='name'
                         value={props.formData.name}
@@ -33,7 +33,7 @@ export const RegForm = (props) => {
                         required
                         minLength={3}
                         maxLength={25}
-                        pattern='/^[a-zA-Z]+$/'
+                        // pattern='/^[a-zA-Z]+$/'
                         placeholder='Enter last name'
                         name='surname'
                         value={props.formData.surname}
@@ -85,6 +85,22 @@ export const RegForm = (props) => {
                         minLength={8}
                         maxLength={20}
                         value={props.formData.password}
+                        onChange={props.handleChange}
+                      />
+                    </FloatingLabel>
+                    <FloatingLabel
+                      label='Confirm Password'
+                      className='mb-3'
+                      controlId='formBasicPassword'
+                    >
+                      <Form.Control
+                        type='password'
+                        placeholder='Confirm Password'
+                        name='confirmPassword'
+                        required
+                        minLength={8}
+                        maxLength={20}
+                        value={props.formData.confirmPassword}
                         onChange={props.handleChange}
                       />
                     </FloatingLabel>

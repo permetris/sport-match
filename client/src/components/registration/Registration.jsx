@@ -4,7 +4,7 @@ import { RegForm } from './RegForm';
 import { successMessages } from '../../utils/responseMessages';
 import axios from 'axios';
 import { isLoggedIn } from '../../utils/isLoggedIn';
-import { toastError, toastSuccess } from '../../hooks/useToastify';
+import { toastError, toastSuccess, toastWarning } from '../../hooks/useToastify';
 
 export const Registration = () => {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ export const Registration = () => {
     surname: '',
     email: '',
     password: '',
+    confirmPassword: '',
     phone: '',
     role: pathname === '/register' ? 'USER' : 'ADMIN'
   });
@@ -26,9 +27,14 @@ export const Registration = () => {
     event.preventDefault();
     try {
       const request = { ...formData };
-      await axios.post(`${process.env.REACT_APP_SERVER_URL}/user`, request);
-      navigate('/login');
-      toastSuccess(successMessages.userRegistered);
+      if (formData.confirmPassword === formData.password) {
+        delete request.confirmPassword;
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/user`, request);
+        navigate('/login');
+        toastSuccess(successMessages.userRegistered);
+      } else {
+        toastWarning('Passwords do not match!!');
+      }
     } catch (err) {
       toastError(err);
     }

@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const { UserModel } = require('../models/User');
 const Token = require('../models/Token');
 const bcrypt = require('bcrypt');
 const { hashPassword } = require('../utils/hashPassword');
@@ -13,7 +13,7 @@ const { successMessages } = require('../utils/successMessages');
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
     if (!user) throw new NotFoundError(ErrorMessages.userNotFound);
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -25,7 +25,7 @@ const loginUser = async (req, res) => {
     res.header('Role', user.role);
     res.header('UserId', user._id);
     res.header('Username', user.username);
-    res.set('Access-Control-Expose-Headers', ['Authorization', 'Role', 'UserId']);
+    res.set('Access-Control-Expose-Headers', ['Authorization', 'Role', 'UserId', 'Username']);
 
     return res.status(HTTP_STATUS.OK).json({ success: true, message: successMessages.userLoggedIn(user.username) });
 };
@@ -33,7 +33,7 @@ const loginUser = async (req, res) => {
 const forgottenPassword = async (req, res) => {
     const { email } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
     if (!user) throw new NotFoundError(ErrorMessages.userNotFound);
 
     let token = await Token.findOne({ userId: user._id });
@@ -63,7 +63,7 @@ const resetPasswordWithLink = async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
-    const user = await User.findByIdAndUpdate({ _id: id }, { password: hashedPassword });
+    const user = await UserModel.findByIdAndUpdate({ _id: id }, { password: hashedPassword });
 
     if (!user) { throw new NotFoundError(ErrorMessages.userNotFound); } else {
         await token.delete();
@@ -76,7 +76,7 @@ const resetPassword = async (req, res) => {
     const { id } = req.params;
     const { password, newPassword } = req.body;
 
-    const user = await User.findById(id);
+    const user = await UserModel.findById(id);
 
     if (!user) throw new NotFoundError(ErrorMessages.dataNotFound);
 

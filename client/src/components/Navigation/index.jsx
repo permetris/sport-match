@@ -35,7 +35,7 @@ const Navigation = () => {
         <Link href='/'>Home</Link>
         {!isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' href='/login'>Log In</Link>}
         {!isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' href='/register'>Register</Link>}
-        {isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' href='/user'>My Profile</Link>}
+        {isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' href={`/user/${isLoggedIn().username}`}>My Profile</Link>}
         {isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' href='/history'>Match History</Link>}
         {isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' onClick={onLogoutHandler} href='/'>Logout</Link>}
       </Toolbar>

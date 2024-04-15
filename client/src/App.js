@@ -53,7 +53,7 @@ const router = createBrowserRouter([
         element: <ResetPassword/>
       },
       {
-        path: 'user',
+        path: 'user/:username',
         element: <UserProfile />
       },
       {
