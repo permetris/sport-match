@@ -14,7 +14,7 @@ export const Home = () => {
 
   return (
     <Wrapper>
-      <h2>Available sport events</h2>
+      <h2 className='text-red-300'>Available sport events</h2>
       <Container
         elevation={20}
         sx={styles.container}>

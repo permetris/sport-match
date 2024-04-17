@@ -1,6 +1,5 @@
 /* eslint-disable no-useless-escape */
 const mongoose = require('mongoose');
-const { hashPassword } = require('../utils/hashPassword');
 
 const userSchema = mongoose.Schema({
     username: {
@@ -68,11 +67,6 @@ const userSchema = mongoose.Schema({
             delete ret.updatedAt;
         }
     }
-});
-
-userSchema.pre('save', async function (next) {
-    this.password = hashPassword(this.password);
-    next();
 });
 
 module.exports = { UserModel: mongoose.model('User', userSchema), userSchema };

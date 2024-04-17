@@ -18,11 +18,19 @@ export const apiSlice = createApi({
       query: () => ({
         url: '/reservation'
       })
+    }),
+    loginUser: builder.mutation({
+      query: (body) => ({
+        url: '/login',
+        body,
+        method: 'POST'
+      })
     })
   })
 });
 
 export const {
   useGetUserQuery,
-  useGetReservationsQuery
+  useGetReservationsQuery,
+  useLoginUserMutation
 } = apiSlice;

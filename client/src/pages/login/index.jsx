@@ -1,31 +1,19 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useState, React } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { LoginForm } from './LoginForm';
-import { toastError } from '../../hooks/useToastify';
+import { useAuth } from '../../context/AuthContext';
 
 export const Login = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({});
+  const { user, login, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const request = { email: formData.email, password: formData.password };
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/login`,
-        request
-      );
-
-      localStorage.setItem('token', response.headers.authorization);
-      localStorage.setItem('role', response.headers.role);
-      localStorage.setItem('userid', response.headers.userid);
-      localStorage.setItem('username', response.headers.username);
-
-      navigate('/');
-    } catch (err) {
-      toastError(err);
-    }
+    const request = { email: formData.email, password: formData.password };
+    login(request);
+    navigate('/');
   };
 
   const handleChange = (e) => {
@@ -39,7 +27,9 @@ export const Login = () => {
   };
 
   return (
-    <LoginForm handleSubmit={handleSubmit} handleChange={handleChange }/>
+    <>
+      {!user && <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} />}
+    </>
   );
 };
 

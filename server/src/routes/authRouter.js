@@ -65,7 +65,7 @@ router.post('/login',
       }
     }
 */
-  callbackErrorHandler(authController.loginUser));
+    callbackErrorHandler(authController.loginUser));
 router.post('/forgotten-password',
 /* #swagger.tags = ['Forgotten Password']
   #swagger.security = []
@@ -125,7 +125,7 @@ router.post('/forgotten-password',
       }
     }
 */
-  validateEmail, callbackErrorHandler(authController.forgottenPassword));
+    validateEmail, callbackErrorHandler(authController.forgottenPassword));
 router.patch('/reset-password/:id/:emailToken',
 /* #swagger.tags = ['Forgotten Password']
   #swagger.security = []
@@ -185,7 +185,7 @@ router.patch('/reset-password/:id/:emailToken',
       }
     }
 */
-  validatePassword, callbackErrorHandler(authController.resetPasswordWithLink));
+    validatePassword, callbackErrorHandler(authController.resetPasswordWithLink));
 router.patch('/:id/reset-password',
 /* #swagger.tags = ['Forgotten Password']
 
@@ -265,5 +265,5 @@ router.patch('/:id/reset-password',
       }
     }
 */
-  validateId, isLoggedIn, isProfileOwner, validatePassword, callbackErrorHandler(authController.resetPassword));
+    validateId, isLoggedIn, isProfileOwner, validatePassword, callbackErrorHandler(authController.resetPassword));
 module.exports = router;

@@ -3,24 +3,18 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { toastSuccess, toastError } from '../../hooks/useToastify';
-import { Link } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { isLoggedIn } from '../../utils/isLoggedIn';
+import { useNavigate, Link } from 'react-router-dom';
 import { successMessages } from '../../utils/responseMessages';
-
-const sx = {
-  marginRight: 1
-};
+import { useAuth } from '../../context/AuthContext';
 
 const Navigation = () => {
   const navigate = useNavigate();
-  const onLogoutHandler = async (e) => {
+  const { user, logout } = useAuth();
+  const onLogoutHandler = (e) => {
     try {
-      e.preventDefault();
-      localStorage.clear();
+      logout();
       toastSuccess(successMessages.userLoggedOut);
       navigate('/');
-      window.location.reload();
     } catch (err) {
       toastError(err);
     }
@@ -29,15 +23,14 @@ const Navigation = () => {
     <AppBar position="fixed" sx={{ paddingLeft: '15%', paddingRight: '15%' }}>
       <Toolbar >
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          <Link sx={sx} color="inherit" underline='hover' href='/'>Sport Scheduler</Link>
+          <Link href='/'>Sport Scheduler</Link>
         </Typography>
 
-        <Link href='/'>Home</Link>
-        {!isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' href='/login'>Log In</Link>}
-        {!isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' href='/register'>Register</Link>}
-        {isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' href={`/user/${isLoggedIn().username}`}>My Profile</Link>}
-        {isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' href='/history'>Match History</Link>}
-        {isLoggedIn() && <Link sx={sx} color="inherit" underline='hover' onClick={onLogoutHandler} href='/'>Logout</Link>}
+        {!user && <Link className='text-red-900' to='/login'>Log In</Link>}
+        {!user && <Link to='/register'>Register</Link>}
+        {user && <Link to={`/user/${user.username}`}>My Profile</Link>}
+        {user && <Link to='/history'>Match History</Link>}
+        {user && <Link onClick={onLogoutHandler} to='/'>Logout</Link>}
       </Toolbar>
     </AppBar >
   );

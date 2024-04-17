@@ -20,6 +20,7 @@ const loginUser = async (req, res) => {
     if (!isPasswordCorrect) throw new AuthenticationError(ErrorMessages.passError);
 
     const token = createJWT(user);
+    user.token = token;
 
     res.header('Authorization', 'Bearer ' + token);
     res.header('Role', user.role);
@@ -27,7 +28,7 @@ const loginUser = async (req, res) => {
     res.header('Username', user.username);
     res.set('Access-Control-Expose-Headers', ['Authorization', 'Role', 'UserId', 'Username']);
 
-    return res.status(HTTP_STATUS.OK).json({ success: true, message: successMessages.userLoggedIn(user.username) });
+    return res.status(HTTP_STATUS.OK).json(user);
 };
 
 const forgottenPassword = async (req, res) => {

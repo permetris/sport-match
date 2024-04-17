@@ -39,8 +39,8 @@ const viewAllReservations = async (req, res) => {
             populate: {
                 path: 'result'
             }
-        }); ;
-    console.log('I am called');
+        });
+    ;
     return res.status(HTTP_STATUS.OK).json(foundReservations);
 };
 

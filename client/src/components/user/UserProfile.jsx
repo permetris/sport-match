@@ -1,13 +1,15 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import { UserInfo } from './UserInfo';
-import { isLoggedIn } from '../../utils/isLoggedIn';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export const UserProfile = () => {
-  if (!isLoggedIn()) {
-    return <h1>Not logged in!</h1>;
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  if (!user) {
+    return navigate('/login');
   }
-
   return (
     <Container className='align-items-center justify-content-center'>
       <UserInfo />

@@ -12,7 +12,7 @@ export const LoginForm = (props) => {
           <Card className='shadow'>
             <Card.Body>
               <div className='mb-5 mt-md-4'>
-                <h2 className='fw-bold mb-5 text-center'>Welcome</h2>
+                <h2 className='fw-bold mb-5 text-center text-grey-300'>Welcome</h2>
                 <div className='mb-3'>
                   <Form onSubmit={props.handleSubmit}>
                     <FloatingLabel label='Email address' className='mb-3' controlId='formBasicEmail'>
