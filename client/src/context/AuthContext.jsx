@@ -1,10 +1,11 @@
 import React, { createContext, useState, useContext } from 'react';
 import { useLoginUserMutation } from '../api/slice';
 
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [triggerLogin, data, result] = useLoginUserMutation();
+  const [triggerLogin] = useLoginUserMutation();
   const [user, setUser] = useState(undefined);
 
   const login = async (userData) => {

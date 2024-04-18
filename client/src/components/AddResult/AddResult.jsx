@@ -2,10 +2,11 @@ import { useState, React } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AddResultForm } from './AddResultForm';
 import axios from 'axios';
-import { isLoggedIn } from '../../utils/isLoggedIn';
 import { toastError, toastSuccess } from '../../hooks/useToastify';
+import { useAuth } from '../../context/AuthContext';
 
 export const AddResult = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const id = pathname.split('/')[2];
@@ -16,12 +17,11 @@ export const AddResult = () => {
     whiteTeamScore: ''
   });
 
-  const user = isLoggedIn();
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const request = { ...formData };
+      // eslint-disable-next-line no-undef
       await axios.put(`${process.env.REACT_APP_SERVER_URL}/match/${id}/result`, request, {
         headers: {
           Authorization: token
@@ -50,4 +50,4 @@ export const AddResult = () => {
   );
 };
 
-export default AddResult;
+

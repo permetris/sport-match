@@ -1,5 +1,6 @@
 import axios from 'axios';
-const URL = process.env.REACT_APP_SERVER_URL;
+// eslint-disable-next-line no-undef
+const URL = import.meta.env.REACT_APP_SERVER_URL;
 
 export const httpGetUser = async (userId) => {
   return await axios.get(`${URL}/user/${userId}`);

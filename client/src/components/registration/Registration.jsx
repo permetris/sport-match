@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { RegForm } from './RegForm';
 import { successMessages } from '../../utils/responseMessages';
 import axios from 'axios';
-import { isLoggedIn } from '../../utils/isLoggedIn';
+import { useAuth } from '../../context/AuthContext';
 import { toastError, toastSuccess, toastWarning } from '../../hooks/useToastify';
 
 export const Registration = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -21,7 +22,7 @@ export const Registration = () => {
     role: pathname === '/register' ? 'USER' : 'ADMIN'
   });
 
-  const user = isLoggedIn();
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,7 +30,8 @@ export const Registration = () => {
       const request = { ...formData };
       if (formData.confirmPassword === formData.password) {
         delete request.confirmPassword;
-        await axios.post(`${process.env.REACT_APP_SERVER_URL}/user`, request);
+        // eslint-disable-next-line no-undef
+        await axios.post(`${import.meta.env.REACT_APP_SERVER_URL}/user`, request);
         navigate('/login');
         toastSuccess(successMessages.userRegistered);
       } else {

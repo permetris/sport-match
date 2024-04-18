@@ -12,7 +12,7 @@ import { AddResult } from './components/AddResult/AddResult';
 import { Match } from './components/Match/Match';
 import { Login } from './pages/Login/index';
 import 'react-toastify/dist/ReactToastify.css';
-import './styles.css';
+import NotFound from './pages/Error/NotFound';
 
 const AppLayout = () => {
   return (
@@ -28,6 +28,10 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     errorElement: <h1>Something went wrong</h1>,
     children: [
+      {
+        path: '*',
+        element: <NotFound />
+      },
       {
         path: '/',
         element: <Home style={ { overflow: 'hidden' } } />

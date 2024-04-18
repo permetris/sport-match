@@ -13,7 +13,7 @@ export const EditForm = (PropTypes) => {
     showModal ? setShowModal(false) : setShowModal(true);
   };
   const modalHandler = (event) => {
-
+        event.preventDefault()
   };
   const changeHandler = (e) => {
     const { name, value } = e.target;
