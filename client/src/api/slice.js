@@ -1,36 +1,45 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiSlice = createApi({
-  reducerPath: 'apiSlice',
+  reducerPath: "apiSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8000'
+    baseUrl: "http://localhost:8000",
   }),
-  tagTypes: [
-
-  ],
+  tagTypes: [],
   endpoints: (builder) => ({
     getUser: builder.query({
       query: (username) => ({
-        url: `/user/${username}`
-      })
+        url: `/user/${username}`,
+      }),
     }),
     getReservations: builder.query({
       query: () => ({
-        url: '/reservation'
-      })
+        url: "/reservation",
+      }),
     }),
     loginUser: builder.mutation({
       query: (body) => ({
-        url: '/login',
+        url: "/login",
         body,
-        method: 'POST'
-      })
-    })
-  })
+        method: "POST",
+      }),
+    }),
+    updatePassword: builder.mutation({
+      query: (id, request, token) => ({
+        url: `/${id}/reset-password`,
+        body: request,
+        method: "PATCH",
+        headers: {
+          authorization: token,
+        },
+      }),
+    }),
+  }),
 });
 
 export const {
   useGetUserQuery,
   useGetReservationsQuery,
-  useLoginUserMutation
+  useLoginUserMutation,
+  useUpdatePasswordMutation,
 } = apiSlice;

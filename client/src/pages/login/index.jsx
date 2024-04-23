@@ -1,19 +1,25 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useState, React } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LoginForm } from './LoginForm';
+import { LoginForm } from './Form';
 import { useAuth } from '../../context/AuthContext';
+import { toastError } from '../../hooks/useToastify';
 
 export const Login = () => {
   const [formData, setFormData] = useState({});
-  const { user, login, logout } = useAuth();
+  const { user, login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const request = { email: formData.email, password: formData.password };
-    login(request);
-    navigate('/');
+    const success = login(request);
+    if (success) {
+      navigate('/');
+    } else { 
+      toastError("Something went wrong")
+    }
+
   };
 
   const handleChange = (e) => {
@@ -28,7 +34,7 @@ export const Login = () => {
 
   return (
     <>
-      {!user && <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} />}
+      {!user && <LoginForm submitLogin={handleSubmit} handleChange={handleChange} />}
     </>
   );
 };
