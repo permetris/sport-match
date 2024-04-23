@@ -12,7 +12,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <AuthProvider>
-        <App className='h-full' />
+        <App className='h-full bg-sky-400' />
       </AuthProvider>
     </Provider>
   </React.StrictMode>

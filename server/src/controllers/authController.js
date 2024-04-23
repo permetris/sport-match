@@ -13,22 +13,16 @@ const { successMessages } = require('../utils/successMessages');
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email }).lean();
     if (!user) throw new NotFoundError(ErrorMessages.userNotFound);
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) throw new AuthenticationError(ErrorMessages.passError);
 
     const token = createJWT(user);
-    user.token = token;
 
-    res.header('Authorization', 'Bearer ' + token);
-    res.header('Role', user.role);
-    res.header('UserId', user._id);
-    res.header('Username', user.username);
-    res.set('Access-Control-Expose-Headers', ['Authorization', 'Role', 'UserId', 'Username']);
-
-    return res.status(HTTP_STATUS.OK).json(user);
+    const userResponse = { ...user, token };
+    return res.status(HTTP_STATUS.OK).json({ user: userResponse, success: true });
 };
 
 const forgottenPassword = async (req, res) => {

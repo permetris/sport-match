@@ -2,44 +2,46 @@ const jwt = require('jsonwebtoken');
 const { callbackErrorHandler } = require('./errorMiddlewareHandler');
 const { ErrorMessages } = require('../errors/ErrorMessages');
 const { AuthenticationError, AuthorizationError } = require('../errors/Errors');
-const { ROLES } = require("../constants/roles");
+const { ROLES } = require('../constants/roles');
 
 const isLoggedIn = callbackErrorHandler(async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) throw new AuthenticationError(ErrorMessages.notLoggedIn);
+    if (!token) throw new AuthenticationError(ErrorMessages.notLoggedIn);
 
-  const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
-  req.user = decoded;
+    const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
+    req.user = decoded;
 
-  return next();
+    return next();
 });
 const isAdmin = callbackErrorHandler(async (req, res, next) => {
-  if (req.user.role !== ROLES.ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
+    if (req.user.role !== ROLES.ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
 
-  next();
+    next();
 });
 const isFieldAdmin = callbackErrorHandler(async (req, res, next) => {
-  if (req.user.role !== ROLES.FILED_ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
+    if (req.user.role !== ROLES.FILED_ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
 
-  next();
+    next();
 });
-const isAnyAdmin = callbackErrorHandler(async (req,res, next) => {
-  if (req.user.role !== ROLES.FILED_ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
+const isAnyAdmin = callbackErrorHandler(async (req, res, next) => {
+    if (req.user.role !== ROLES.FILED_ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
 
-  next();
-})
+    next();
+});
 const isProfileOwner = callbackErrorHandler(async (req, res, next) => {
-  const id = req.params.playerId ? req.params.playerId : req.params.id;
+    const id = req.params.playerId ? req.params.playerId : req.params.id;
 
-  if ((id !== req.user.id)) throw new AuthorizationError(ErrorMessages.unauthorized);
+    if ((id !== req.user.id)) throw new AuthorizationError(ErrorMessages.unauthorized);
 
-  return next();
+    return next();
 });
 
 module.exports = {
-  isLoggedIn,
-  isAdmin,
-  isProfileOwner
+    isLoggedIn,
+    isAdmin,
+    isProfileOwner,
+    isAnyAdmin,
+    isFieldAdmin
 };

@@ -12,22 +12,21 @@
     "unseed": "node -r dotenv/config src/seed/unseed.js dotenv_config_path=.env.development",
     "jest": "jest --runInBand"
   },
-  "name": "sport_matches_organizer",
-  "description": "API for scheduling cage ball matches",
+  "name": "GameFinder",
+  "description": "API for scheduling sport matches",
   "version": "1.0.0",
   "main": "server.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/agilathon/sport_matches_organizer.git"
   },
+  "engines" : { 
+    "npm" : ">=8.0.0 <9.0.0",
+    "node" : ">=16.0.0 < 22.0.0"
+  },
   "keywords": [
     "cageball"
   ],
-  "authors": "Ivana Burazin, Marko Vukusic, Josip Bogunovic",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/agilathon/sport_matches_organizer/issues"
-  },
   "homepage": "https://github.com/agilathon/sport_matches_organizer#readme",
   "dependencies": {
     "@joi/date": "^2.1.0",
