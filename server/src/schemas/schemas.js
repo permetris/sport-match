@@ -9,7 +9,7 @@ const idSchema = Joi.object({
 
 const passwordSchema = Joi.object({
     password: Joi.string().min(8).max(20).required(),
-    newPassword: Joi.string().min(8).max(20)
+    newPassword: Joi.string().min(8).max(20).required()
 });
 
 const emailSchema = Joi.object({
@@ -71,7 +71,7 @@ const userSchema = Joi.object({
     surname: Joi.string().min(3).max(25).pattern(/^[a-zA-Z]+$/).required(),
     email: Joi.string().email({ minDomainSegments: 2 }).required(),
     password: Joi.string().min(8).max(20),
-    phone: Joi.string().regex(/^\+(?:\d\s?){6,14}\d$/).required(),
+    phone: Joi.string().required(),
     role: Joi.string().valid('ADMIN', 'USER'),
     isDeleted: Joi.boolean()
 

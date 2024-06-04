@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { citySchema } = require('./City');
 
 const fieldSchema = mongoose.Schema({
     name: {
@@ -8,15 +9,13 @@ const fieldSchema = mongoose.Schema({
         unique: true
     },
     city: {
-        type: String,
-        minLength: 3,
-        maxLength: 50
+        type: citySchema
     },
     address: {
         type: String,
         minLength: 8,
-        maxLength: 50,
-        unique: true
+        maxLength: 50
+        // unique: true
 
     },
     owner: {

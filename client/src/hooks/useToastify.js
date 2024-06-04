@@ -12,8 +12,8 @@ const options = {
 };
 
 export const toastError = (err) => {
-  if (err.response) {
-    const errors = err.response.data.message;
+  if (err.data) {
+    const errors = err.data.message;
     if (errors instanceof Array) {
       for (const error of errors) {
         toast.error(error, options);

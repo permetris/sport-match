@@ -1,19 +1,21 @@
-import { useState, React } from "react";
+import { useState, React, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RegForm } from "./Form";
 import { successMessages } from "../../utils/responseMessages";
-import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import {
   toastError,
   toastSuccess,
   toastWarning,
 } from "../../hooks/useToastify";
+import { ROLES } from "../../utils/roles";
+import { useCreateUserMutation } from "../../slices/apiSlice";
 
 export const Registration = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [createUser, { isSuccess, isError, error }] = useCreateUserMutation();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -32,13 +34,7 @@ export const Registration = () => {
       const request = { ...formData };
       if (formData.confirmPassword === formData.password) {
         delete request.confirmPassword;
-        // eslint-disable-next-line no-undef
-        await axios.post(
-          `${import.meta.env.REACT_APP_SERVER_URL}/user`,
-          request,
-        );
-        navigate("/login");
-        toastSuccess(successMessages.userRegistered);
+        createUser(request).unwrap();
       } else {
         toastWarning("Passwords do not match!!");
       }
@@ -46,13 +42,23 @@ export const Registration = () => {
       toastError(err);
     }
   };
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/login");
+      toastSuccess("Registration successfull!");
+    }
+    if (isError) {
+      console.log(error);
+      toastError(error);
+    }
+  },[isSuccess,isError]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  if (pathname === "/admin/register" && user.role === "USER") {
+  if (pathname === "/admin/register" && user.role !== ROLES.ADMIN) {
     return (
       <>
         <h1> 403 Unauthorized</h1>

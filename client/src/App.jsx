@@ -14,6 +14,12 @@ import { Login } from "./pages/Login/index";
 import "react-toastify/dist/ReactToastify.css";
 import NotFound from "./pages/Error/NotFound";
 import UnhandledPage from "./pages/Error/Unhandled";
+import Dashboard from "./pages/Dashboard";
+import Unauthorised from "./pages/Error/Unauthorised";
+import Cities from "./pages/Dashboard/Cities";
+import Reservations from "./pages/Dashboard/Reservations";
+import Fields from "./pages/Dashboard/Fields";
+import Users from "./pages/Dashboard/Users";
 
 const AppLayout = () => {
   return (
@@ -32,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "*",
         element: <NotFound />,
+      },
+      {
+        path: "unauthorised",
+        element: <Unauthorised />,
       },
       {
         path: "/",
@@ -72,6 +82,16 @@ const router = createBrowserRouter([
       {
         path: "match/:id",
         element: <Match />,
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+        children: [
+          { path: "cities", element: <Cities /> },
+          { path: "reservations", element: <Reservations /> },
+          { path: "fields", element: <Fields /> },
+          { path: "users", element: <Users /> },
+        ],
       },
     ],
   },

@@ -18,7 +18,17 @@ const registerUser = async (req, res) => {
 };
 
 const viewAllUsers = async (req, res) => {
-    await getAll(UserModel, req, res);
+    const { page = 1, size = 10 } = req.query;
+    const skip = (page - 1) * size;
+
+    const dataFound = await UserModel.find({}, exclude)
+        .lean()
+        .skip(skip)
+        .limit(size);
+
+    const totalItems = await UserModel.countDocuments();
+
+    res.status(HTTP_STATUS.OK).json({ success: true, data: dataFound, totalItems });
 };
 
 const viewSingleUser = async (req, res) => {

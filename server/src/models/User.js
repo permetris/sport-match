@@ -6,22 +6,22 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        minLength: 4,
-        maxLength: 16,
+        minLength: 2,
+        maxLength: 50,
         trim: true,
         lowercase: true
     },
     name: {
         type: String,
         required: true,
-        minLength: 3,
+        minLength: 2,
         maxLength: 25,
         trim: true
     },
     surname: {
         type: String,
         required: true,
-        minLength: 3,
+        minLength: 2,
         maxLength: 25,
         trim: true
     },
@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         minLength: 6,
-        maxLength: 25,
+        maxLength: 75,
         trim: true,
         unique: true,
         match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email address']
@@ -43,8 +43,8 @@ const userSchema = mongoose.Schema({
     phone: {
         type: String,
         required: true,
-        unique: true,
-        match: [/^\+(?:\d\s?){6,14}\d$/, 'Please enter a valid phone number']
+        unique: true
+        // match: [/^\+(?:\d\s?){6,14}\d$/, 'Please enter a valid phone number'] Remove for seeding fake data
 
     },
     role: {

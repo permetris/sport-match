@@ -1,19 +1,21 @@
 const mongoose = require('mongoose');
+const { resultSchema } = require('./Result');
+const { teamSchema } = require('./Team');
 
 const matchSchema = mongoose.Schema({
 
     whiteTeam: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: teamSchema,
         ref: 'Team'
 
     },
     blackTeam: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: teamSchema,
         ref: 'Team'
 
     },
     result: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: resultSchema,
         ref: 'Result'
 
     }
@@ -27,10 +29,6 @@ const matchSchema = mongoose.Schema({
             delete ret.updatedAt;
         }
     }
-});
-
-matchSchema.pre('find', function () {
-    this.populate('result').populate('whiteTeam').populate('blackTeam');
 });
 
 module.exports = { MatchModel: mongoose.model('Match', matchSchema), matchSchema };

@@ -10,77 +10,42 @@ const createReservation = async (req, res) => {
 };
 
 const viewAllReservations = async (req, res) => {
-    const foundReservations = await ReservationModel.find({}, null, { sort: { time: 1 } }).populate('field')
-        .populate('registeredPlayers', 'username')
-        .populate({
-            path: 'match',
-            populate: {
-                path: 'whiteTeam',
-                select: 'players ',
-                populate: {
-                    path: 'players',
-                    select: 'username'
-                }
-            }
-        })
-        .populate({
-            path: 'match',
-            populate: {
-                path: 'blackTeam',
-                select: 'players',
-                populate: {
-                    path: 'players',
-                    select: 'username'
-                }
-            }
-        })
-        .populate({
-            path: 'match',
-            populate: {
-                path: 'result'
-            }
-        });
+    const { city, date, page = 1, size = 10 } = req.query;
+
+    const query = { };
+
+    if (city !== 'undefined' && city !== undefined && city !== '') {
+        query['field.city.name'] = city;
+    }
+    if (date !== 'undefined' && date !== undefined && date !== '') {
+        const dayFrom = new Date(date);
+        const dayTo = new Date(dayFrom);
+        dayTo.setDate(dayTo.getDate() + 1);
+
+        query.time = {
+            $gte: dayFrom.toISOString(),
+            $lte: dayTo.toISOString()
+        };
+    }
+    const skip = (page - 1) * size;
+    const totalItems = await ReservationModel.countDocuments(query);
+
+    const foundReservations = await ReservationModel.find(query)
+        .sort({ time: 1 })
+        .skip(skip)
+        .limit(size)
     ;
-    return res.status(HTTP_STATUS.OK).json(foundReservations);
+    return res.status(HTTP_STATUS.OK).json({ data: foundReservations, totalItems });
 };
 
 const viewSingleReservation = async (req, res) => {
     const { id } = req.params;
 
-    const viewOneReservation = await ReservationModel.findOne({ _id: id }, '-color')
-        .populate('field')
-        .populate('registeredPlayers', 'username')
-        .populate({
-            path: 'match',
-            populate: {
-                path: 'whiteTeam',
-                select: 'players ',
-                populate: {
-                    path: 'players',
-                    select: 'username'
-                }
-            }
-        })
-        .populate({
-            path: 'match',
-            populate: {
-                path: 'blackTeam',
-                select: 'players',
-                populate: {
-                    path: 'players',
-                    select: 'username'
-                }
-            }
-        })
-        .populate({
-            path: 'match',
-            populate: {
-                path: 'result'
-            }
-        });
-    if (!viewOneReservation) throw new NotFoundError(ErrorMessages.dataNotFound);
+    const reservation = await ReservationModel.findOne({ _id: id }, '-color');
 
-    res.status(HTTP_STATUS.OK).json(viewOneReservation);
+    if (!reservation) throw new NotFoundError(ErrorMessages.dataNotFound);
+
+    res.status(HTTP_STATUS.OK).json(reservation);
 };
 
 const updateReservation = async (req, res) => {
@@ -107,10 +72,10 @@ const addPlayerToReservation = async (req, res) => {
     const player = req.params.playerId;
 
     const find = await ReservationModel
-        .findByIdAndUpdate({ _id: req.params.id },
-            {
-                $addToSet: { registeredPlayers: mongoose.Types.ObjectId(player) }
-            });
+        .findByIdAndUpdate(
+            { _id: req.params.id },
+            { $addToSet: { registeredPlayers: mongoose.Types.ObjectId(player) } }
+        );
 
     if (!find) throw new NotFoundError(ErrorMessages.dataNotFound);
 
@@ -126,7 +91,8 @@ const removePlayerFromReservation = async (req, res) => {
         .findByIdAndUpdate({ _id: req.params.id },
             {
                 $pull: { registeredPlayers: mongoose.Types.ObjectId(player) }
-            });
+            }
+        );
 
     if (!find) throw new NotFoundError(ErrorMessages.dataNotFound);
 

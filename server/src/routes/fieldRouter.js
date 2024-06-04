@@ -40,7 +40,7 @@ router.get('/',
     }
   }
 */
-  callbackErrorHandler(fieldController.viewAllFields));
+    callbackErrorHandler(fieldController.viewAllFields));
 router.post('/',
 /* #swagger.tags = ['Field']
   #swagger.summary = 'Add a new Field'
@@ -106,9 +106,9 @@ router.post('/',
       }
     }
 */
-  isLoggedIn, isAdmin, validateField, callbackErrorHandler(fieldController.createField));
+    isLoggedIn, isAdmin, validateField, callbackErrorHandler(fieldController.createField));
 router.get('/:id',
-  /* #swagger.tags = ['Field']
+    /* #swagger.tags = ['Field']
   #swagger.security = []
   #swagger.summary = 'Get a single Field'
     #swagger.responses[200] = {
@@ -152,7 +152,7 @@ router.get('/:id',
 
 */
 
-  validateId, callbackErrorHandler(fieldController.viewSingleField));
+    validateId, callbackErrorHandler(fieldController.viewSingleField));
 router.put('/:id',
 /* #swagger.tags = ['Field']
   #swagger.summary = 'Update an existig field'
@@ -226,7 +226,7 @@ router.put('/:id',
       }
     }
 */
-  validateId, isLoggedIn, isAdmin, validateField, callbackErrorHandler(fieldController.updateField));
+    validateId, isLoggedIn, isAdmin, validateField, callbackErrorHandler(fieldController.updateField));
 router.delete('/:id',
 /* #swagger.tags = ['Field']
   #swagger.summary = 'Delete one Field'
@@ -281,6 +281,6 @@ router.delete('/:id',
     }
   }
 */
-  validateId, isLoggedIn, isAdmin, callbackErrorHandler(fieldController.deleteField));
+    validateId, isLoggedIn, isAdmin, callbackErrorHandler(fieldController.deleteField));
 
 module.exports = router;

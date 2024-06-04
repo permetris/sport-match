@@ -6,16 +6,17 @@ const { ROLES } = require('../constants/roles');
 
 const isLoggedIn = callbackErrorHandler(async (req, res, next) => {
     const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1];
 
+    const token = authHeader && authHeader.split(' ')[1];
     if (!token) throw new AuthenticationError(ErrorMessages.notLoggedIn);
 
     const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
     req.user = decoded;
-
+    console.log(req.user);
     return next();
 });
 const isAdmin = callbackErrorHandler(async (req, res, next) => {
+    console.log(req);
     if (req.user.role !== ROLES.ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
 
     next();
@@ -32,6 +33,7 @@ const isAnyAdmin = callbackErrorHandler(async (req, res, next) => {
 });
 const isProfileOwner = callbackErrorHandler(async (req, res, next) => {
     const id = req.params.playerId ? req.params.playerId : req.params.id;
+    console.log(req.params.id, req.user);
 
     if ((id !== req.user.id)) throw new AuthorizationError(ErrorMessages.unauthorized);
 

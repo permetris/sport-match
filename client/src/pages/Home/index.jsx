@@ -1,34 +1,38 @@
-import { React } from "react";
-import { Wrapper } from "../../components/Wrapper/index";
-import { Container } from "@mui/material";
-import ReservationCard from "../../components/ReservationCard";
-import { useGetReservationsQuery } from "../../api/slice";
+import { React, useEffect, useState } from "react";
+import { useLazyGetReservationsQuery } from "../../slices/apiSlice";
+import ReservationList from "./ResevationList";
+import Container from "../../components/Container";
+import { ReservationFilters } from "./ReservationFilters";
+import Pagination from "../../components/Pagination";
 
 export const Home = () => {
-  const { data: response, isLoading } = useGetReservationsQuery();
-  if (isLoading) {
-    return <h1>Loading</h1>;
-  }
+  const [getReservations, { data: response }] = useLazyGetReservationsQuery();
+  const [cityFilter, setCityFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    getReservations({ city: cityFilter, date: dateFilter, page });
+  }, [cityFilter, dateFilter, page]);
+
+  const resetFilters = () => {
+    setCityFilter("");
+    setDateFilter("");
+  };
 
   return (
-    <Wrapper>
-      <h2 className="text-red-300">Available sport events</h2>
-      <Container elevation={20} sx={styles.container}>
-        {response?.map((reservation) => (
-          <ReservationCard key={reservation._id} reservation={reservation} />
-        ))}
-      </Container>
-    </Wrapper>
+    <Container>
+      <ReservationFilters
+        resetFilters={resetFilters}
+        setCityFilter={setCityFilter}
+        setDateFilter={setDateFilter}
+      />
+      <ReservationList reservations={response?.data} />
+      <Pagination
+        totalItems={response?.totalItems}
+        page={page}
+        setPage={setPage}
+      />
+    </Container>
   );
-};
-
-const styles = {
-  container: {
-    p: 1,
-    display: "flex",
-    justifyContent: "space-evenly",
-    flexWrap: "wrap",
-    flexDirection: "row",
-    gap: 2,
-  },
 };

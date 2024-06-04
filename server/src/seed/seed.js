@@ -14,6 +14,7 @@ const reservations = require('./seedData/reservations');
 const matches = require('./seedData/matches');
 const results = require('./seedData/results');
 const fields = require('./seedData/fields');
+const generateFakeData  = require('./generateData');
 
 const seedDB = async () => {
     const userWithHashPasswordPromiseArray = users.map(
@@ -49,7 +50,7 @@ const seedDB = async () => {
 const runSeed = async () => {
     mongoose.set('strictQuery', true);
     await mongoose.connect(`mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@localhost:27017/`);
-    await seedDB();
+    await generateFakeData();
     await mongoose.connection.close();
 };
 module.exports.runSeed = runSeed;

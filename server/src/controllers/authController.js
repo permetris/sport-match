@@ -17,11 +17,12 @@ const loginUser = async (req, res) => {
     if (!user) throw new NotFoundError(ErrorMessages.userNotFound);
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    if (!isPasswordCorrect) throw new AuthenticationError(ErrorMessages.passError);
 
+    if (!isPasswordCorrect) { return res.status(HTTP_STATUS.FORBIDDEN).json({ success: false, message: 'Passwords do not match' }); }
     const token = createJWT(user);
+    const bearer = `Bearer ${token}`;
 
-    const userResponse = { ...user, token };
+    const userResponse = { ...user, token: bearer };
     return res.status(HTTP_STATUS.OK).json({ user: userResponse, success: true });
 };
 
@@ -70,8 +71,10 @@ const resetPasswordWithLink = async (req, res) => {
 const resetPassword = async (req, res) => {
     const { id } = req.params;
     const { password, newPassword } = req.body;
+    console.log(id);
 
     const user = await UserModel.findById(id);
+    console.log(user);
 
     if (!user) throw new NotFoundError(ErrorMessages.dataNotFound);
 

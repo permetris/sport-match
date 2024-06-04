@@ -1,27 +1,31 @@
 import React, { createContext, useState, useContext } from "react";
-import { useLoginUserMutation } from "../api/slice";
+import { useLoginUserMutation } from "../slices/apiSlice";
+import store from "../store/store";
+import { setToken } from "../slices/authSlice";
+
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [triggerLogin, result] = useLoginUserMutation();
+  const [triggerLogin] = useLoginUserMutation();
+
   const [user, setUser] = useState(undefined);
 
   const login = async (userData) => {
     const response = await triggerLogin(userData);
-    console.log(response.data);
-    console.log(result);
 
-    if (response?.data.user) {
+    if (response?.data?.user) {
       setUser(response.data.user);
-      return true;
+      store.dispatch(setToken(response.data.user.token));
+      return response.data.user;
     }
-    return false;
+    return undefined;
   };
 
   const logout = () => {
     setUser(undefined);
   };
+  
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

@@ -4,12 +4,13 @@ const { ErrorMessages } = require('../errors/ErrorMessages');
 
 const Team = require('./Team');
 const { MatchModel, matchSchema } = require('./Match');
-const Field = require('./Field');
+const { FieldModel, fieldSchema } = require('./Field');
 const { userSchema } = require('./User');
+const { boolean } = require('joi');
 
 const reservationSchema = mongoose.Schema({
     field: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: fieldSchema,
         ref: 'Field',
         required: true
     },
@@ -27,12 +28,16 @@ const reservationSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['scheduled', 'canceled', 'done', 'open'], // Enumerated values for the role property
-        default: 'user' // Default value if not provided
+        enum: ['scheduled', 'canceled', 'done', 'open'],
+        default: 'open'
     },
     registeredPlayers: [{
         type: userSchema
-    }]
+    }],
+    openEntry: {
+        type: Boolean,
+        required: true
+    }
 },
 {
     timestamps: true,
@@ -79,7 +84,7 @@ reservationSchema.pre('findOneAndUpdate', async function (next) {
 });
 
 reservationSchema.pre('save', async function (next) {
-    const field = await Field.findById(this.field);
+    const field = await FieldModel.findById(this.field);
     const maxPlayers = field.maxPlayers;
     if (this.registeredPlayers.length > maxPlayers) throw new ValidationError(ErrorMessages.playerLimit);
 });
