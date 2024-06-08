@@ -12,7 +12,6 @@ const isLoggedIn = callbackErrorHandler(async (req, res, next) => {
 
     const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
     req.user = decoded;
-    console.log(req.user);
     return next();
 });
 const isAdmin = callbackErrorHandler(async (req, res, next) => {
@@ -39,11 +38,20 @@ const isProfileOwner = callbackErrorHandler(async (req, res, next) => {
 
     return next();
 });
+const isProfileOwnerOrAdmin = callbackErrorHandler(async (req, res, next) => {
+    const id = req.params.playerId ? req.params.playerId : req.params.id;
+    console.log('user', req.user);
+    if (req.user.role === 'ADMIN') return next();
+    if ((id !== req.user.id)) throw new AuthorizationError(ErrorMessages.unauthorized);
+
+    return next();
+});
 
 module.exports = {
     isLoggedIn,
     isAdmin,
     isProfileOwner,
     isAnyAdmin,
-    isFieldAdmin
+    isFieldAdmin,
+    isProfileOwnerOrAdmin
 };

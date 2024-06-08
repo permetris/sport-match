@@ -6,7 +6,7 @@ import Pagination from "../../../components/Pagination";
 
 export default function Fields() {
   const [page, setPage] = useState(1);
-  const [getFields,{ data }] = useLazyGetFieldsQuery();
+  const [getFields, { data }] = useLazyGetFieldsQuery();
 
   const editEntry = (event) => {
     console.log("editing");
@@ -18,7 +18,7 @@ export default function Fields() {
     console.log("adding");
   };
   useEffect(() => {
-    getFields({ page });
+    getFields({ page, size: 0 });
   }, [page]);
   return (
     <>
@@ -34,7 +34,6 @@ export default function Fields() {
         page={page}
         setPage={setPage}
       ></Pagination>
-      
     </>
   );
 }

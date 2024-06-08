@@ -1,4 +1,4 @@
-const { createOne, getAll, updateOne } = require('./crudController');
+const { createOne, updateOne } = require('./crudController');
 const { UserModel } = require('../models/User');
 const { ReservationModel } = require('../models/Reservation');
 const { ErrorMessages } = require('../errors/ErrorMessages');
@@ -20,8 +20,15 @@ const registerUser = async (req, res) => {
 const viewAllUsers = async (req, res) => {
     const { page = 1, size = 10 } = req.query;
     const skip = (page - 1) * size;
+    const { username } = req.query;
 
-    const dataFound = await UserModel.find({}, exclude)
+    const query = {};
+    if (username) {
+        query.username =
+            { $regex: username, $options: 'i' };
+    }
+
+    const dataFound = await UserModel.find(query, exclude)
         .lean()
         .skip(skip)
         .limit(size);

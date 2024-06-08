@@ -7,7 +7,7 @@ const createField = async (req, res) => {
 };
 
 const viewAllFields = async (req, res) => {
-    const { page = 1, size = 10, } = req.query;
+    const { page = 1, size = 10 } = req.query;
     const skip = (page - 1) * size;
 
     const dataFound = await FieldModel.find({})

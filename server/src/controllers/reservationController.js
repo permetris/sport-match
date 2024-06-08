@@ -84,9 +84,10 @@ const addPlayerToReservation = async (req, res) => {
 
 const removePlayerFromReservation = async (req, res) => {
     const player = req.params.playerId;
-    if (player !== req.user.id) {
+    if (player !== req.user.id && req.user.role !== 'ADMIN') {
         throw new AuthorizationError(ErrorMessages.unauthorized);
     }
+    
     const find = await ReservationModel
         .findByIdAndUpdate({ _id: req.params.id },
             {

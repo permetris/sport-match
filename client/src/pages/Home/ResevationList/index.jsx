@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "./Modal";
 
 export default function ReservationList({ reservations }) {
-  const [reservation, setReservation] = useState(undefined);
+  const [reservationId, setReservationId] = useState(undefined);
 
   if (!reservations || reservations.length == 0) {
     return (
@@ -16,7 +16,7 @@ export default function ReservationList({ reservations }) {
   }
 
   const openReservation = (id) => {
-    setReservation(reservations.find((each) => each._id === id));
+    setReservationId(id);
   };
 
   return (
@@ -57,7 +57,7 @@ export default function ReservationList({ reservations }) {
           </li>
         ))}
       </ul>
-      <Modal reservation={reservation} setReservation={setReservation} />
+      <Modal reservationId={reservationId} setReservationId={setReservationId} />
     </div>
   );
 }

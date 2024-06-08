@@ -2,7 +2,7 @@ const express = require('express');
 const reservationController = require('../controllers/reservationController');
 const { callbackErrorHandler } = require('../middleware/errorMiddlewareHandler');
 const { validateId, validateDoubleId, validateQuery, validateReservation } = require('../middleware/requestValidationHandler');
-const { isLoggedIn, isAdmin, isProfileOwner } = require('../middleware/authorizationHandler');
+const { isLoggedIn, isAdmin, isProfileOwner, isProfileOwnerOrAdmin } = require('../middleware/authorizationHandler');
 
 const router = express.Router();
 
@@ -302,7 +302,7 @@ router.put('/:id',
       }
     }
 */
-    validateId, isLoggedIn, isAdmin, validateReservation, callbackErrorHandler(reservationController.updateReservation));
+    validateId, isLoggedIn, isAdmin, callbackErrorHandler(reservationController.updateReservation));
 router.put('/:id/add-player/:playerId',
 /* #swagger.tags = ['Reservation']
 #swagger.summary = 'Add a Player to a Reservation'
@@ -357,8 +357,8 @@ router.put('/:id/add-player/:playerId',
     }
   }
   */
-    validateDoubleId, isLoggedIn, isProfileOwner, callbackErrorHandler(reservationController.addPlayerToReservation));
-router.put('/:id/player-withdraw/:playerId',
+    validateDoubleId, isLoggedIn, isProfileOwnerOrAdmin, callbackErrorHandler(reservationController.addPlayerToReservation));
+router.put('/:id/remove-player/:playerId',
 /* #swagger.tags = ['Reservation']
 #swagger.summary = 'Withdraw a Player from Reservation'
   #swagger.responses[200] = {
@@ -412,7 +412,7 @@ router.put('/:id/player-withdraw/:playerId',
     }
   }
   */
-    validateDoubleId, isLoggedIn, isProfileOwner, callbackErrorHandler(reservationController.removePlayerFromReservation));
+    validateDoubleId, isLoggedIn, isProfileOwnerOrAdmin, callbackErrorHandler(reservationController.removePlayerFromReservation));
 router.delete('/:id',
 /* #swagger.tags = ['Reservation']
    #swagger.summary = 'Delete one Reservation'

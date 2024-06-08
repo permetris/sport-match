@@ -27,6 +27,18 @@ export const apiSlice = createApi({
         url: `/reservation?city=${city}&date=${date}&page=${page}`,
       }),
     }),
+    getReservation: builder.query({
+      query: ({ id }) => ({
+        url: `/reservation/${id}`,
+      }),
+    }),
+    updateReservation: builder.mutation({
+      query: (body) => ({
+        url: `/reservation/${body._id}`,
+        body,
+        method: "PUT",
+      }),
+    }),
     getCities: builder.query({
       query: (query) => ({
         url: `/city?page=${query?.page}`,
@@ -61,7 +73,7 @@ export const apiSlice = createApi({
       }),
     }),
     getUsers: builder.query({
-      query: ({page}) => ({
+      query: ({ page }) => ({
         url: `/user?page=${page}`,
         method: "GET",
       }),
@@ -70,6 +82,13 @@ export const apiSlice = createApi({
       query: (query) => ({
         url: `/field?page=${query?.page}&size=${query?.size}`,
         method: "GET",
+      }),
+    }),
+
+    removeRegisteredPlayer: builder.mutation({
+      query: ({ reservationId, playerId }) => ({
+        url: `/reservation/${reservationId}/remove-player/${playerId}`,
+        method: "PUT",
       }),
     }),
   }),
@@ -88,5 +107,8 @@ export const {
   useLazyGetUsersQuery,
   useGetFieldsQuery,
   useLazyGetUserQuery,
-  useLazyGetFieldsQuery
+  useLazyGetFieldsQuery,
+  useRemoveRegisteredPlayerMutation,
+  useLazyGetReservationQuery,
+  useUpdateReservationMutation,
 } = apiSlice;
