@@ -69,7 +69,10 @@ async function generateFakeData () {
         cities.push(city);
         await city.save();
     }
-
+    const bacina = new CityModel({
+        name: 'Bacina'
+    });
+    await bacina.save();
     // Generate fields
     const fields = [];
     for (let i = 0; i < 10; i++) {

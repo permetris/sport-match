@@ -1,5 +1,4 @@
 import React from "react";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 export default function Table({
   data,
@@ -20,8 +19,8 @@ export default function Table({
                   onClick={addEntry}
                   className="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                 >
-                  {settings.name}
-                  <PlusCircleIcon className="inline" />
+                  {`Add ${settings.name}`}
+                  
                 </button>
               </div>
             </div>
@@ -66,7 +65,7 @@ export default function Table({
                               key={each[field.key]}
                               className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"
                             >
-                              {each[field.key]}
+                              {field.key !== "time" ? each[field.key] : new Date(each[field.key]).toUTCString()}
                             </td>
                           ))}
                           {settings.deepFields && settings.deepFields.map((field) => (

@@ -1,26 +1,39 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../../components/Table";
-import { useLazyGetCitiesQuery } from "../../../slices/apiSlice";
+import { useDeleteCityMutation, useLazyGetCitiesQuery } from "../../../slices/apiSlice";
 import { citiesTableSettings } from "./settings";
 import Pagination from "../../../components/Pagination";
+import { toastSuccess } from "../../../hooks/useToastify";
+import { AddCityModal } from "./AddCity";
 
 export default function Cities() {
-  const [getCities, { data }] = useLazyGetCitiesQuery();
+  const [getCities, { data , isLoading, isFetching}] = useLazyGetCitiesQuery();
+  const [deleteCity] = useDeleteCityMutation();
   const [page, setPage] = useState(1);
+  const [isAddCity, setIsAddCity] = useState(false);
 
-  const editEntry = (event) => {
+
+  const editEntry = async (event) => {
     console.log("editing");
   };
-  const deleteEntry = (id) => {
-    console.log("deleting" + id);
+  const deleteEntry =  async (id) => {
+    const deleteResult = await deleteCity({ id }).unwrap();
+    if (deleteResult.success) {
+      toastSuccess("Sucessfully deleted city.");
+      await getCities({page});
+     }
   };
   const addEntry = () => {
-    console.log("adding");
+    setIsAddCity(true);
   };
 
   useEffect(() => {
     getCities({page});
   }, [page]);
+
+  if (isLoading || isFetching) { 
+    return <h1>Loading...</h1>
+  }
 
   return (
     <>
@@ -36,6 +49,7 @@ export default function Cities() {
         page={page}
         setPage={setPage}
       ></Pagination>
+      {isAddCity && <AddCityModal setIsAddCity={setIsAddCity } getCities={getCities} />}
     </>
   );
 }

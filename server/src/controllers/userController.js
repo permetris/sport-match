@@ -18,11 +18,14 @@ const registerUser = async (req, res) => {
 };
 
 const viewAllUsers = async (req, res) => {
-    const { page = 1, size = 10 } = req.query;
+    const { page = 1, size = 10, isDeleted } = req.query;
     const skip = (page - 1) * size;
     const { username } = req.query;
 
     const query = {};
+    if (isDeleted !== undefined) {
+        query.isDeleted = isDeleted;
+    }
     if (username) {
         query.username =
             { $regex: username, $options: 'i' };
@@ -55,16 +58,17 @@ const deleteUser = async (req, res) => {
 
     const userToDelete = await UserModel.findByIdAndUpdate(id, { isDeleted: true });
 
-    if (userToDelete) {
-        await ReservationModel.updateMany({
-            registeredPlayers: { $in: [id] }
-        },
-        {
-            $pull: { registeredPlayers: id }
-        });
-    } else {
-        throw new NotFoundError(ErrorMessages.dataNotFound);
-    }
+    // TODO DECIDE WHAT TO DO WITH DELETED USERS THAT HAVE RESERVATIONS
+    // if (userToDelete) {
+    //     await ReservationModel.updateMany({
+    //         registeredPlayers: { $in: [id] }
+    //     },
+    //     {
+    //         $pull: { registeredPlayers: id }
+    //     });
+    // } else {
+    //     throw new NotFoundError(ErrorMessages.dataNotFound);
+    // }
 
     res.status(HTTP_STATUS.OK).json({ success: true, message: successMessages.userDeleted(userToDelete.username) });
 };

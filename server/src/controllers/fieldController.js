@@ -1,6 +1,7 @@
 const { getOne, deleteOne, createOne, updateOne } = require('./crudController');
 const { FieldModel } = require('../models/Field');
 const { HTTP_STATUS } = require('../constants/httpCodes');
+const { successMessages } = require('../utils/successMessages');
 
 const createField = async (req, res) => {
     await createOne(FieldModel, req, res);
@@ -29,7 +30,15 @@ const updateField = async (req, res) => {
 };
 
 const deleteField = async (req, res) => {
-    await deleteOne(FieldModel, req, res);
+    const { id } = req.params;
+
+    const isDeleted = await FieldModel.findByIdAndUpdate(id, { isDeleted: true });
+
+    if (isDeleted) {
+        return res.status(HTTP_STATUS.OK).json({ success: true, message: 'Field deleted.' });
+    }
+
+    return res.status(HTTP_STATUS.NOT_FOUND).json({ success: false, message: 'Field not found' });
 };
 
 module.exports = {

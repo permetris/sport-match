@@ -6,15 +6,15 @@ export function PlayersList({ players,title,removePlayer,addPlayer }) {
 
   return (
     <div className="w-full text-center">
-     {title}
+      <span>{title.toUpperCase()}</span>
       <div >
         <ul>
           {players?.map((player) => (
-            <li className="text-center" key={player._id}>{player.username} {user.role === "ADMIN" && <button className="text-red" onClick={()=> removePlayer(player._id)}> Remove</button>}</li>
+            <li className="text-center" key={player._id}>{player.username} {user?.role === "ADMIN" && <button className="text-red-800 hover:text-red-300" onClick={()=> removePlayer(player._id)}> Remove</button>}</li>
           ))}
         </ul>
       </div>
       <button onClick={() => addPlayer()}>Join</button>
-    </div>
+    </div>  
   );
 }

@@ -1,8 +1,7 @@
 // eslint-disable-next-line max-len
-const { idSchema, passwordSchema, emailSchema, resetParamsSchema, doubleIdSchema, fieldSchema, matchSchema, reservationSchema, resultSchema, teamSchema, userSchema, querySchema } = require('../schemas/schemas');
+const { idSchema, passwordSchema, emailSchema, resetParamsSchema, doubleIdSchema, fieldSchema, matchSchema, reservationSchema, resultSchema, teamSchema, userSchema, querySchema, citySchema } = require('../schemas/schemas');
 const { validateSchema } = require('../schemas/validateSchema');
 const { HTTP_STATUS } = require('../constants/httpCodes');
-const { citySchema } = require('../models/City');
 
 const validateParams = (schema) => (req, res, next) => {
     const { error } = schema.validate(req.params);

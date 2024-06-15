@@ -31,6 +31,10 @@ const fieldSchema = mongoose.Schema({
                 return this.maxPlayers % 2 === 0;
             }
         }
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 
 }, {

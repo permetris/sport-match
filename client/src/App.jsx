@@ -89,6 +89,7 @@ const router = createBrowserRouter([
         children: [
           { path: "cities", element: <Cities /> },
           { path: "reservations", element: <Reservations /> },
+          { path: "", element: <Reservations /> },
           { path: "fields", element: <Fields /> },
           { path: "users", element: <Users /> },
         ],

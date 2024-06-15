@@ -34,10 +34,10 @@ export default function ReservationDetails({ reservationId, closeModal }) {
         (user) => user._id !== playerId,
       ),
     };
-    const response = await updateReservation(updatedReservation);
+    const response = await updateReservation(updatedReservation).unwrap();
     console.log(response);
     if (response?.success === true) {
-      getReservation(reservationId);
+      getReservation({id:reservationId});
     }
   };
 

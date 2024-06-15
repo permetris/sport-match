@@ -1,4 +1,4 @@
 export const reservationTableSettings = {
-  name: "User",
+  name: "Reservation",
   fields: [{ key: "time", displayName: "Time" }],
 };

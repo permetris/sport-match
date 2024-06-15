@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { MatchItem } from './MatchItem';
 import { toastError } from '../../hooks/useToastify';
-import { httpGetMatch } from '../../hooks/requests';
+
 import { useLocation } from 'react-router-dom';
 
 export const Match = () => {
@@ -11,15 +11,7 @@ export const Match = () => {
   const [match, setMatch] = useState();
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const { data } = await httpGetMatch(id);
-        setMatch(data.data);
-      } catch (e) {
-        toastError(e);
-      }
-    };
-    getData();
+
 
     return () => {
       // cleanup

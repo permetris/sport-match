@@ -39,7 +39,7 @@ export default function ReservationList({ reservations }) {
                   {reservation.field.city.name}
                 </p>
                 <p className="text-sm font-semibold leading-6 text-white">
-                  {new Date(reservation.time).toLocaleString()}
+                  {new Date(reservation.time).toUTCString()}
                 </p>
                 <p className="mt-1 truncate text-xs leading-5 text-gray-400">
                   {reservation.field.address}

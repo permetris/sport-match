@@ -76,6 +76,9 @@ const userSchema = Joi.object({
     isDeleted: Joi.boolean()
 
 }).options({ abortEarly: false });
+const citySchema = Joi.object({
+    name: Joi.string().min(5).max(50).required()
+}).options({ abortEarly: false });
 
 module.exports = {
     idSchema,
@@ -89,5 +92,6 @@ module.exports = {
     resultSchema,
     teamSchema,
     userSchema,
-    doubleIdSchema
+    doubleIdSchema,
+    citySchema
 };

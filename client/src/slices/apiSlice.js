@@ -15,7 +15,7 @@ const baseQueryWithAuth = fetchBaseQuery({
 export const apiSlice = createApi({
   reducerPath: "apiSlice",
   baseQuery: baseQueryWithAuth,
-  tagTypes: ["cities"],
+  tagTypes: ["City", "User", "Field", "Reservation"],
   endpoints: (builder) => ({
     getUser: builder.query({
       query: (username) => ({
@@ -43,7 +43,7 @@ export const apiSlice = createApi({
       query: (query) => ({
         url: `/city?page=${query?.page}`,
         method: "GET",
-        providesTag: "cities",
+        providesTags: [{type: "City", id: "LIST"}],
       }),
     }),
     loginUser: builder.mutation({
@@ -73,9 +73,10 @@ export const apiSlice = createApi({
       }),
     }),
     getUsers: builder.query({
-      query: ({ page }) => ({
-        url: `/user?page=${page}`,
+      query: ({ page,isDeleted }) => ({
+        url: `/user?page=${page}&isDeleted=${isDeleted}`,
         method: "GET",
+        providesTags: [{type:"User", id:"LIST"}]
       }),
     }),
     getFields: builder.query({
@@ -89,6 +90,28 @@ export const apiSlice = createApi({
       query: ({ reservationId, playerId }) => ({
         url: `/reservation/${reservationId}/remove-player/${playerId}`,
         method: "PUT",
+      }),
+    }),
+    deleteCity: builder.mutation({
+      query: ({ id }) => ({
+        url: `/city/${id}`,
+        method: "DELETE",
+        invalidatesTags: [{type: "City", id: "LIST"}],
+      }),
+    }),
+    deleteUser: builder.mutation({
+      query: ({ id }) => ({
+        url: `/user/${id}`,
+        method: "DELETE",
+        invalidatesTags: [{type: "User", id: "LIST"}],
+      }),
+    }),
+    addCity: builder.mutation({
+      query: (body) => ({
+        url: `/city`,
+        body,
+        method: "POST",
+        invalidatesTags: [{type: "City", id: "LIST"}],
       }),
     }),
   }),
@@ -111,4 +134,7 @@ export const {
   useRemoveRegisteredPlayerMutation,
   useLazyGetReservationQuery,
   useUpdateReservationMutation,
+  useDeleteCityMutation,
+  useDeleteUserMutation,
+  useAddCityMutation
 } = apiSlice;
