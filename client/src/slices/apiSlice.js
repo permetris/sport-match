@@ -43,7 +43,7 @@ export const apiSlice = createApi({
       query: (query) => ({
         url: `/city?page=${query?.page}`,
         method: "GET",
-        providesTags: [{type: "City", id: "LIST"}],
+        providesTags: [{ type: "City", id: "LIST" }],
       }),
     }),
     loginUser: builder.mutation({
@@ -73,10 +73,10 @@ export const apiSlice = createApi({
       }),
     }),
     getUsers: builder.query({
-      query: ({ page,isDeleted }) => ({
+      query: ({ page, isDeleted }) => ({
         url: `/user?page=${page}&isDeleted=${isDeleted}`,
         method: "GET",
-        providesTags: [{type:"User", id:"LIST"}]
+        providesTags: [{ type: "User", id: "LIST" }],
       }),
     }),
     getFields: builder.query({
@@ -96,14 +96,21 @@ export const apiSlice = createApi({
       query: ({ id }) => ({
         url: `/city/${id}`,
         method: "DELETE",
-        invalidatesTags: [{type: "City", id: "LIST"}],
+        invalidatesTags: [{ type: "City", id: "LIST" }],
+      }),
+    }),
+    deleteField: builder.mutation({
+      query: ({ id }) => ({
+        url: `/field/${id}`,
+        method: "DELETE",
+        invalidatesTags: [{ type: "Field", id: "LIST" }],
       }),
     }),
     deleteUser: builder.mutation({
       query: ({ id }) => ({
         url: `/user/${id}`,
         method: "DELETE",
-        invalidatesTags: [{type: "User", id: "LIST"}],
+        invalidatesTags: [{ type: "User", id: "LIST" }],
       }),
     }),
     addCity: builder.mutation({
@@ -111,7 +118,7 @@ export const apiSlice = createApi({
         url: `/city`,
         body,
         method: "POST",
-        invalidatesTags: [{type: "City", id: "LIST"}],
+        invalidatesTags: [{ type: "City", id: "LIST" }],
       }),
     }),
   }),
@@ -136,5 +143,6 @@ export const {
   useUpdateReservationMutation,
   useDeleteCityMutation,
   useDeleteUserMutation,
-  useAddCityMutation
+  useAddCityMutation,
+  useDeleteFieldMutation
 } = apiSlice;
