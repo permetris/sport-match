@@ -8,11 +8,13 @@ import { toastSuccess } from "../../hooks/useToastify";
 
 export const Login = () => {
   const [formData, setFormData] = useState({});
-  const {user, login } = useAuth();
+  const { user, login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(e)
+    if (e.key === "Enter") console.log("enter pressed");
     const request = { email: formData.email, password: formData.password };
     const user = await login(request);
     if (user) {
@@ -22,7 +24,7 @@ export const Login = () => {
       if (user.role === ROLES.ADMIN) {
         return navigate("/dashboard");
       }
-      toastSuccess(`Welcome ${user.name} ${user.surname}`)
+      toastSuccess(`Welcome ${user.name} ${user.surname}`);
     }
   };
 

@@ -3,7 +3,6 @@ import Navigation from "./components/Navigation";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { Registration } from "./components/Registration";
 import { Home } from "./pages/Home/index";
-import { UserProfilee } from "./components/asd/UserProfile";
 import { ResetPassword } from "./components/ResetPassword/ResetPass";
 import { ToastContainer } from "react-toastify";
 import { SendEmail } from "./components/ResetPassword/SendEmail";
@@ -66,10 +65,6 @@ const router = createBrowserRouter([
       {
         path: "reset-password/:id/:emailToken",
         element: <ResetPassword />,
-      },
-      {
-        path: "user/:username",
-        element: <UserProfilee />,
       },
       {
         path: "history",

@@ -33,10 +33,18 @@ const querySchema = Joi.object({
 }).options({ abortEarly: false });
 
 const fieldSchema = Joi.object({
+    _id: Joi.string().min(24).max(24).hex(),
     name: Joi.string().min(5).max(50).required(),
     address: Joi.string().min(8).max(50).required(),
     maxPlayers: Joi.number().min(6).max(22).multiple(2).required(),
-    city: Joi.string().min(3).max(50).required()
+    city: Joi.object({
+        _id: Joi.string().min(24).max(24).hex().required(),
+        name: Joi.string().min(5).max(50).required(),
+        createdAt: Joi.string(),
+        updatedAt: Joi.string()
+    }),
+    owner: Joi.string().min(24).max(24).hex().required(),
+    isDeleted: Joi.boolean()
 }).options({ abortEarly: false });
 
 const matchSchema = Joi.object({
@@ -46,13 +54,13 @@ const matchSchema = Joi.object({
 }).options({ abortEarly: false });
 
 const reservationSchema = Joi.object({
-    field: Joi.string().min(24).max(24).hex().required(),
+    field: fieldSchema,
     time: Joi.string().isoDate().required(),
     match: Joi.string(),
-    num: Joi.number(),
     isCanceled: Joi.boolean(),
     isScheduled: Joi.boolean(),
-    registeredPlayers: Joi.array().items(Joi.string())
+    registeredPlayers: Joi.array().items(Joi.string()),
+    openEntry: Joi.boolean()
 }).options({ abortEarly: false });
 
 const resultSchema = Joi.object({

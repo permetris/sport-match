@@ -18,9 +18,8 @@ const registerUser = async (req, res) => {
 };
 
 const viewAllUsers = async (req, res) => {
-    const { page = 1, size = 10, isDeleted } = req.query;
+    const { page = 1, size = 10, isDeleted, username, role } = req.query;
     const skip = (page - 1) * size;
-    const { username } = req.query;
 
     const query = {};
     if (isDeleted !== undefined) {
@@ -29,6 +28,9 @@ const viewAllUsers = async (req, res) => {
     if (username) {
         query.username =
             { $regex: username, $options: 'i' };
+    }
+    if (role) {
+        query.role = role;
     }
 
     const dataFound = await UserModel.find(query, exclude)

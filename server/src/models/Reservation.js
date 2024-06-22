@@ -6,7 +6,6 @@ const Team = require('./Team');
 const { MatchModel, matchSchema } = require('./Match');
 const { FieldModel, fieldSchema } = require('./Field');
 const { userSchema } = require('./User');
-const { boolean } = require('joi');
 
 const reservationSchema = mongoose.Schema({
     field: {
@@ -28,8 +27,8 @@ const reservationSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['scheduled', 'canceled', 'done', 'open'],
-        default: 'open'
+        enum: ['scheduled', 'canceled', 'done'],
+        default: 'scheduled'
     },
     registeredPlayers: [{
         type: userSchema

@@ -3,8 +3,10 @@ import Table from "../../../components/Table";
 import { useLazyGetReservationsQuery } from "../../../slices/apiSlice";
 import { reservationTableSettings } from "./settings";
 import Pagination from "../../../components/Pagination";
+import { AddReservationModal } from "./AddReservation";
 
 export default function Reservations() {
+  const [isAddReservation, setIsAddReservation] = useState(false);
   const [page, setPage] = useState(1);
   const [getReservations, { data }] = useLazyGetReservationsQuery();
 
@@ -15,11 +17,11 @@ export default function Reservations() {
     console.log("deleting" + id);
   };
   const addEntry = () => {
-    console.log("adding");
+    setIsAddReservation(true);
   };
   useEffect(() => {
     getReservations({ page });
-  },[page]);
+  }, [page]);
   return (
     <>
       <Table
@@ -34,6 +36,9 @@ export default function Reservations() {
         page={page}
         setPage={setPage}
       ></Pagination>
+      {isAddReservation && (
+        <AddReservationModal setIsAddReservation={setIsAddReservation} />
+      )}
     </>
   );
 }

@@ -15,8 +15,6 @@ const fieldSchema = mongoose.Schema({
         type: String,
         minLength: 8,
         maxLength: 50
-        // unique: true
-
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
@@ -32,9 +30,9 @@ const fieldSchema = mongoose.Schema({
             }
         }
     },
-    isActive: {
+    isDeleted: {
         type: Boolean,
-        default: true
+        default: false
     }
 
 }, {

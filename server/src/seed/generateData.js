@@ -127,7 +127,7 @@ async function generateFakeData () {
             field: faker.helpers.arrayElement(fields),
             match: faker.helpers.arrayElement(matches),
             time: faker.date.future(),
-            status: faker.helpers.arrayElement(['scheduled', 'canceled', 'done', 'open']),
+            status: faker.helpers.arrayElement(['scheduled', 'canceled', 'done']),
             registeredPlayers: faker.helpers.arrayElements(users, 2),
             openEntry: faker.datatype.boolean()
         });

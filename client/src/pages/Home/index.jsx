@@ -12,7 +12,7 @@ export const Home = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    getReservations({ city: cityFilter, date: dateFilter, page });
+    getReservations({ city: cityFilter, date: dateFilter, page, status: "scheduled" });
   }, [cityFilter, dateFilter, page]);
 
   const resetFilters = () => {

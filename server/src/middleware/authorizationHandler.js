@@ -15,9 +15,7 @@ const isLoggedIn = callbackErrorHandler(async (req, res, next) => {
     return next();
 });
 const isAdmin = callbackErrorHandler(async (req, res, next) => {
-    console.log(req);
     if (req.user.role !== ROLES.ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
-
     next();
 });
 const isFieldAdmin = callbackErrorHandler(async (req, res, next) => {

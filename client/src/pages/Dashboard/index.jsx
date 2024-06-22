@@ -3,10 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { ROLES } from "../../utils/roles";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { navigation } from "./Sidebars/Utils/constants";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "../../utils/classNames";
 
 export default function Dashboard() {
   const { user } = useAuth();

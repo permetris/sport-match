@@ -10,12 +10,15 @@ const createReservation = async (req, res) => {
 };
 
 const viewAllReservations = async (req, res) => {
-    const { city, date, page = 1, size = 10 } = req.query;
+    const { city, date, page = 1, size = 10, status } = req.query;
 
-    const query = { };
+    const query = {};
 
     if (city !== 'undefined' && city !== undefined && city !== '') {
         query['field.city.name'] = city;
+    }
+    if (status) {
+        query.status = status;
     }
     if (date !== 'undefined' && date !== undefined && date !== '') {
         const dayFrom = new Date(date);
@@ -87,7 +90,7 @@ const removePlayerFromReservation = async (req, res) => {
     if (player !== req.user.id && req.user.role !== 'ADMIN') {
         throw new AuthorizationError(ErrorMessages.unauthorized);
     }
-    
+
     const find = await ReservationModel
         .findByIdAndUpdate({ _id: req.params.id },
             {

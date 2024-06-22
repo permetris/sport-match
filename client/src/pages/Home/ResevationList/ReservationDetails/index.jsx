@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import { useAuth } from "../../../../context/AuthContext";
-import { PlusIcon } from "@heroicons/react/24/outline";
+
 import { PlayersList } from "./PlayersList";
 import {
   useLazyGetReservationQuery,
@@ -102,20 +102,7 @@ export default function ReservationDetails({ reservationId, closeModal }) {
               />
             </div>
           )}
-          <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
-            <dt className="flex-none">
-              <span className="sr-only">Due date</span>
-              <CalendarDaysIcon
-                className="h-6 w-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </dt>
-            <dd className="text-sm leading-6 text-gray-500">
-              <time dateTime="2023-01-31">
-                {new Date(reservation?.time).toLocaleString()}
-              </time>
-            </dd>
-          </div>
+        
         </dl>
         <div className=" mt-6 border-t border-gray-900/5 px-6 py-6">
           <button

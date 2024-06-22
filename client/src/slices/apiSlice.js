@@ -1,5 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+function toQueryString(obj) {
+  if (!obj) return "";
+  return Object.keys(obj)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
+    .join('&');
+}
+
 const baseQueryWithAuth = fetchBaseQuery({
   baseUrl: "http://localhost:8000",
   prepareHeaders: (headers, { getState }) => {
@@ -23,8 +30,8 @@ export const apiSlice = createApi({
       }),
     }),
     getReservations: builder.query({
-      query: ({ city, date, page }) => ({
-        url: `/reservation?city=${city}&date=${date}&page=${page}`,
+      query: (query) => ({
+        url: `/reservation?${toQueryString(query)}`,
       }),
     }),
     getReservation: builder.query({
@@ -37,6 +44,13 @@ export const apiSlice = createApi({
         url: `/reservation/${body._id}`,
         body,
         method: "PUT",
+      }),
+    }),
+    addReservation: builder.mutation({
+      query: (body) => ({
+        url: `/reservation`,
+        body,
+        method: "POST",
       }),
     }),
     getCities: builder.query({
@@ -73,15 +87,14 @@ export const apiSlice = createApi({
       }),
     }),
     getUsers: builder.query({
-      query: ({ page, isDeleted }) => ({
-        url: `/user?page=${page}&isDeleted=${isDeleted}`,
-        method: "GET",
-        providesTags: [{ type: "User", id: "LIST" }],
+      query: (query) => ({
+        url: `/user?${toQueryString(query)}`,
+        method: "GET"
       }),
     }),
     getFields: builder.query({
       query: (query) => ({
-        url: `/field?page=${query?.page}&size=${query?.size}`,
+        url: `/field?${toQueryString(query)}`,
         method: "GET",
       }),
     }),
@@ -118,7 +131,14 @@ export const apiSlice = createApi({
         url: `/city`,
         body,
         method: "POST",
-        invalidatesTags: [{ type: "City", id: "LIST" }],
+      }),
+    }),
+    addField: builder.mutation({
+      query: (body) => ({
+        url: `/field`,
+        body,
+        method: "POST",
+        invalidatesTags: [{ type: "Filed", id: "LIST" }],
       }),
     }),
   }),
@@ -144,5 +164,7 @@ export const {
   useDeleteCityMutation,
   useDeleteUserMutation,
   useAddCityMutation,
-  useDeleteFieldMutation
+  useDeleteFieldMutation,
+  useAddFieldMutation,
+  useAddReservationMutation
 } = apiSlice;

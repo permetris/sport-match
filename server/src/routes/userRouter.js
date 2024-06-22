@@ -8,41 +8,6 @@ const { isProfileOwner, isLoggedIn, isAdmin, isProfileOwnerOrAdmin } = require('
 const router = express.Router();
 
 router.get('/',
-/* #swagger.tags = ['User']
-  #swagger.security = []
-
-  #swagger.summary = 'Retrieve a list of users'
-    #swagger.responses[200] = {
-            description: 'Displaying a list of users',
-            content: {
-                'application/json': {
-                    schema: { $ref: '#/definitions/UserList' }
-                }
-            }
-
-        }
-
-  #swagger.responses[404] = {
-    description: 'Responds with not found error message',
-    content: {
-        'application/json': {
-            schema: {
-              $ref: '#/definitions/httpNotFound'
-            }
-        }
-    }
-  }
-  #swagger.responses[500] = {
-  description: 'Responds with error message',
-  content: {
-      'application/json': {
-          schema: {
-            $ref: '#/definitions/httpInternalError'
-          }
-      }
-    }
-  }
-*/
     isLoggedIn, isAdmin, callbackErrorHandler(userController.viewAllUsers));
 router.get('/:id/history',
 /* #swagger.tags = ['User']

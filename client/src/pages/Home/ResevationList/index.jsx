@@ -48,7 +48,7 @@ export default function ReservationList({ reservations }) {
             </div>
             <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end pe-3">
               <p className="text-sm leading-6 text-sky-300">
-                {reservation.status.toUpperCase()}
+                {reservation?.openEntry ? "FREE ENTRY" : "ALL RANDOM"}
               </p>
               <div className="mt-1 flex items-center gap-x-1.5">
                 <p className="text-s leading-5 text-gray-400">{`Capacity: ${reservation.registeredPlayers.length}/${reservation.field.maxPlayers}`}</p>

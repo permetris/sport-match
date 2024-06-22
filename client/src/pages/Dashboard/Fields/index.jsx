@@ -7,33 +7,39 @@ import {
 import { fieldTableSettings } from "./settings";
 import Pagination from "../../../components/Pagination";
 import { toastError, toastSuccess } from "../../../hooks/useToastify";
+import { AddFieldModal } from "./AddField";
 
 export default function Fields() {
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(0);
+
+  const [isAddField, setIsAddField] = useState(false);
   const [getFields, { data }] = useLazyGetFieldsQuery();
   const [deleteField] = useDeleteFieldMutation();
 
-  const editEntry = (event) => {
+  const editEntry = () => {
     console.log("editing");
   };
+
   const deleteEntry = async (id) => {
     try {
       const result = await deleteField({ id }).unwrap();
       if (result.success) {
         toastSuccess("Successfully deleted city.");
-        getFields({ page, size, isDeleted:false });
+        getFields({ page, size: 10, isDeleted:false });
       }
     } catch (error) {
       toastError(error);
     }
   };
+
   const addEntry = () => {
-    console.log("adding");
+    setIsAddField(true);
   };
+
   useEffect(() => {
-    getFields({ page, size: 0, isDeleted:false });
+    getFields({ page, size: 10, isDeleted:false });
   }, [page]);
+
   return (
     <>
       <Table
@@ -48,6 +54,7 @@ export default function Fields() {
         page={page}
         setPage={setPage}
       ></Pagination>
+      {isAddField && <AddFieldModal getFields={getFields} setIsAddField={setIsAddField}></AddFieldModal>}
     </>
   );
 }

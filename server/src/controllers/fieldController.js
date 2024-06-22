@@ -1,23 +1,26 @@
-const { getOne, deleteOne, createOne, updateOne } = require('./crudController');
+const { getOne, createOne, updateOne } = require('./crudController');
 const { FieldModel } = require('../models/Field');
 const { HTTP_STATUS } = require('../constants/httpCodes');
-const { successMessages } = require('../utils/successMessages');
 
 const createField = async (req, res) => {
     await createOne(FieldModel, req, res);
 };
 
 const viewAllFields = async (req, res) => {
-    const { page = 1, size = 10,isDeleted } = req.query;
-    const skip = (page - 1) * size;
-    const query = 
+    const { page = 1, size = 10, isDeleted } = req.query;
+    const skip = size !== 0 ? (page - 1) * size : 1000;
+    const query = {};
 
-    const dataFound = await FieldModel.find({})
+    if (isDeleted !== 'undefined') {
+        query.isDeleted = isDeleted;
+    }
+
+    const dataFound = await FieldModel.find(query, '-createdAt -updatedAt -deletedAt')
         .lean()
         .skip(skip)
         .limit(size);
 
-    const totalItems = await FieldModel.countDocuments();
+    const totalItems = await FieldModel.countDocuments(query);
 
     res.status(HTTP_STATUS.OK).json({ success: true, data: dataFound, totalItems });
 };
