@@ -48,7 +48,6 @@ export const Registration = () => {
       toastSuccess("Registration successfull!");
     }
     if (isError) {
-      console.log(error);
       toastError(error);
     }
   },[isSuccess,isError]);

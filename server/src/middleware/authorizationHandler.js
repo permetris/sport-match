@@ -30,7 +30,6 @@ const isAnyAdmin = callbackErrorHandler(async (req, res, next) => {
 });
 const isProfileOwner = callbackErrorHandler(async (req, res, next) => {
     const id = req.params.playerId ? req.params.playerId : req.params.id;
-    console.log(req.params.id, req.user);
 
     if ((id !== req.user.id)) throw new AuthorizationError(ErrorMessages.unauthorized);
 
@@ -38,7 +37,6 @@ const isProfileOwner = callbackErrorHandler(async (req, res, next) => {
 });
 const isProfileOwnerOrAdmin = callbackErrorHandler(async (req, res, next) => {
     const id = req.params.playerId ? req.params.playerId : req.params.id;
-    console.log('user', req.user);
     if (req.user.role === 'ADMIN') return next();
     if ((id !== req.user.id)) throw new AuthorizationError(ErrorMessages.unauthorized);
 

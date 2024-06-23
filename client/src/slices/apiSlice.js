@@ -11,7 +11,6 @@ const baseQueryWithAuth = fetchBaseQuery({
   baseUrl: "http://localhost:8000",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
-    console.log();
     if (token) {
       headers.set("Authorization", `${token}`);
     }
@@ -22,7 +21,6 @@ const baseQueryWithAuth = fetchBaseQuery({
 export const apiSlice = createApi({
   reducerPath: "apiSlice",
   baseQuery: baseQueryWithAuth,
-  tagTypes: ["City", "User", "Field", "Reservation"],
   endpoints: (builder) => ({
     getUser: builder.query({
       query: (username) => ({
@@ -57,7 +55,7 @@ export const apiSlice = createApi({
       query: (query) => ({
         url: `/city?page=${query?.page}`,
         method: "GET",
-        providesTags: [{ type: "City", id: "LIST" }],
+
       }),
     }),
     loginUser: builder.mutation({
@@ -109,21 +107,21 @@ export const apiSlice = createApi({
       query: ({ id }) => ({
         url: `/city/${id}`,
         method: "DELETE",
-        invalidatesTags: [{ type: "City", id: "LIST" }],
+
       }),
     }),
     deleteField: builder.mutation({
       query: ({ id }) => ({
         url: `/field/${id}`,
         method: "DELETE",
-        invalidatesTags: [{ type: "Field", id: "LIST" }],
+
       }),
     }),
     deleteUser: builder.mutation({
       query: ({ id }) => ({
         url: `/user/${id}`,
         method: "DELETE",
-        invalidatesTags: [{ type: "User", id: "LIST" }],
+
       }),
     }),
     addCity: builder.mutation({
@@ -138,7 +136,7 @@ export const apiSlice = createApi({
         url: `/field`,
         body,
         method: "POST",
-        invalidatesTags: [{ type: "Filed", id: "LIST" }],
+
       }),
     }),
   }),
