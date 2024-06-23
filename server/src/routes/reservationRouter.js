@@ -2,7 +2,7 @@ const express = require('express');
 const reservationController = require('../controllers/reservationController');
 const { callbackErrorHandler } = require('../middleware/errorMiddlewareHandler');
 const { validateId, validateDoubleId, validateQuery, validateReservation } = require('../middleware/requestValidationHandler');
-const { isLoggedIn, isAdmin, isProfileOwner, isProfileOwnerOrAdmin } = require('../middleware/authorizationHandler');
+const { isLoggedIn, isAdmin, isProfileOwnerOrAdmin } = require('../middleware/authorizationHandler');
 
 const router = express.Router();
 
@@ -302,7 +302,7 @@ router.put('/:id',
       }
     }
 */
-    validateId, isLoggedIn, isAdmin, callbackErrorHandler(reservationController.updateReservation));
+    validateId, isLoggedIn, callbackErrorHandler(reservationController.updateReservation));
 router.put('/:id/add-player/:playerId',
 /* #swagger.tags = ['Reservation']
 #swagger.summary = 'Add a Player to a Reservation'

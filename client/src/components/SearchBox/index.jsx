@@ -19,7 +19,6 @@ export default function SearchBox({
   displayKey,
   title
 }) {
-  console.log(data)
   return (
     <Combobox
       as="div"

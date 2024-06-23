@@ -10,7 +10,6 @@ export default function ReservationList({ reservations }) {
         <h1 className="text-center text-white font-bold text-3xl">
           No reservations
         </h1>
-        ;
       </div>
     );
   }
@@ -18,7 +17,7 @@ export default function ReservationList({ reservations }) {
   const openReservation = (id) => {
     setReservationId(id);
   };
-
+  console.log(reservations)
   return (
     <div>
       <ul role="list" className="divide-y divide-white-800 mt-5">

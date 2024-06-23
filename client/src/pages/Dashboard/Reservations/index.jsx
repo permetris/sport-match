@@ -18,6 +18,7 @@ export default function Reservations() {
   };
   const addEntry = () => {
     setIsAddReservation(true);
+
   };
   useEffect(() => {
     getReservations({ page });

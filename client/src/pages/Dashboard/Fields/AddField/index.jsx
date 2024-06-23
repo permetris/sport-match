@@ -17,8 +17,8 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
   const [addField] = useAddFieldMutation();
   const [fieldName, setFieldName] = useState("");
   const [fieldAddress, setFieldAddress] = useState("");
-  const [capacity, setCapacity] = useState({_id:22, value:22});
-  const [selectedCity, setSelectedCity] = useState(cities?.data[0]);
+  const [capacity, setCapacity] = useState({ _id: 22, value: 22 });
+  const [selectedCity, setSelectedCity] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [query, setQuery] = useState("null");
 
@@ -31,6 +31,9 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
       setFieldAddress(e.target.value);
     }
   };
+  useEffect(() => {
+    if (citiesSuccess) setSelectedCity(cities.data[0]);
+  });
   const handleAddField = async (e) => {
     e.preventDefault();
     const newField = {
@@ -39,14 +42,14 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
       maxPlayers: capacity.value,
       owner: selectedPerson._id,
       city: selectedCity,
-    }
+    };
 
     try {
       const result = await addField(newField).unwrap();
       if (result.success) {
         toastSuccess("Added field");
         setIsAddField(false);
-        getFields({ page: 1, size: 10, isDeleted:false });
+        getFields({ page: 1, size: 10, isDeleted: false });
       }
     } catch (error) {
       toastError(error);
@@ -54,7 +57,12 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
   };
   useEffect(() => {
     if (user?.role === ROLES.ADMIN) {
-      getUsers({ isDeleted: false, username: query, page: 1, role: ROLES.OWNER});
+      getUsers({
+        isDeleted: false,
+        username: query,
+        page: 1,
+        role: ROLES.OWNER,
+      });
     }
   }, [query]);
 

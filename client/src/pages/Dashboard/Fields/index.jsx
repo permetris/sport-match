@@ -25,7 +25,7 @@ export default function Fields() {
       const result = await deleteField({ id }).unwrap();
       if (result.success) {
         toastSuccess("Successfully deleted city.");
-        getFields({ page, size: 10, isDeleted:false });
+        getFields({ page, size: 10, isDeleted: false });
       }
     } catch (error) {
       toastError(error);
@@ -37,7 +37,7 @@ export default function Fields() {
   };
 
   useEffect(() => {
-    getFields({ page, size: 10, isDeleted:false });
+    getFields({ page, size: 10, isDeleted: false });
   }, [page]);
 
   return (
@@ -54,7 +54,12 @@ export default function Fields() {
         page={page}
         setPage={setPage}
       ></Pagination>
-      {isAddField && <AddFieldModal getFields={getFields} setIsAddField={setIsAddField}></AddFieldModal>}
+      {isAddField && (
+        <AddFieldModal
+          getFields={getFields}
+          setIsAddField={setIsAddField}
+        ></AddFieldModal>
+      )}
     </>
   );
 }

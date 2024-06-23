@@ -16,7 +16,7 @@ export default function Pagination({ totalItems, page, setPage }) {
   }
  
   return (
-    <nav className="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0 z-10">
+    <nav className="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0 z-10 mb-4">
       <div className="-mt-px flex w-0 flex-1">
         {totalPages > 1 && page !== 1 && (
           <button

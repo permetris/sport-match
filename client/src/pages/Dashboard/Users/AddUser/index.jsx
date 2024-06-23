@@ -3,7 +3,7 @@ import React, { useState} from 'react';
 import { useAddCityMutation } from '../../../../slices/apiSlice';
 import { toastError, toastSuccess } from '../../../../hooks/useToastify';
 
-export const AddCityModal = ({ setIsAddCity, getCities }) => { 
+export const AddUserModal = ({ setIsAddUser, getUsers }) => { 
     const [city, setCityName] = useState("");
     const [addCity] = useAddCityMutation();
     const changeCity = (e) => { 

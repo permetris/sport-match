@@ -5,11 +5,11 @@ const userSchema = mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique: true,
         minLength: 2,
         maxLength: 50,
         trim: true,
-        lowercase: true
+        lowercase: true,
+        unique: false
     },
     name: {
         type: String,
@@ -31,7 +31,7 @@ const userSchema = mongoose.Schema({
         minLength: 6,
         maxLength: 75,
         trim: true,
-        unique: true,
+
         match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email address']
     },
     password: {
@@ -42,8 +42,8 @@ const userSchema = mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true,
-        unique: true
+        required: true
+
         // match: [/^\+(?:\d\s?){6,14}\d$/, 'Please enter a valid phone number'] Remove for seeding fake data
 
     },
@@ -68,5 +68,6 @@ const userSchema = mongoose.Schema({
         }
     }
 });
+userSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = { UserModel: mongoose.model('User', userSchema), userSchema };

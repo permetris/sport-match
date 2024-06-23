@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const teamSchema = mongoose.Schema({
     players: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-
+        ref: 'UserModel',
+        autopupulate: true
     }],
     color: {
         type: String,
@@ -21,12 +21,13 @@ const teamSchema = mongoose.Schema({
         }
     }
 });
-teamSchema.pre('find', async function () {
-    this.populate({
-        path: 'players',
-        model: 'User',
-        select: 'username isDeleted'
-    });
-});
+// teamSchema.pre('find', async function () {
+//     this.populate({
+//         path: 'players',
+//         model: 'User',
+//         select: 'username isDeleted'
+//     });
+// });
+teamSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = { TeamModel: mongoose.model('Team', teamSchema), teamSchema };

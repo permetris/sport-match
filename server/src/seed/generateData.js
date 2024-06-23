@@ -21,6 +21,7 @@ async function generateFakeData () {
     await ReservationModel.deleteMany({});
     await UserModel.deleteMany({});
 
+    // try {
     const admin = new UserModel({
         username: 'superuser',
         name: 'Josip',
@@ -41,11 +42,22 @@ async function generateFakeData () {
         role: 'USER',
         isDeleted: false
     });
+    const josip2 = new UserModel({
+        username: 'josip2',
+        name: 'Josip',
+        surname: 'Bogunovic',
+        email: 'josip2@mail.com',
+        password: await bcrypt.hash('asdasdasd', salt),
+        phone: '0993404577',
+        role: 'FIELD_ADMIN',
+        isDeleted: false
+    });
     await admin.save();
     await josip.save();
+    await josip2.save();
     // Generate users
     const users = [];
-    for (let i = 0; i < 250; i++) {
+    for (let i = 0; i < 50; i++) {
         const user = new UserModel({
             username: faker.internet.userName(),
             name: faker.person.firstName(),
@@ -53,7 +65,7 @@ async function generateFakeData () {
             email: faker.internet.email(),
             password: await bcrypt.hash('password', salt),
             phone: faker.phone.number(),
-            role: faker.helpers.arrayElement(['ADMIN', 'USER', 'FIELD_ADMIN']),
+            role: faker.helpers.arrayElement(['USER', 'FIELD_ADMIN']),
             isDeleted: false
         });
         users.push(user);
@@ -69,7 +81,7 @@ async function generateFakeData () {
         cities.push(city);
         await city.save();
     }
- 
+
     // Generate fields
     const fields = [];
     for (let i = 0; i < 10; i++) {
@@ -99,37 +111,40 @@ async function generateFakeData () {
     const teams = [];
     for (let i = 0; i < 10; i++) {
         const team = new TeamModel({
-            players: faker.helpers.arrayElements(users, 5).map(user => user._id),
+            players: faker.helpers.arrayElements(users.map(each => each._id)),
             color: faker.helpers.arrayElement(['white', 'black'])
         });
         teams.push(team);
         await team.save();
     }
 
-    // Generate matches
-    const matches = [];
-    for (let i = 0; i < 10; i++) {
-        const match = new MatchModel({
-            whiteTeam: faker.helpers.arrayElement(teams),
-            blackTeam: faker.helpers.arrayElement(teams),
-            result: faker.helpers.arrayElement(results)
-        });
-        matches.push(match);
-        await match.save();
-    }
+    //     // Generate matches
+    //     const matches = [];
+    //     for (let i = 0; i < 10; i++) {
+    //         const match = new MatchModel({
+    //             whiteTeam: faker.helpers.arrayElement(teams),
+    //             blackTeam: faker.helpers.arrayElement(teams),
+    //             result: faker.helpers.arrayElement(results)
+    //         });
+    //         matches.push(match);
+    //         await match.save();
+    //     }
 
-    // Generate reservations
-    for (let i = 0; i < 100; i++) {
-        const reservation = new ReservationModel({
-            field: faker.helpers.arrayElement(fields),
-            match: faker.helpers.arrayElement(matches),
-            time: faker.date.future(),
-            status: faker.helpers.arrayElement(['scheduled', 'canceled', 'done']),
-            registeredPlayers: faker.helpers.arrayElements(users, 2),
-            openEntry: faker.datatype.boolean()
-        });
-        await reservation.save();
-    }
+    //     // Generate reservations
+    //     for (let i = 0; i < 20; i++) {
+    //         const reservation = new ReservationModel({
+    //             field: faker.helpers.arrayElement(fields)._id,
+    //             match: faker.helpers.arrayElement(matches),
+    //             time: faker.date.future(),
+    //             status: faker.helpers.arrayElement(['scheduled', 'canceled', 'done']),
+    //             registeredPlayers: faker.helpers.arrayElements(users.map(each => each._id), 2),
+    //             openEntry: faker.datatype.boolean()
+    //         });
+    //         await reservation.save();
+    //     }
+    // } catch (error) {
+    //     console.log(error);
+    // }
 
     console.log('Fake data generated successfully');
     mongoose.disconnect();

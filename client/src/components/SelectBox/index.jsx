@@ -17,9 +17,6 @@ export default function SelectBox({
   selected,
   setSelected,
 }) {
-  useEffect(() => {
-    setSelected[data[0]._id];
-  }, []);
   return (
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (

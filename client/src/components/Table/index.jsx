@@ -8,7 +8,7 @@ export default function Table({
   editEntry,
 }) {
   return (
-    <div className="bg-gray-900 m-5">
+    <div className="bg-gray-900">
       <div className="mx-auto">
         <div className="bg-gray-900 py-10">
           <div className="px-4 sm:px-6 lg:px-8">

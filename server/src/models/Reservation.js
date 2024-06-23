@@ -4,25 +4,31 @@ const { ErrorMessages } = require('../errors/ErrorMessages');
 
 const Team = require('./Team');
 const { MatchModel, matchSchema } = require('./Match');
-const { FieldModel, fieldSchema } = require('./Field');
-const { userSchema } = require('./User');
+const { FieldModel } = require('./Field');
 
 const reservationSchema = mongoose.Schema({
     field: {
-        type: fieldSchema,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Field',
-        required: true
+        required: true,
+        autopopulate: true
     },
     match: {
-        type: matchSchema
+        type: matchSchema,
+        default: () => ({})
     },
     time: {
         type: Date,
         required: true,
         validate: {
-            validator: function () {
-                return this.time > new Date();
-            }
+            validator: function (value) {
+                const now = new Date();
+                const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                return value.getFullYear() >= tomorrow.getFullYear() &&
+                       value.getMonth() >= tomorrow.getMonth() &&
+                       value.getDate() >= tomorrow.getDate();
+            },
+            message: 'Reservation time must be set to tomorrow.'
         }
     },
     status: {
@@ -31,7 +37,10 @@ const reservationSchema = mongoose.Schema({
         default: 'scheduled'
     },
     registeredPlayers: [{
-        type: userSchema
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false,
+        unique: false
     }],
     openEntry: {
         type: Boolean,
@@ -69,7 +78,7 @@ reservationSchema.method('createMatch', async function () {
     Promise.all([blackTeam.save(), whiteTeam.save()]).catch(err => console.log(err));
     const match = new MatchModel({ blackTeam, whiteTeam });
     await match.save();
-    this.match = match._id;
+    this.match = match;
     this.isScheduled = true;
 });
 
@@ -87,5 +96,6 @@ reservationSchema.pre('save', async function (next) {
     const maxPlayers = field.maxPlayers;
     if (this.registeredPlayers.length > maxPlayers) throw new ValidationError(ErrorMessages.playerLimit);
 });
+reservationSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = { ReservationModel: mongoose.model('Reservation', reservationSchema), reservationSchema };

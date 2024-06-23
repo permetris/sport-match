@@ -16,9 +16,6 @@ function Navigation() {
 
   const navigation = [
     { name: "Dashboard", href: "/dashboard", roles: [ROLES.ADMIN] },
-    { name: "ADMIN", href: "/titlic", roles: [ROLES.ADMIN] },
-    { name: "USER", href: "/pitlic", roles: [ROLES.USER] },
-    { name: "Marketplace", href: "/kiklic", roles: [ROLES.USER] },
   ];
   const onLogoutHandler = () => {
     try {
@@ -29,7 +26,10 @@ function Navigation() {
       toastError(err);
     }
   };
-  if ((user?.role !== ROLES.ADMIN && user?.role !== ROLES.OWNER) || !location.pathname.split('/').includes('dashboard')) {
+  if (
+    (user?.role !== ROLES.ADMIN && user?.role !== ROLES.OWNER) ||
+    !location.pathname.split("/").includes("dashboard")
+  ) {
     return (
       <header className="sticky top-0 bg-gray-800">
         <nav
@@ -136,6 +136,7 @@ function Navigation() {
                 <div className="space-y-2 py-6">
                   {navigation.map((item) => (
                     <Link
+                      onClick={() => setMobileMenuOpen(false)}
                       key={item.name}
                       href={item.href}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white-900 hover:bg-gray-50"
@@ -148,6 +149,7 @@ function Navigation() {
                   {!user && (
                     <Link
                       to="/login"
+                      onClick={() => setMobileMenuOpen(false)}
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white-900 hover:bg-gray-50"
                     >
                       Log in

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
-import { useAuth } from "../../../../context/AuthContext";
 
 import { PlayersList } from "./PlayersList";
 import {
   useLazyGetReservationQuery,
-  useRemoveRegisteredPlayerMutation,
   useUpdateReservationMutation,
 } from "../../../../slices/apiSlice";
+import { toastError } from "../../../../hooks/useToastify";
 
 const statusColors = {
   canceled: "bg-red-50 text-red-700 ring-red-600/20",
@@ -15,29 +14,74 @@ const statusColors = {
 };
 
 export default function ReservationDetails({ reservationId, closeModal }) {
-  const { user } = useAuth();
-  const [showUserSearch, setShowUserSearch] = useState();
-  const [removeRegisteredPlayer] = useRemoveRegisteredPlayerMutation();
   const [updateReservation] = useUpdateReservationMutation();
-  const [getReservation, { data: reservation }] = useLazyGetReservationQuery(
-    reservationId
-  );
+  const [getReservation, { data: reservation }] =
+    useLazyGetReservationQuery(reservationId);
 
   useEffect(() => {
     getReservation({ id: reservationId });
   }, [reservationId]);
-  const addPlayer = () => {};
+
+  const addPlayer = async (player, addPlayerTo) => {
+    
+    let updatedReservation = {};
+    if (addPlayerTo === "registeredPlayers") {
+      if (reservation.registeredPlayers.filter(each => each._id === player._id).length !== 0) {
+        return toastError("")
+       }
+
+      updatedReservation = {
+        ...reservation,
+        registeredPlayers: [...reservation.registeredPlayers, player],
+      };
+    } else if (addPlayerTo === "blackTeam") {
+      updatedReservation = {
+        ...reservation,
+        match: {
+          ...reservation.match,
+          blackTeam: {
+            ...reservation.blackTeam,
+            players: [...reservation.match.blackTeam.players, player],
+          },
+        },
+      };
+    } else {
+      updatedReservation = {
+        ...reservation,
+        match: {
+          ...reservation.match,
+          whiteTeam: {
+            ...reservation.whiteTeam,
+            players: [...reservation.match.whiteTeam.players, player],
+          },
+        },
+      };
+    }
+
+    try {
+      const response = await updateReservation(updatedReservation).unwrap();
+      if (response?.success === true) {
+        getReservation({ id: reservationId });
+      }
+    } catch (error) {
+      toastError(error);
+    }
+  };
+
   const removePlayer = async (playerId) => {
     const updatedReservation = {
       ...reservation,
       registeredPlayers: reservation.registeredPlayers.filter(
-        (user) => user._id !== playerId,
+        (user) => user._id !== playerId
       ),
     };
-    const response = await updateReservation(updatedReservation).unwrap();
-    console.log(response);
-    if (response?.success === true) {
-      getReservation({id:reservationId});
+    try {
+      const response = await updateReservation(updatedReservation).unwrap();
+      if (response?.success === true) {
+        getReservation({ id: reservationId });
+      }
+    } catch (error) {
+      toastError(error);
     }
   };
 
@@ -77,18 +121,22 @@ export default function ReservationDetails({ reservationId, closeModal }) {
           </div>
 
           {reservation?.openEntry && (
-            <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+            <div className="mt-4 flex center w-full flex-none gap-x-4 px-6">
               <PlayersList
                 players={reservation?.match?.blackTeam?.players}
                 title={"Black Team"}
                 removePlayer={removePlayer}
                 addPlayer={addPlayer}
+                action={"blackTeam"}
+                capacity={reservation?.field.maxPlayers / 2}
               />
               <PlayersList
                 players={reservation?.match?.whiteTeam?.players}
                 title={"White Team"}
                 removePlayer={removePlayer}
                 addPlayer={addPlayer}
+                action={"whiteTeam"}
+                capacity={reservation?.field.maxPlayers / 2}
               />
             </div>
           )}
@@ -99,10 +147,11 @@ export default function ReservationDetails({ reservationId, closeModal }) {
                 title={"Registered players"}
                 removePlayer={removePlayer}
                 addPlayer={addPlayer}
+                action={"registeredPlayers"}
+                capacity={reservation?.field.maxPlayers}
               />
             </div>
           )}
-        
         </dl>
         <div className=" mt-6 border-t border-gray-900/5 px-6 py-6">
           <button

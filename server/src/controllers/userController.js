@@ -11,6 +11,9 @@ const exclude = '-updatedAt -createdAt -password -role';
 
 const registerUser = async (req, res) => {
     const { body } = req;
+
+    const user = UserModel.findOne({ username: body.username });
+    if (user) return res.status(409).json({ success: false, message: 'Username already exists' });
     const salt = await bcrypt.genSalt();
     body.password = await bcrypt.hash(body.password, salt);
     req.body = body;

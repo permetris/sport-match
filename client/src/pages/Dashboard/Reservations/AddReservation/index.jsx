@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useAddReservationMutation,
   useGetFieldsQuery,
@@ -6,6 +6,7 @@ import {
 import { toastError, toastSuccess } from "../../../../hooks/useToastify";
 import SelectBox from "../../../../components/SelectBox";
 import Toggle from "../../../../components/Toogle";
+import { getTomorrowDate } from "../../../../utils/getTomorrowDate";
 
 export const AddReservationModal = ({
   setIsAddReservation,
@@ -15,21 +16,26 @@ export const AddReservationModal = ({
   const [isAllRandom, setIsAllRandom] = useState();
   const { data: fields, isSuccess } = useGetFieldsQuery({
     page: 1,
-    size: 10,
+    size: 100,
     isDeleted: false,
   });
-  const [selectedField, setSelectedField] = useState(fields?.data[0]);
+  const [selectedField, setSelectedField] = useState(null);
   const [addReservation] = useAddReservationMutation();
   const changeDateTime = (e) => {
     setDateTime(e.target.value);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSelectedField(fields.data[0]);
+    }
+  });
   const handleAddReservation = async () => {
-    console.log("adding");
     try {
       const result = await addReservation({
         time: new Date(dateTime).toISOString(),
         field: selectedField,
-        openEntry: !isAllRandom
+        openEntry: !isAllRandom,
       }).unwrap();
       if (result.success) {
         toastSuccess("Added reservation");
@@ -40,7 +46,6 @@ export const AddReservationModal = ({
       toastError(error);
     }
   };
-
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -66,6 +71,7 @@ export const AddReservationModal = ({
                     name="time"
                     type="datetime-local"
                     value={dateTime}
+                    min={getTomorrowDate()}
                     required
                     onChange={changeDateTime}
                     className="block w-full rounded-md border-0  p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
