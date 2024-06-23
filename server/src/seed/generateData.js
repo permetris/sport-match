@@ -69,10 +69,7 @@ async function generateFakeData () {
         cities.push(city);
         await city.save();
     }
-    const bacina = new CityModel({
-        name: 'Bacina'
-    });
-    await bacina.save();
+ 
     // Generate fields
     const fields = [];
     for (let i = 0; i < 10; i++) {
@@ -113,9 +110,9 @@ async function generateFakeData () {
     const matches = [];
     for (let i = 0; i < 10; i++) {
         const match = new MatchModel({
-            whiteTeam: faker.helpers.arrayElement(teams)._id,
-            blackTeam: faker.helpers.arrayElement(teams)._id,
-            result: faker.helpers.arrayElement(results)._id
+            whiteTeam: faker.helpers.arrayElement(teams),
+            blackTeam: faker.helpers.arrayElement(teams),
+            result: faker.helpers.arrayElement(results)
         });
         matches.push(match);
         await match.save();
