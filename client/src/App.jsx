@@ -19,6 +19,7 @@ import Cities from "./pages/Dashboard/Cities";
 import Reservations from "./pages/Dashboard/Reservations";
 import Fields from "./pages/Dashboard/Fields";
 import Users from "./pages/Dashboard/Users";
+import { UserProfile } from "./pages/UserProfile";
 
 const AppLayout = () => {
   return (
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: "match/:id/result",
         element: <AddResult />,
+      },
+      {
+        path: "user/:username",
+        element: <UserProfile />,
       },
       {
         path: "match/:id",

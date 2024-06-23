@@ -66,6 +66,7 @@ export default function Table({
                               className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"
                             >
                               {field.key !== "time" ? each[field.key] : new Date(each[field.key]).toUTCString()}
+
                             </td>
                           ))}
                           {settings.deepFields && settings.deepFields.map((field) => (

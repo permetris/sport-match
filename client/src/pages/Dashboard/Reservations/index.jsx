@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../../components/Table";
-import { useLazyGetReservationsQuery } from "../../../slices/apiSlice";
+import {
+  useDeleteReservationMutation,
+  useLazyGetReservationsQuery,
+} from "../../../slices/apiSlice";
 import { reservationTableSettings } from "./settings";
 import Pagination from "../../../components/Pagination";
 import { AddReservationModal } from "./AddReservation";
+import { toastError, toastSuccess } from "../../../hooks/useToastify";
 
 export default function Reservations() {
   const [isAddReservation, setIsAddReservation] = useState(false);
   const [page, setPage] = useState(1);
   const [getReservations, { data }] = useLazyGetReservationsQuery();
+  const [deleteReservation] = useDeleteReservationMutation();
 
   const editEntry = (event) => {
     console.log("editing");
   };
-  const deleteEntry = (id) => {
-    console.log("deleting" + id);
+  const deleteEntry = async (id) => {
+    try {
+      const result = await deleteReservation(id).unwrap();
+      if (result.success) {
+        toastSuccess("Successfully deleted reservation");
+        getReservations({page})
+      }
+    } catch (error) {
+      toastError(error);
+    }
   };
   const addEntry = () => {
     setIsAddReservation(true);
-
   };
   useEffect(() => {
     getReservations({ page });
@@ -38,7 +50,10 @@ export default function Reservations() {
         setPage={setPage}
       ></Pagination>
       {isAddReservation && (
-        <AddReservationModal setIsAddReservation={setIsAddReservation} />
+        <AddReservationModal
+          setIsAddReservation={setIsAddReservation}
+          getReservations={getReservations}
+        />
       )}
     </>
   );

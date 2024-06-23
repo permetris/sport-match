@@ -39,6 +39,7 @@ const reservationSchema = mongoose.Schema({
     registeredPlayers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        autopopulate: true,
         required: false,
         unique: false
     }],

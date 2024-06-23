@@ -6,5 +6,6 @@ export const userTableSettings = {
     { key: "username", displayName: "Username" },
     { key: "email", displayName: "Email" },
     { key: "phone", displayName: "Phone" },
+    {key : 'role', displayName: "Role"}
   ],
 };

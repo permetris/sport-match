@@ -7,12 +7,13 @@ const { HTTP_STATUS } = require('../constants/httpCodes.js');
 const { successMessages } = require('../utils/successMessages');
 const bcrypt = require('bcrypt');
 
-const exclude = '-updatedAt -createdAt -password -role';
+const exclude = '-updatedAt -createdAt -password';
 
 const registerUser = async (req, res) => {
     const { body } = req;
 
-    const user = UserModel.findOne({ username: body.username });
+    const user = await UserModel.findOne({ username: body.username }).lean();
+
     if (user) return res.status(409).json({ success: false, message: 'Username already exists' });
     const salt = await bcrypt.genSalt();
     body.password = await bcrypt.hash(body.password, salt);

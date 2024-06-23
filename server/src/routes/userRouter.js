@@ -244,7 +244,7 @@ router.put('/:id',
       }
     }
 */
-    validateId, isLoggedIn, isProfileOwner, validateUser, callbackErrorHandler(userController.updateUser));
+    validateId, isLoggedIn, isProfileOwnerOrAdmin, validateUser, callbackErrorHandler(userController.updateUser));
 router.delete('/:id',
 /* #swagger.tags = ['User']
    #swagger.summary = 'Delete one User'

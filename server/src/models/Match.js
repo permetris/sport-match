@@ -6,18 +6,15 @@ const matchSchema = mongoose.Schema({
 
     whiteTeam: {
         type: teamSchema,
-        ref: 'Team'
-
+        default: () => ({ })
     },
     blackTeam: {
         type: teamSchema,
-        ref: 'Team'
-
+        default: () => ({ })
     },
     result: {
         type: resultSchema,
         ref: 'Result'
-
     }
 }, {
     timestamps: true,

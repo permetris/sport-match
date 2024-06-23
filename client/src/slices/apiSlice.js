@@ -27,9 +27,29 @@ export const apiSlice = createApi({
         url: `/user/${username}`,
       }),
     }),
+    updateUser: builder.mutation({
+      query: (user) => ({
+        url: `/user/${user._id}`,
+        body:user,
+        method: "PUT"
+      }),
+    }),
+    deleteUser: builder.mutation({
+      query: (user) => ({
+        url: `/user/${user._id}`,
+        body:user,
+        method: "DELETE"
+      }),
+    }),
     getReservations: builder.query({
       query: (query) => ({
         url: `/reservation?${toQueryString(query)}`,
+      }),
+    }),
+    deleteReservation: builder.mutation({
+      query: (reservationId) => ({
+        url: `/reservation/${reservationId}`,
+        method: "DELETE"
       }),
     }),
     getReservation: builder.query({
@@ -117,13 +137,7 @@ export const apiSlice = createApi({
 
       }),
     }),
-    deleteUser: builder.mutation({
-      query: ({ id }) => ({
-        url: `/user/${id}`,
-        method: "DELETE",
-
-      }),
-    }),
+    
     addCity: builder.mutation({
       query: (body) => ({
         url: `/city`,
@@ -164,5 +178,7 @@ export const {
   useAddCityMutation,
   useDeleteFieldMutation,
   useAddFieldMutation,
-  useAddReservationMutation
+  useAddReservationMutation,
+  useUpdateUserMutation,
+  useDeleteReservationMutation
 } = apiSlice;

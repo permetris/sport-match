@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginForm } from "./Form";
 import { useAuth } from "../../context/AuthContext";
 import { ROLES } from "../../utils/roles";
-import { toastSuccess } from "../../hooks/useToastify";
+
 
 export const Login = () => {
   const [formData, setFormData] = useState({});
@@ -13,8 +13,6 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e)
-    if (e.key === "Enter") console.log("enter pressed");
     const request = { email: formData.email, password: formData.password };
     const user = await login(request);
     if (user) {
@@ -24,7 +22,6 @@ export const Login = () => {
       if (user.role === ROLES.ADMIN) {
         return navigate("/dashboard");
       }
-      toastSuccess(`Welcome ${user.name} ${user.surname}`);
     }
   };
 

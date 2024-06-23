@@ -17,7 +17,6 @@ export default function ReservationList({ reservations }) {
   const openReservation = (id) => {
     setReservationId(id);
   };
-  console.log(reservations)
   return (
     <div>
       <ul role="list" className="divide-y divide-white-800 mt-5">

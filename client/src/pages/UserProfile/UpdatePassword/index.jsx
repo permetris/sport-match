@@ -42,7 +42,7 @@ export const UpdatePassword = () => {
     }
   };
   return (
-    <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+    <div className="grid max-w-7xl grid-cols-1 gap-x-4 gap-y-4 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
       <div>
         <h2 className="text-base font-semibold leading-7 text-white">
           Change password
@@ -53,7 +53,7 @@ export const UpdatePassword = () => {
       </div>
 
       <form className="md:col-span-2">
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
+        <div className="grid grid-cols-1 gap-x-2 gap-y-4 sm:max-w-xl sm:grid-cols-6">
           <div className="col-span-full">
             <label
               htmlFor="password"
@@ -115,7 +115,7 @@ export const UpdatePassword = () => {
           </div>
         </div>
 
-        <div className="mt-8 flex">
+        <div className="mt-4 flex">
           <button
             type="button"
             onClick={updatePasswordHandler}

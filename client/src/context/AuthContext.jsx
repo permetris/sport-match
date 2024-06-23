@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext } from "react";
 import { useLoginUserMutation } from "../slices/apiSlice";
 import store from "../store/store";
 import { setToken } from "../slices/authSlice";
-
+import { toastError, toastSuccess } from "../hooks/useToastify";
 
 const AuthContext = createContext();
 
@@ -12,20 +12,29 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(undefined);
 
   const login = async (userData) => {
-    const response = await triggerLogin(userData);
+    try {
+      const response = await triggerLogin(userData);
 
-    if (response?.data?.user) {
-      setUser(response.data.user);
-      store.dispatch(setToken(response.data.user.token));
-      return response.data.user;
+      if (response?.data?.user) {
+        setUser(response.data.user);
+        store.dispatch(setToken(response.data.user.token));
+        toastSuccess(
+          `Welcome ${response.data.user.name} ${response.data.user.surname}`
+        );
+        return response.data.user;
+      } else {
+        toastError(response.error.data.message);
+        return undefined;
+      }
+    } catch (error) {
+      toastError(error);
+      return undefined;
     }
-    return undefined;
   };
 
   const logout = () => {
     setUser(undefined);
   };
-  
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

@@ -40,7 +40,7 @@ export const AddReservationModal = ({
       if (result.success) {
         toastSuccess("Added reservation");
         setIsAddReservation(false);
-        getReservations({ page: 1, size: 50 });
+        await getReservations({ page: 1 });
       }
     } catch (error) {
       toastError(error);

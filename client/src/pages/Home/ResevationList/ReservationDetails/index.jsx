@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 
 import { PlayersList } from "./PlayersList";
@@ -22,30 +22,55 @@ export default function ReservationDetails({ reservationId, closeModal }) {
     getReservation({ id: reservationId });
   }, [reservationId]);
 
-  const addPlayer = async (player, addPlayerTo) => {
-    
+  const addPlayer = async (player, action) => {
     let updatedReservation = {};
-    if (addPlayerTo === "registeredPlayers") {
-      if (reservation.registeredPlayers.filter(each => each._id === player._id).length !== 0) {
-        return toastError("")
-       }
+    if (action === "registeredPlayers") {
+      if (
+        reservation.registeredPlayers.filter((each) => each._id === player._id)
+          .length !== 0
+      ) {
+        toastError("Player already registered!");
+        return;
+      }
 
       updatedReservation = {
         ...reservation,
         registeredPlayers: [...reservation.registeredPlayers, player],
       };
-    } else if (addPlayerTo === "blackTeam") {
+    } else if (action === "blackTeam") {
+      if (
+        reservation.match.blackTeam.players.filter((each) => each._id === player._id)
+          .length !== 0
+      ) {
+        toastError("Player already registered!");
+        return;
+      }
       updatedReservation = {
         ...reservation,
         match: {
           ...reservation.match,
           blackTeam: {
-            ...reservation.blackTeam,
+            ...reservation.match.blackTeam,
             players: [...reservation.match.blackTeam.players, player],
+          },
+          whiteTeam: {
+            ...reservation.match.whiteTeam,
+            players: [
+              ...reservation.match.whiteTeam.players.filter(
+                (each) => each._id !== player._id
+              ),
+            ],
           },
         },
       };
     } else {
+      if (
+        reservation.match.whiteTeam.players.filter((each) => each._id === player._id)
+          .length !== 0
+      ) {
+        toastError("Player already registered!");
+        return;
+      }
       updatedReservation = {
         ...reservation,
         match: {
@@ -53,6 +78,14 @@ export default function ReservationDetails({ reservationId, closeModal }) {
           whiteTeam: {
             ...reservation.whiteTeam,
             players: [...reservation.match.whiteTeam.players, player],
+          },
+          blackTeam: {
+            ...reservation.match.blackTeam,
+            players: [
+              ...reservation.match.blackTeam.players.filter(
+                (each) => each._id !== player._id
+              ),
+            ],
           },
         },
       };
@@ -68,13 +101,47 @@ export default function ReservationDetails({ reservationId, closeModal }) {
     }
   };
 
-  const removePlayer = async (playerId) => {
-    const updatedReservation = {
-      ...reservation,
-      registeredPlayers: reservation.registeredPlayers.filter(
-        (user) => user._id !== playerId
-      ),
-    };
+  const removePlayer = async (player, action) => {
+    var updatedReservation = {};
+    if (action === "registeredPlayers") {
+      updatedReservation = {
+        ...reservation,
+        registeredPlayers: reservation.registeredPlayers.filter(
+          (user) => user._id !== player._id
+        ),
+      };
+    } else if (action === "blackTeam") {
+      updatedReservation = {
+        ...reservation,
+        match: {
+          ...reservation.match,
+          blackTeam: {
+            ...reservation.match.blackTeam,
+            players: [
+              ...reservation.match.blackTeam.players.filter(
+                (each) => each._id !== player._id
+              ),
+            ],
+          },
+        },
+      };
+    } else {
+      updatedReservation = {
+        ...reservation,
+        match: {
+          ...reservation.match,
+          whiteTeam: {
+            ...reservation.match.whiteTeam,
+            players: [
+              ...reservation.match.whiteTeam.players.filter(
+                (each) => each._id !== player._id
+              ),
+            ],
+          },
+        },
+      };
+    }
+
     try {
       const response = await updateReservation(updatedReservation).unwrap();
       if (response?.success === true) {
@@ -128,6 +195,7 @@ export default function ReservationDetails({ reservationId, closeModal }) {
                 removePlayer={removePlayer}
                 addPlayer={addPlayer}
                 action={"blackTeam"}
+                registered={reservation?.match?.blackTeam?.players.length}
                 capacity={reservation?.field.maxPlayers / 2}
               />
               <PlayersList
@@ -136,6 +204,7 @@ export default function ReservationDetails({ reservationId, closeModal }) {
                 removePlayer={removePlayer}
                 addPlayer={addPlayer}
                 action={"whiteTeam"}
+                registered={reservation?.match?.whiteTeam?.players.length}
                 capacity={reservation?.field.maxPlayers / 2}
               />
             </div>
@@ -148,6 +217,7 @@ export default function ReservationDetails({ reservationId, closeModal }) {
                 removePlayer={removePlayer}
                 addPlayer={addPlayer}
                 action={"registeredPlayers"}
+                registered={reservation?.registeredPlayers.length}
                 capacity={reservation?.field.maxPlayers}
               />
             </div>

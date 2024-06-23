@@ -1,17 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useGetUserQuery } from "../../slices/apiSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { useDeleteUserMutation, useGetUserQuery } from "../../slices/apiSlice";
 import { useParams } from "react-router-dom";
 
 import Container from "../../components/Container";
 import { UpdatePassword } from "./UpdatePassword";
 import { useAuth } from "../../context/AuthContext";
 import UserInfo from "./UserInfo";
+import { toastError, toastSuccess } from "../../hooks/useToastify";
 
 export const UserProfile = () => {
+  const { user, logout } = useAuth();
   const { username } = useParams();
   const { data, isLoading } = useGetUserQuery(username);
-  const { user: authUser } = useAuth();
+  const [deleteUser] = useDeleteUserMutation();
+  const navigate = useNavigate();
 
   const secondaryNavigation = [
     { name: "Account", href: "#", current: true },
@@ -21,12 +24,25 @@ export const UserProfile = () => {
   if (isLoading) {
     return <h1>Loading</h1>;
   }
-  
+  if (username !== user?.username) {
+    return "You can only access this users history";
+  }
+  const deleteProfile = async () => {
+    try {
+      const result = await deleteUser(user).unwrap();
+      if (result.success) {
+        toastSuccess("User deleted");
+        setTimeout(() => logout(), 1500);
+        navigate("/");
+      }
+    } catch (error) {
+      toastError(error);
+    }
+  };
 
   return (
     <Container>
       <header className="border-b border-white/5">
-        {/* Secondary navigation */}
         <nav className="flex overflow-x-auto py-4">
           <ul
             role="list"
@@ -46,7 +62,7 @@ export const UserProfile = () => {
         </nav>
       </header>
       <div className="divide-y divide-white/5">
-        <UserInfo user={data.data} />
+        <UserInfo user={data?.data} />
         <UpdatePassword />
 
         <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
@@ -63,7 +79,8 @@ export const UserProfile = () => {
 
           <form className="flex items-start md:col-span-2">
             <button
-              type="submit"
+              type="button"
+              onClick={deleteProfile}
               className="rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400"
             >
               Yes, delete my account

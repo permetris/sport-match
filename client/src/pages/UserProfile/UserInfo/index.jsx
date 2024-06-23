@@ -1,9 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
+import { useUpdateUserMutation } from "../../../slices/apiSlice";
+import { toastError, toastSuccess } from "../../../hooks/useToastify";
 
-export default function UserInfo({user}) {
-    const changeData = () => {}
+export default function UserInfo({ user }) {
+  const [isEdit, setIsEdit] = useState(false);
+  const [username, setUsername] = useState(user.username);
+  const [name, setName] = useState(user.name);
+  const [surname, setSurname] = useState(user.surname);
+  const [email, setEmail] = useState(user.email);
+
+  const [update] = useUpdateUserMutation();
+
+  const updateUser = async (e) => {
+    e.preventDefault();
+    setIsEdit(false);
+
+    try {
+      const result = await update({
+        ...user,
+        username,
+        name,
+        surname,
+        email,
+      }).unwrap();
+      if (result.success) {
+        toastSuccess("Successfully updated user.");
+      }
+    } catch (error) {
+      toastError(error);
+      setUsername(user.username);
+      setName(user.name);
+      setSurname(user.surname);
+      setEmail(user.email);
+    }
+  };
+
   return (
-    <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+    <div className="grid max-w-7xl grid-cols-1 gap-x-4 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
       <div>
         <h2 className="text-base font-semibold leading-7 text-white">
           Personal Information
@@ -13,27 +46,8 @@ export default function UserInfo({user}) {
         </p>
       </div>
 
-      <form className="md:col-span-2">
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
-          <div className="col-span-full flex items-center gap-x-8">
-            <img
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              alt=""
-              className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
-            />
-            <div>
-              <button
-                type="button"
-                className="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20"
-              >
-                Change avatar
-              </button>
-              <p className="mt-2 text-xs leading-5 text-gray-400">
-                JPG, GIF or PNG. 1MB max.
-              </p>
-            </div>
-          </div>
-
+      <form className="md:col-span-2" onSubmit={updateUser}>
+        <div className="grid grid-cols-1 gap-x-2 gap-y-4 sm:max-w-xl sm:grid-cols-6">
           <div className="sm:col-span-3">
             <label
               htmlFor="first-name"
@@ -45,8 +59,9 @@ export default function UserInfo({user}) {
               <input
                 type="text"
                 name="first-name"
-                value={user.name}
-                onChange={changeData}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                disabled={!isEdit}
                 id="first-name"
                 autoComplete="given-name"
                 className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 p-2"
@@ -66,8 +81,9 @@ export default function UserInfo({user}) {
                 type="text"
                 name="last-name"
                 id="last-name"
-                value={user.surname}
-                onChange={changeData}
+                disabled={!isEdit}
+                value={surname}
+                onChange={(e) => setSurname(e.target.value)}
                 autoComplete="family-name"
                 className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 p-2"
               />
@@ -86,8 +102,9 @@ export default function UserInfo({user}) {
                 id="email"
                 name="email"
                 type="email"
-                value={user.email}
-                onChange={changeData}
+                value={email}
+                disabled={!isEdit}
+                onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 p-2"
               />
@@ -107,8 +124,9 @@ export default function UserInfo({user}) {
                   type="text"
                   name="username"
                   id="username"
-                  value={user.username}
-                  onChange={changeData}
+                  value={username}
+                  disabled={!isEdit}
+                  onChange={(e) => setUsername(e.target.value)}
                   autoComplete="username"
                   className="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6 p-2"
                   placeholder="janesmith"
@@ -118,14 +136,27 @@ export default function UserInfo({user}) {
           </div>
         </div>
 
-        <div className="mt-8 flex">
-          <button
-            type="submit"
-            className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-          >
-            Save
-          </button>
-        </div>
+        {isEdit && (
+          <div className="mt-2 flex">
+            <button
+              type="submit"
+              className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            >
+              Save
+            </button>
+          </div>
+        )}
+        {!isEdit && (
+          <div className="mt-2 flex">
+            <button
+              type="button"
+              onClick={() => setIsEdit(true)}
+              className="rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500"
+            >
+              Edit
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );

@@ -3,7 +3,7 @@ const Token = require('../models/Token');
 const bcrypt = require('bcrypt');
 const { hashPassword } = require('../utils/hashPassword');
 const { ErrorMessages } = require('../errors/ErrorMessages');
-const { ValidationError, NotFoundError, AuthorizationError, AuthenticationError } = require('../errors/Errors');
+const { ValidationError, NotFoundError, AuthorizationError } = require('../errors/Errors');
 const { HTTP_STATUS } = require('../constants/httpCodes');
 const { createJWT } = require('../token.js');
 const { forgottenPasswordEmail } = require('../utils/forgottenPasswordEmail');
@@ -13,7 +13,7 @@ const { successMessages } = require('../utils/successMessages');
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await UserModel.findOne({ email }).lean();
+    const user = await UserModel.findOne({ email, isDeleted: false }).lean();
     if (!user) throw new NotFoundError(ErrorMessages.userNotFound);
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);

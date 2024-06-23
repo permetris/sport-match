@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../../context/AuthContext";
 import { ROLES } from "../../../../../utils/roles";
 import SearchBox from "../../../../../components/SearchBox";
-import { useGetUsersQuery } from "../../../../../slices/apiSlice";
+import { useLazyGetUsersQuery } from "../../../../../slices/apiSlice";
 
 export function PlayersList({
   players,
@@ -11,26 +11,30 @@ export function PlayersList({
   addPlayer,
   action,
   capacity,
+  registered,
 }) {
   const { user } = useAuth();
 
-  const [query, setQuery] = useState();
-  const { data: users } = useGetUsersQuery({ username: query });
+  const [query, setQuery] = useState("");
+  const [getUsers, { data: users }] = useLazyGetUsersQuery();
   const [selectedUser, setSelectedUser] = useState(users?.data[0]);
-  const isJoined = players?.filter((each) => each.username === user.username).length > 0 ;
-
+  const isJoined =
+    players?.filter((each) => each.username === user?.username).length > 0;
 
   const handleAdminPlayerAdd = () => {
     addPlayer(selectedUser, action);
     setSelectedUser(null);
   };
+  useEffect(() => {
+    if (user && user.role !== ROLES.USER) getUsers({ username: query });
+  }, [query]);
 
   return (
     <div className="w-full text-center">
       <div>
         <ul className="bg-white shadow-md rounded-lg divide-y divide-gray-200">
           <h2 className="text-gray-700 p-2 antialiased">
-            {title.toUpperCase()}
+            {`${title.toUpperCase()} ${registered}/${capacity}`}
           </h2>
           {players?.map((player) => (
             <li
@@ -41,7 +45,7 @@ export function PlayersList({
               {user?.role === "ADMIN" && (
                 <button
                   className="text-red-800 hover:text-red-300"
-                  onClick={() => removePlayer(player._id)}
+                  onClick={() => removePlayer(player, action)}
                 >
                   {" "}
                   Remove
@@ -51,25 +55,28 @@ export function PlayersList({
           ))}
         </ul>
       </div>
-      {user && user.role === ROLES.USER && players?.lenght !== capacity && !isJoined && (
-        <button
-          className="bg-blue-500 hover:bg-blue-700 mt-3 text-white font-bold py-1 px-4 rounded-full transition duration-300 ease-in-out transform  "
-          onClick={() => addPlayer(user, addPlayerTo)}
-        >
-          Join
-        </button>
-      )}
+      {user &&
+        user.role === ROLES.USER &&
+        players?.lenght !== capacity &&
+        !isJoined && (
+          <button
+            className="bg-blue-500 hover:bg-blue-700 mt-3 text-white font-bold py-1 px-4 rounded-full transition duration-300 ease-in-out transform  "
+            onClick={() => addPlayer(user, action)}
+          >
+            Join
+          </button>
+        )}
 
       {isJoined && (
         <button
           className="bg-red-500 hover:bg-red-700 mt-3 text-white font-bold py-1 px-4 rounded-full transition duration-300 ease-in-out transform  "
-          onClick={() => removePlayer(user, addPlayerTo)}
+          onClick={() => removePlayer(user, action)}
         >
           Withdraw
         </button>
       )}
 
-      {user && user?.role === ROLES.ADMIN && (
+      {user && user?.role === ROLES.ADMIN && registered !== capacity && (
         <SearchBox
           data={users?.data}
           selectedItem={selectedUser}

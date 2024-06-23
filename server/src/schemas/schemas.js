@@ -74,6 +74,7 @@ const teamSchema = Joi.object({
 }).options({ abortEarly: false });
 
 const userSchema = Joi.object({
+    _id: Joi.string().min(24).max(24).hex(),
     username: Joi.string().min(4).max(16).required(),
     name: Joi.string().min(3).max(25).pattern(/^[a-zA-Z]+$/).required(),
     surname: Joi.string().min(3).max(25).pattern(/^[a-zA-Z]+$/).required(),

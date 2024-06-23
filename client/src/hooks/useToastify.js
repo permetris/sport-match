@@ -12,6 +12,7 @@ const options = {
 };
 
 export const toastError = (err) => {
+  if (typeof err === "string"){ toast.error(err, options)}
   if (err.data) {
     const errors = err.data.message;
     if (errors instanceof Array) {
