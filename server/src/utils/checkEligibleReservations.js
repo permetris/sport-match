@@ -42,20 +42,9 @@ const checkConditionsAndNotify = async (reservation) => {
         return;
     }
 
-    const data = await fetchWeather(reservation.field.city);
-    if (!data) { // Match will be played if Weather API is not available
-        await createMatchForReservation(reservation.id);
-        notifyPlayers(reservation, mailContexts.scheduled);
-        return;
-    }
-    if (
-        data.main.temp < weatherConsts.MIN_TEMP ||
-    data.main.temp > weatherConsts.MAX_TEMP ||
-    data.main.humidity > weatherConsts.MAX_HUMIDITY ||
-    data.wind.speed > weatherConsts.MAX_WIND_SPEED ||
-    data.weather[0].main === weatherConsts.RAIN ||
-    data.weather[0].main === weatherConsts.SNOW
-    ) {
+    const isWeatherGood = await fetchWeather(reservation.field.city);
+    
+    if (isWeatherGood) {
         await Reservations.findByIdAndUpdate(reservation.id, { $set: { isCanceled: true } });
         notifyPlayers(reservation, mailContexts.badWeather);
     } else {

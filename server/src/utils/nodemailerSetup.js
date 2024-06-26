@@ -1,9 +1,10 @@
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 const sendEmail = async (recepient, subject, html) => {
     const transporter = nodemailer.createTransport({
-        host: process.env.MAILER_HOST,
-        port: process.env.MAILER_PORT,
+        host: 'localhost',
+        port: '1025',
         secure: false
     });
 
