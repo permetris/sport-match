@@ -5,6 +5,7 @@ const { ErrorMessages } = require('../errors/ErrorMessages');
 const Team = require('./Team');
 const { MatchModel, matchSchema } = require('./Match');
 const { FieldModel } = require('./Field');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const reservationSchema = mongoose.Schema({
     field: {
@@ -98,5 +99,6 @@ reservationSchema.pre('save', async function (next) {
     if (this.registeredPlayers.length > maxPlayers) throw new ValidationError(ErrorMessages.playerLimit);
 });
 reservationSchema.plugin(require('mongoose-autopopulate'));
+reservationSchema.plugin(AutoIncrement, { inc_field: 'num', start_seq: 1, inc_amount: 1 });
 
 module.exports = { ReservationModel: mongoose.model('Reservation', reservationSchema), reservationSchema };

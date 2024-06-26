@@ -35,7 +35,7 @@ const querySchema = Joi.object({
 const fieldSchema = Joi.object({
     _id: Joi.string().min(24).max(24).hex(),
     name: Joi.string().min(5).max(50).required(),
-    address: Joi.string().min(8).max(50).required(),
+    address: Joi.string().min(4).max(50).required(),
     maxPlayers: Joi.number().min(6).max(22).multiple(2).required(),
     city: Joi.object({
         _id: Joi.string().min(24).max(24).hex().required(),
@@ -44,7 +44,8 @@ const fieldSchema = Joi.object({
         updatedAt: Joi.string()
     }),
     owner: Joi.string().min(24).max(24).hex().required(),
-    isDeleted: Joi.boolean()
+    isDeleted: Joi.boolean(),
+    isOutdoor: Joi.boolean()
 }).options({ abortEarly: false });
 
 const matchSchema = Joi.object({
@@ -75,17 +76,18 @@ const teamSchema = Joi.object({
 
 const userSchema = Joi.object({
     _id: Joi.string().min(24).max(24).hex(),
-    username: Joi.string().min(4).max(16).required(),
-    name: Joi.string().min(3).max(25).pattern(/^[a-zA-Z]+$/).required(),
-    surname: Joi.string().min(3).max(25).pattern(/^[a-zA-Z]+$/).required(),
+    username: Joi.string().min(2).max(50).required(),
+    name: Joi.string().min(3).max(25).pattern(/[A-Za-z]+( [A-Za-z]+)*$/).required(),
+    surname: Joi.string().min(3).max(25).pattern(/[A-Za-z]+( [A-Za-z]+)*$/).required(),
     email: Joi.string().email({ minDomainSegments: 2 }).required(),
     password: Joi.string().min(8).max(20),
     phone: Joi.string().required(),
-    role: Joi.string().valid('ADMIN', 'USER'),
+    role: Joi.string().valid('ADMIN', 'USER', 'FIELD_OWNER'),
     isDeleted: Joi.boolean()
 
 }).options({ abortEarly: false });
 const citySchema = Joi.object({
+    _id: Joi.string().min(24).max(24).hex(),
     name: Joi.string().min(5).max(50).required()
 }).options({ abortEarly: false });
 

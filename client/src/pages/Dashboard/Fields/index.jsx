@@ -8,9 +8,11 @@ import { fieldTableSettings } from "./settings";
 import Pagination from "../../../components/Pagination";
 import { toastError, toastSuccess } from "../../../hooks/useToastify";
 import { AddFieldModal } from "./AddField";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function Fields() {
   const [page, setPage] = useState(1);
+  const { user } = useAuth();
 
   const [isAddField, setIsAddField] = useState(false);
   const [getFields, { data }] = useLazyGetFieldsQuery();
@@ -37,7 +39,12 @@ export default function Fields() {
   };
 
   useEffect(() => {
-    getFields({ page, size: 10, isDeleted: false });
+    getFields({
+      page,
+      size: 10,
+      isDeleted: false,
+      owner: user.role === "FIELD_OWNER" ? user._id : undefined,
+    });
   }, [page]);
 
   return (

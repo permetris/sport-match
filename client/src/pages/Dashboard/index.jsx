@@ -31,7 +31,7 @@ export default function Dashboard() {
             <ul role="" className="flex flex-1 flex-col gap-y-7">
               <li>
                 <div>
-                  {navigation.map((item) => (
+                  {navigation.filter(item => item.roles.includes(user.role)).map((item) => (
                     <Link
                       key={item.name}
                       to={item.href}

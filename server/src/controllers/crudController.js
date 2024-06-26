@@ -32,6 +32,7 @@ const createOne = async (model, req, res) => {
 
 const updateOne = async (model, req, res) => {
     const { id } = req.params;
+    console.log(req.body)
     const dataUpdated = await model.findByIdAndUpdate(id, req.body, {
         new: true
     });

@@ -80,7 +80,7 @@ const deleteUser = async (req, res) => {
 };
 
 const viewHistory = async (req, res) => {
-    const { id } = req.params;
+    const { username } = req.params;
     const exclude = ' -isScheduled -isCanceled -isFinished -registeredPlayers';
 
     // eslint-disable-next-line max-len

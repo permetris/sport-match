@@ -11,9 +11,10 @@ export const navigation = [
     name: "Reservations",
     href: "/dashboard/reservations",
     icon: ClockIcon,
+    roles: ["ADMIN","FIELD_OWNER"]
   },
-  { name: "Cities", href: "/dashboard/cities", icon: HomeIcon },
-  { name: "Users", href: "/dashboard/users", icon: UserIcon },
-  { name: "Fields", href: "/dashboard/fields", icon: MapIcon },
-  { name: "Back to app", href: "/", icon: ArrowLeftIcon },
+  { name: "Cities", href: "/dashboard/cities", icon: HomeIcon, roles: ["ADMIN"] },
+  { name: "Users", href: "/dashboard/users", icon: UserIcon, roles: ["ADMIN"] },
+  { name: "Fields", href: "/dashboard/fields", icon: MapIcon, roles: ["ADMIN","FIELD_OWNER"] },
+  { name: "Back to app", href: "/", icon: ArrowLeftIcon ,roles: ["ADMIN","FIELD_OWNER"]},
 ];

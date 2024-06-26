@@ -49,7 +49,7 @@ async function generateFakeData () {
         email: 'josip2@mail.com',
         password: await bcrypt.hash('asdasdasd', salt),
         phone: '0993404577',
-        role: 'FIELD_ADMIN',
+        role: 'FIELD_OWNER',
         isDeleted: false
     });
     await admin.save();
@@ -65,12 +65,13 @@ async function generateFakeData () {
             email: faker.internet.email(),
             password: await bcrypt.hash('password', salt),
             phone: faker.phone.number(),
-            role: faker.helpers.arrayElement(['USER', 'FIELD_ADMIN']),
+            role: faker.helpers.arrayElement(['USER', 'FIELD_OWNER']),
             isDeleted: false
         });
         users.push(user);
         await user.save();
     }
+    console.log(users);
 
     // Generate cities
     const cities = [];
@@ -89,7 +90,7 @@ async function generateFakeData () {
             name: faker.company.name(),
             city: faker.helpers.arrayElement(cities),
             address: faker.location.streetAddress(),
-            owner: faker.helpers.arrayElement(users.filter(user => user.role === 'FIELD_ADMIN'))._id,
+            owner: faker.helpers.arrayElement(users.filter(user => user.role === 'FIELD_OWNER'))._id,
             maxPlayers: faker.helpers.arrayElement([10, 12, 14, 16])
         });
         fields.push(field);

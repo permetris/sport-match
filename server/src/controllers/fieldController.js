@@ -7,12 +7,16 @@ const createField = async (req, res) => {
 };
 
 const viewAllFields = async (req, res) => {
-    const { page = 1, size = 10, isDeleted } = req.query;
+    const { page = 1, size = 10, isDeleted, owner } = req.query;
     const skip = size !== 0 ? (page - 1) * size : 1000;
     const query = {};
 
     if (isDeleted !== 'undefined') {
         query.isDeleted = isDeleted;
+    }
+
+    if (owner && owner !== 'undefined') {
+        query.owner = owner;
     }
 
     const dataFound = await FieldModel.find(query, '-createdAt -updatedAt -deletedAt')

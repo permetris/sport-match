@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 
-export default function ReservationList({ reservations }) {
+const formatCapacityString = (reservation) => {
+  if (reservation.openEntry) {
+    return `${reservation.match.blackTeam.players.length + reservation.match.whiteTeam.players.length}/${reservation.field.maxPlayers}`;
+  }
+  return `${reservation.registeredPlayers.length}/${reservation.field.maxPlayers}`;
+};
+
+export function ReservationList({ reservations }) {
   const [reservationId, setReservationId] = useState(undefined);
 
   if (!reservations || reservations.length == 0) {
@@ -46,16 +53,22 @@ export default function ReservationList({ reservations }) {
             </div>
             <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end pe-3">
               <p className="text-sm leading-6 text-sky-300">
-                {reservation?.openEntry ? "FREE ENTRY" : "ALL RANDOM"}
+                {reservation.openEntry ? "FREE ENTRY" : "ALL RANDOM"}
               </p>
               <div className="mt-1 flex items-center gap-x-1.5">
-                <p className="text-s leading-5 text-gray-400">{`Capacity: ${reservation.registeredPlayers.length}/${reservation.field.maxPlayers}`}</p>
+                <p className="text-s leading-5 text-gray-400">{`Capacity:${formatCapacityString(reservation)} `}</p>
+              </div>
+              <div className="mt-1 flex items-center gap-x-1.5">
+                <p className="text-s leading-5 text-gray-400">{`Id ${reservation.num}`}</p>
               </div>
             </div>
           </li>
         ))}
       </ul>
-      <Modal reservationId={reservationId} setReservationId={setReservationId} />
+      <Modal
+        reservationId={reservationId}
+        setReservationId={setReservationId}
+      />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { toastError, toastSuccess } from "../../../hooks/useToastify";
 
 export default function UserInfo({ user }) {
   const [isEdit, setIsEdit] = useState(false);
-  const [username, setUsername] = useState(user.username);
+  const [username, setUsername] = useState(user?.username);
   const [name, setName] = useState(user.name);
   const [surname, setSurname] = useState(user.surname);
   const [email, setEmail] = useState(user.email);

@@ -2,8 +2,6 @@ import React from "react";
 import { Description, Field, Label, Switch } from "@headlessui/react";
 import { classNames } from "../../utils/classNames";
 
-
-
 export default function Toggle({ enabled, setEnabled, title, description }) {
   return (
     <Field as="div" className="flex items-center justify-between">

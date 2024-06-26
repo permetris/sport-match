@@ -7,17 +7,20 @@ import { toastError, toastSuccess } from "../../../../hooks/useToastify";
 import SelectBox from "../../../../components/SelectBox";
 import Toggle from "../../../../components/Toogle";
 import { getTomorrowDate } from "../../../../utils/getTomorrowDate";
+import { useAuth } from "../../../../context/AuthContext";
 
 export const AddReservationModal = ({
   setIsAddReservation,
   getReservations,
 }) => {
+  const { user } = useAuth(); 
   const [dateTime, setDateTime] = useState("");
   const [isAllRandom, setIsAllRandom] = useState();
   const { data: fields, isSuccess } = useGetFieldsQuery({
     page: 1,
     size: 100,
     isDeleted: false,
+    owner: user?.role === "FIELD_OWNER" ? user._id : undefined
   });
   const [selectedField, setSelectedField] = useState(null);
   const [addReservation] = useAddReservationMutation();
@@ -29,7 +32,7 @@ export const AddReservationModal = ({
     if (isSuccess) {
       setSelectedField(fields.data[0]);
     }
-  });
+  },[isSuccess]);
   const handleAddReservation = async () => {
     try {
       const result = await addReservation({
@@ -46,6 +49,10 @@ export const AddReservationModal = ({
       toastError(error);
     }
   };
+  if (!isSuccess) { 
+    return <h1>Loading</h1>
+  }
+
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

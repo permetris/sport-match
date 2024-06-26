@@ -10,7 +10,7 @@ import SelectBox from "../../../../components/SelectBox";
 const roles = [
   { id: "USER", role: "User" },
   { id: "ADMIN", role: "Admin" },
-  { id: "FIELD_ADMIN", role: "Field owner" },
+  { id: "FIELD_OWNER", role: "Field owner" },
 ];
 
 export const AddUserModal = ({ setIsAddUser, getUsers, user }) => {
@@ -20,7 +20,8 @@ export const AddUserModal = ({ setIsAddUser, getUsers, user }) => {
   const [email, setEmail] = useState(user ? user.email : "");
   const [phone, setPhone] = useState(user ? user.phone : "");
   const [password, setPassword] = useState(user ? "Hidden" : "");
-  const [updateUser] = useUpdateUserMutation(); //
+  const [userData, setUserData] = useState(user ? user : null);
+  const [updateUser] = useUpdateUserMutation();
 
   const [role, setRole] = useState(roles[0]);
 
@@ -53,14 +54,24 @@ export const AddUserModal = ({ setIsAddUser, getUsers, user }) => {
         ...user,
         name,
         surname,
+        username,
         password: password === "Hidden" ? user.password : password,
         email,
         phone,
         role: role.id,
       }).unwrap();
+
       if (result.success) {
         toastSuccess("Successfuly updated user!");
         getUsers({ page: 1 });
+        setIsAddUser(false);
+        setUserData(null);
+        setEmail("");
+        setName("");
+        setSurname("");
+        setPassword("");
+        setPhone("");
+        setUsername("");
       }
     } catch (error) {
       toastError(error);

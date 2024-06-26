@@ -163,6 +163,9 @@ export default function ReservationDetails({ reservationId, closeModal }) {
             <dd className="mt-1 text-base font-semibold leading-6 text-blue-900">
               {reservation?.openEntry ? "Free entry" : "All random"}
             </dd>
+            <dd className="mt-1 text-base font-semibold leading-6 text-gray-600">
+              {"Id: " + reservation?.num }
+            </dd>
           </div>
 
           <div className="flex-none self-end px-6 pt-4">

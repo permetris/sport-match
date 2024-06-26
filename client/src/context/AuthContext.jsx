@@ -8,24 +8,19 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [triggerLogin] = useLoginUserMutation();
-
   const [user, setUser] = useState(undefined);
 
   const login = async (userData) => {
     try {
-      const response = await triggerLogin(userData);
+      const response = await triggerLogin(userData).unwrap();
 
-      if (response?.data?.user) {
-        setUser(response.data.user);
-        store.dispatch(setToken(response.data.user.token));
-        toastSuccess(
-          `Welcome ${response.data.user.name} ${response.data.user.surname}`
-        );
-        return response.data.user;
-      } else {
-        toastError(response.error.data.message);
-        return undefined;
+      if (response.user) {
+        setUser(response.user);
+        store.dispatch(setToken(response.user.token));
+        toastSuccess(`Welcome ${response.user.name} ${response.user.surname}`);
+        return response.user;
       }
+      return undefined;
     } catch (error) {
       toastError(error);
       return undefined;

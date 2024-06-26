@@ -14,9 +14,11 @@ export default function Cities() {
   const [deleteCity] = useDeleteCityMutation();
   const [page, setPage] = useState(1);
   const [isAddCity, setIsAddCity] = useState(false);
+  const [updateCity, setUpdateCity] = useState(null);
 
-  const editEntry = async (event) => {
-    console.log("editing");
+  const editEntry = async (id) => {
+    setIsAddCity(true);
+    setUpdateCity(data.data.find((each) => each._id === id));
   };
   const deleteEntry = async (id) => {
     const deleteResult = await deleteCity({ id }).unwrap();
@@ -52,7 +54,11 @@ export default function Cities() {
         setPage={setPage}
       ></Pagination>
       {isAddCity && (
-        <AddCityModal setIsAddCity={setIsAddCity} getCities={getCities} />
+        <AddCityModal
+          setIsAddCity={setIsAddCity}
+          getCities={getCities}
+          city={updateCity}
+        />
       )}
     </>
   );

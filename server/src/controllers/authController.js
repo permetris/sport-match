@@ -17,7 +17,6 @@ const loginUser = async (req, res) => {
     if (!user) throw new NotFoundError(ErrorMessages.userNotFound);
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
     if (!isPasswordCorrect) { return res.status(HTTP_STATUS.FORBIDDEN).json({ success: false, message: 'Passwords do not match' }); }
     const token = createJWT(user);
     const bearer = `Bearer ${token}`;

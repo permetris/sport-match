@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 function toQueryString(obj) {
+  console.log(obj)
   if (!obj) return "";
   return Object.keys(obj)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
@@ -145,6 +146,13 @@ export const apiSlice = createApi({
         method: "POST",
       }),
     }),
+    updateCity: builder.mutation({
+      query: (body) => ({
+        url: `/city/${body._id}`,
+        body,
+        method: "PUT",
+      }),
+    }),
     addField: builder.mutation({
       query: (body) => ({
         url: `/field`,
@@ -180,5 +188,6 @@ export const {
   useAddFieldMutation,
   useAddReservationMutation,
   useUpdateUserMutation,
-  useDeleteReservationMutation
+  useDeleteReservationMutation,
+  useUpdateCityMutation
 } = apiSlice;

@@ -30,6 +30,10 @@ const fieldSchema = mongoose.Schema({
             }
         }
     },
+    isOutdoor: {
+        type: Boolean,
+        default: false
+    },
     isDeleted: {
         type: Boolean,
         default: false

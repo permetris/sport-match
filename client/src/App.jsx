@@ -7,8 +7,7 @@ import { ResetPassword } from "./components/ResetPassword/ResetPass";
 import { ToastContainer } from "react-toastify";
 import { SendEmail } from "./components/ResetPassword/SendEmail";
 import { UserHistory } from "./pages/UserHistory";
-import { AddResult } from "./components/AddResult/AddResult";
-import { Match } from "./components/Match/Match";
+
 import { Login } from "./pages/Login/index";
 import "react-toastify/dist/ReactToastify.css";
 import NotFound from "./pages/Error/NotFound";
@@ -20,6 +19,7 @@ import Reservations from "./pages/Dashboard/Reservations";
 import Fields from "./pages/Dashboard/Fields";
 import Users from "./pages/Dashboard/Users";
 import { UserProfile } from "./pages/UserProfile";
+import { Account } from "./pages/UserProfile/Account";
 
 const AppLayout = () => {
   return (
@@ -68,21 +68,14 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
       },
       {
-        path: "history",
-        element: <UserHistory />,
-      },
-      {
-        path: "match/:id/result",
-        element: <AddResult />,
-      },
-      {
         path: "user/:username",
+        children: [
+          { path: "history", element: <UserHistory /> },
+          { path: "", element: <Account /> },
+        ],
         element: <UserProfile />,
       },
-      {
-        path: "match/:id",
-        element: <Match />,
-      },
+     
       {
         path: "dashboard",
         element: <Dashboard />,

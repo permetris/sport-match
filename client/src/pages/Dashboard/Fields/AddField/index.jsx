@@ -9,6 +9,7 @@ import SelectBox from "../../../../components/SelectBox";
 import SearchBox from "../../../../components/SearchBox";
 import { useAuth } from "../../../../context/AuthContext";
 import { ROLES } from "../../../../utils/roles";
+import Toggle from "../../../../components/Toogle";
 
 export const AddFieldModal = ({ setIsAddField, getFields }) => {
   const { user } = useAuth();
@@ -21,6 +22,7 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [query, setQuery] = useState("null");
+  const [isOutdoor, setIsOutdoor] = useState(false);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -33,15 +35,16 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
   };
   useEffect(() => {
     if (citiesSuccess) setSelectedCity(cities.data[0]);
-  });
+  }, [citiesSuccess]);
   const handleAddField = async (e) => {
     e.preventDefault();
     const newField = {
       name: fieldName,
       address: fieldAddress,
       maxPlayers: capacity.value,
-      owner: selectedPerson._id,
+      owner: selectedPerson ? selectedPerson._id : user._id,
       city: selectedCity,
+      isOutdoor,
     };
 
     try {
@@ -49,7 +52,7 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
       if (result.success) {
         toastSuccess("Added field");
         setIsAddField(false);
-        getFields({ page: 1, size: 10, isDeleted: false });
+        getFields({ page: 1, size: 10, isDeleted: false, owner: user.role === "FIELD_OWNER" ? user._id: undefined });
       }
     } catch (error) {
       toastError(error);
@@ -65,7 +68,9 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
       });
     }
   }, [query]);
-
+  if (!citiesSuccess) {
+    return <h1>loading</h1>;
+  }
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -141,7 +146,16 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
                 selected={capacity}
                 setSelected={setCapacity}
               />
-              <div>
+              <div className="mt-3">
+                <Toggle
+                  enabled={isOutdoor}
+                  setEnabled={setIsOutdoor}
+                  title={"Outdoor field?"}
+                  description={""}
+                />
+              </div>
+
+              <div className="mt-10">
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useLazyGetReservationsQuery } from "../../slices/apiSlice";
-import ReservationList from "./ResevationList";
+import { ReservationList } from "./ResevationList";
 import Container from "../../components/Container";
 import { ReservationFilters } from "./ReservationFilters";
 import Pagination from "../../components/Pagination";
@@ -12,7 +12,12 @@ export const Home = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    getReservations({ city: cityFilter, date: dateFilter, page, status: "scheduled" });
+    getReservations({
+      city: cityFilter,
+      date: dateFilter,
+      page,
+      status: "scheduled",
+    });
   }, [cityFilter, dateFilter, page]);
 
   const resetFilters = () => {

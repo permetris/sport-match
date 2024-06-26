@@ -12,7 +12,7 @@ function Navigation() {
   const { user, logout } = useAuth();
 
   const navigation = [
-    { name: "Dashboard", href: "/dashboard", roles: [ROLES.ADMIN] },
+    { name: "Dashboard", href: "/dashboard", roles: [ROLES.ADMIN, ROLES.OWNER] },
   ];
   const onLogoutHandler = () => {
     try {
