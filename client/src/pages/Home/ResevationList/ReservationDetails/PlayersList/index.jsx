@@ -3,6 +3,7 @@ import { useAuth } from "../../../../../context/AuthContext";
 import { ROLES } from "../../../../../utils/roles";
 import SearchBox from "../../../../../components/SearchBox";
 import { useLazyGetUsersQuery } from "../../../../../slices/apiSlice";
+import { useNavigate } from "react-router-dom";
 
 export function PlayersList({
   players,
@@ -12,9 +13,10 @@ export function PlayersList({
   action,
   capacity,
   registered,
+  closeModal
 }) {
   const { user } = useAuth();
-
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [getUsers, { data: users }] = useLazyGetUsersQuery();
   const [selectedUser, setSelectedUser] = useState(users?.data[0]);
@@ -41,8 +43,18 @@ export function PlayersList({
               className="p-1 hover:bg-gray-100 transition-colors duration-200 space-x-12"
               key={player._id}
             >
-              <span>{player.username} </span>
-              {user?.role === "ADMIN" && (
+              <span
+                className="cursor-pointer z-50"
+                onClick={() =>
+                {
+                  closeModal();
+                  navigate(`/user/${player.username}/history`)
+                }
+                }
+              >
+                {player.username}{" "}
+              </span>
+              {user?.role !== "USER" && (
                 <button
                   className="text-red-800 hover:text-red-300"
                   onClick={() => removePlayer(player, action)}

@@ -5,7 +5,7 @@ import {
 } from "../../../../slices/apiSlice";
 import { toastError, toastSuccess } from "../../../../hooks/useToastify";
 
-export const AddCityModal = ({ setIsAddCity, getCities, city }) => {
+export const AddCityModal = ({ setIsAddCity, getCities, city, setCity }) => {
   const [cityName, setCityName] = useState(city ? city.name : "");
   const [updateCity] = useUpdateCityMutation();
   const [addCity] = useAddCityMutation();
@@ -33,6 +33,7 @@ export const AddCityModal = ({ setIsAddCity, getCities, city }) => {
       if (result.success) {
         toastSuccess("Updated city");
         setIsAddCity(false);
+        setCity(null);
         await getCities({ page: 1 });
       }
     } catch (error) {

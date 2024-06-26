@@ -9,7 +9,7 @@ export const UserProfile = () => {
   const navigate = useNavigate();
   const secondaryNavigation = [
     { name: "Account", href: (id) => `/user/${id}` },
-    { name: "History", href: (id) => `/user/${id}/history` },
+    { name: "History", href: (id) => `/user/${id}/myhistory` },
   ];
   useEffect(() => {
     if (!user) {

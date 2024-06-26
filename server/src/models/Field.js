@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { citySchema } = require('./City');
 
 const fieldSchema = mongoose.Schema({
     name: {
@@ -9,7 +8,9 @@ const fieldSchema = mongoose.Schema({
         unique: true
     },
     city: {
-        type: citySchema
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'City',
+        autopopulate: true
     },
     address: {
         type: String,
@@ -19,7 +20,8 @@ const fieldSchema = mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
+        autopopulate: true
     },
     maxPlayers: {
         type: Number,
@@ -50,5 +52,7 @@ const fieldSchema = mongoose.Schema({
         }
     }
 });
+
+fieldSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = { FieldModel: mongoose.model('Field', fieldSchema), fieldSchema };

@@ -200,6 +200,7 @@ export default function ReservationDetails({ reservationId, closeModal }) {
                 action={"blackTeam"}
                 registered={reservation?.match?.blackTeam?.players.length}
                 capacity={reservation?.field.maxPlayers / 2}
+                closeModal={closeModal}
               />
               <PlayersList
                 players={reservation?.match?.whiteTeam?.players}
@@ -209,6 +210,7 @@ export default function ReservationDetails({ reservationId, closeModal }) {
                 action={"whiteTeam"}
                 registered={reservation?.match?.whiteTeam?.players.length}
                 capacity={reservation?.field.maxPlayers / 2}
+                closeModal={closeModal}
               />
             </div>
           )}
@@ -222,6 +224,7 @@ export default function ReservationDetails({ reservationId, closeModal }) {
                 action={"registeredPlayers"}
                 registered={reservation?.registeredPlayers.length}
                 capacity={reservation?.field.maxPlayers}
+                closeModal={closeModal}
               />
             </div>
           )}

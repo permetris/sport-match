@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 function toQueryString(obj) {
-  console.log(obj)
   if (!obj) return "";
   return Object.keys(obj)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
@@ -26,6 +25,11 @@ export const apiSlice = createApi({
     getUser: builder.query({
       query: (username) => ({
         url: `/user/${username}`,
+      }),
+    }),
+    getUserHistory: builder.query({
+      query: (id) => ({
+        url: `/user/${id}/history`,
       }),
     }),
     updateUser: builder.mutation({
@@ -91,13 +95,7 @@ export const apiSlice = createApi({
         return { url: `/${id}/reset-password`, body, method: "PATCH" };
       },
     }),
-    getUserHistory: builder.mutation({
-      query: ({ id, body }) => ({
-        url: `/user/${id}/history`,
-        body,
-        method: "POST",
-      }),
-    }),
+  
     createUser: builder.mutation({
       query: (body) => ({
         url: `/user`,
@@ -117,7 +115,13 @@ export const apiSlice = createApi({
         method: "GET",
       }),
     }),
-
+    updateField: builder.mutation({
+      query: (body) => ({
+        url: `/field/${body._id}`,
+        body,
+        method: "PUT",
+      }),
+    }),
     removeRegisteredPlayer: builder.mutation({
       query: ({ reservationId, playerId }) => ({
         url: `/reservation/${reservationId}/remove-player/${playerId}`,
@@ -189,5 +193,8 @@ export const {
   useAddReservationMutation,
   useUpdateUserMutation,
   useDeleteReservationMutation,
-  useUpdateCityMutation
+  useUpdateCityMutation,
+  useGetUserHistoryQuery,
+  useLazyGetUserHistoryQuery,
+  useUpdateFieldMutation
 } = apiSlice;

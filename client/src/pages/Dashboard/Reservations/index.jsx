@@ -8,12 +8,14 @@ import { reservationTableSettings } from "./settings";
 import Pagination from "../../../components/Pagination";
 import { AddReservationModal } from "./AddReservation";
 import { toastError, toastSuccess } from "../../../hooks/useToastify";
+import Modal from "../../Home/ResevationList/Modal";
 
 export default function Reservations() {
   const [isAddReservation, setIsAddReservation] = useState(false);
   const [page, setPage] = useState(1);
   const [getReservations, { data }] = useLazyGetReservationsQuery();
   const [deleteReservation] = useDeleteReservationMutation();
+  const [reservationId, setReservationId] = useState("");
 
   const editEntry = (event) => {
     console.log("editing");
@@ -23,7 +25,7 @@ export default function Reservations() {
       const result = await deleteReservation(id).unwrap();
       if (result.success) {
         toastSuccess("Successfully deleted reservation");
-        getReservations({page})
+        getReservations({ page });
       }
     } catch (error) {
       toastError(error);
@@ -35,6 +37,9 @@ export default function Reservations() {
   useEffect(() => {
     getReservations({ page });
   }, [page]);
+  const openModal = (id) => {
+    setReservationId(id);
+  };
   return (
     <>
       <Table
@@ -43,6 +48,7 @@ export default function Reservations() {
         editEntry={editEntry}
         deleteEntry={deleteEntry}
         addEntry={addEntry}
+        openModal={openModal}
       />
       <Pagination
         totalItems={data?.totalItems}
@@ -55,6 +61,10 @@ export default function Reservations() {
           getReservations={getReservations}
         />
       )}
+      <Modal
+        reservationId={reservationId}
+        setReservationId={setReservationId}
+      />
     </>
   );
 }

@@ -3,6 +3,7 @@ import {
   useAddFieldMutation,
   useGetCitiesQuery,
   useLazyGetUsersQuery,
+  useUpdateFieldMutation,
 } from "../../../../slices/apiSlice";
 import { toastError, toastSuccess } from "../../../../hooks/useToastify";
 import SelectBox from "../../../../components/SelectBox";
@@ -11,18 +12,40 @@ import { useAuth } from "../../../../context/AuthContext";
 import { ROLES } from "../../../../utils/roles";
 import Toggle from "../../../../components/Toogle";
 
-export const AddFieldModal = ({ setIsAddField, getFields }) => {
+const capacityList = [
+  { _id: 22, value: 22 },
+  { _id: 20, value: 20 },
+  { _id: 18, value: 18 },
+  { _id: 16, value: 16 },
+  { _id: 14, value: 14 },
+  { _id: 12, value: 12 },
+  { _id: 10, value: 10 },
+];
+
+export const AddFieldModal = ({
+  setIsAddField,
+  getFields,
+  field,
+  setField,
+}) => {
   const { user } = useAuth();
   const { data: cities, isSuccess: citiesSuccess } = useGetCitiesQuery();
   const [getUsers, { data: users }] = useLazyGetUsersQuery();
   const [addField] = useAddFieldMutation();
-  const [fieldName, setFieldName] = useState("");
-  const [fieldAddress, setFieldAddress] = useState("");
-  const [capacity, setCapacity] = useState({ _id: 22, value: 22 });
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [selectedPerson, setSelectedPerson] = useState(null);
+  const [fieldName, setFieldName] = useState(field ? field.name : "");
+  const [fieldAddress, setFieldAddress] = useState(field ? field.address : "");
+  const [capacity, setCapacity] = useState(
+    field
+      ? capacityList.find((el) => el.value === field.maxPlayers)
+      : capacityList[0]
+  );
+  const [updateField] = useUpdateFieldMutation();
+  const [selectedCity, setSelectedCity] = useState(field ? field.city : null);
+  const [selectedPerson, setSelectedPerson] = useState(
+    field ? field.owner : null
+  );
   const [query, setQuery] = useState("null");
-  const [isOutdoor, setIsOutdoor] = useState(false);
+  const [isOutdoor, setIsOutdoor] = useState(field ? field.isOutdoor : false);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -42,7 +65,7 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
       name: fieldName,
       address: fieldAddress,
       maxPlayers: capacity.value,
-      owner: selectedPerson ? selectedPerson._id : user._id,
+      owner: selectedPerson ? selectedPerson._id : user?._id,
       city: selectedCity,
       isOutdoor,
     };
@@ -52,7 +75,42 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
       if (result.success) {
         toastSuccess("Added field");
         setIsAddField(false);
-        getFields({ page: 1, size: 10, isDeleted: false, owner: user.role === "FIELD_OWNER" ? user._id: undefined });
+        await getFields({
+          page: 1,
+          size: 10,
+          isDeleted: false,
+          owner: user.role === "FIELD_OWNER" ? user._id : undefined,
+        });
+      }
+    } catch (error) {
+      toastError(error);
+    }
+  };
+
+  
+
+  const handleSaveField = async () => {
+    try {
+      const result = await updateField({
+        _id: field._id,
+        name: fieldName,
+        address: fieldAddress,
+        maxPlayers: capacity.value,
+        owner: selectedPerson ? selectedPerson._id : user?.id,
+        city: selectedCity,
+        isOutdoor,
+      }).unwrap();
+
+      if (result.success) {
+        toastSuccess("Successfully edited field");
+        setIsAddField(false);
+        setField(null);
+        await getFields({
+          page: 1,
+          size: 10,
+          isDeleted: false,
+          owner: user.role === "FIELD_OWNER" ? user._id : undefined,
+        });
       }
     } catch (error) {
       toastError(error);
@@ -132,16 +190,8 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
                 />
               )}
               <SelectBox
-                labelText={"Capacity:"}
-                data={[
-                  { _id: 22, value: 22 },
-                  { _id: 20, value: 20 },
-                  { _id: 18, value: 18 },
-                  { _id: 16, value: 16 },
-                  { _id: 14, value: 14 },
-                  { _id: 12, value: 12 },
-                  { _id: 10, value: 10 },
-                ]}
+                labelText={"Capacity: "}
+                data={capacityList}
                 displayKey={"value"}
                 selected={capacity}
                 setSelected={setCapacity}
@@ -154,15 +204,26 @@ export const AddFieldModal = ({ setIsAddField, getFields }) => {
                   description={""}
                 />
               </div>
-
-              <div className="mt-10">
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Add
-                </button>
-              </div>
+              {field ? (
+                <div className="mt-10">
+                  <button
+                    type="button"
+                    onClick={handleSaveField}
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Save
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-10">
+                  <button
+                    type="submit"
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Add
+                  </button>
+                </div>
+              )}
             </form>
             <div>
               <button

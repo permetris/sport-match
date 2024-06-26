@@ -37,7 +37,7 @@ export default function Users() {
   useEffect(() => {
     getUsers({ page, isDeleted: false });
   }, [page]);
-console.log(data)
+
   return (
     <>
       <Table

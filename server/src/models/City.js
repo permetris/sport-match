@@ -4,7 +4,6 @@ const citySchema = mongoose.Schema({
     name: {
         type: String,
         minLength: 5,
-
         maxLength: 50
 
     }

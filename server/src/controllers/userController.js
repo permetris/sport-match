@@ -6,6 +6,7 @@ const { NotFoundError } = require('../errors/Errors');
 const { HTTP_STATUS } = require('../constants/httpCodes.js');
 const { successMessages } = require('../utils/successMessages');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 
 const exclude = '-updatedAt -createdAt -password';
 
@@ -64,52 +65,25 @@ const deleteUser = async (req, res) => {
 
     const userToDelete = await UserModel.findByIdAndUpdate(id, { isDeleted: true });
 
-    // TODO DECIDE WHAT TO DO WITH DELETED USERS THAT HAVE RESERVATIONS
-    // if (userToDelete) {
-    //     await ReservationModel.updateMany({
-    //         registeredPlayers: { $in: [id] }
-    //     },
-    //     {
-    //         $pull: { registeredPlayers: id }
-    //     });
-    // } else {
-    //     throw new NotFoundError(ErrorMessages.dataNotFound);
-    // }
-
     res.status(HTTP_STATUS.OK).json({ success: true, message: successMessages.userDeleted(userToDelete.username) });
 };
 
 const viewHistory = async (req, res) => {
-    const { username } = req.params;
-    const exclude = ' -isScheduled -isCanceled -isFinished -registeredPlayers';
+    const { id } = req.params;
 
-    // eslint-disable-next-line max-len
-    const userHistory = await ReservationModel.find({ registeredPlayers: { $in: [id] }, isFinished: true }, exclude)
-        .populate('field', 'name')
-        .populate({
-            path: 'match',
-            populate: {
-                path: 'whiteTeam',
-                populate: {
-                    path: 'players'
-                }
-            }
-        })
-        .populate({
-            path: 'match',
-            populate: {
-                path: 'blackTeam',
-                populate: {
-                    path: 'players'
-                }
-            }
-        })
-        .populate({
-            path: 'match',
-            populate: {
-                path: 'result'
-            }
-        }).lean();
+    const playerId = mongoose.Types.ObjectId(id);
+
+    const exclude = ' -isScheduled -isCanceled -isFinished -registeredPlayers';
+    const query = {
+        $or: [
+            { registeredPlayers: { $in: [playerId] } },
+            { 'match.whiteTeam.players': { $in: [playerId] } },
+            { 'match.blackTeam.players': { $in: [playerId] } }]
+    };
+
+    const userHistory = await ReservationModel.find(query, exclude)
+        .populate('field')
+        .lean();
 
     if (!userHistory.length) throw new NotFoundError(ErrorMessages.dataNotFound);
 

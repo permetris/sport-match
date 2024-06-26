@@ -6,6 +6,7 @@ export default function Table({
   addEntry,
   deleteEntry,
   editEntry,
+  openModal,
 }) {
   return (
     <div className="bg-gray-900">
@@ -20,7 +21,6 @@ export default function Table({
                   className="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                 >
                   {`Add ${settings.name}`}
-                  
                 </button>
               </div>
             </div>
@@ -39,16 +39,26 @@ export default function Table({
                             {each.displayName}
                           </th>
                         ))}
-                        {settings.deepFields && settings.deepFields.map((each) => (
-                          <th
-                            key={each.displayName}
-                            scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0"
-                          >
-                            {each.displayName}
-                          </th>
-                        ))}
-
+                        {settings.deepFields &&
+                          settings.deepFields.map((each) => (
+                            <th
+                              key={each.displayName}
+                              scope="col"
+                              className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0"
+                            >
+                              {each.displayName}
+                            </th>
+                          ))}
+                        {settings.triple &&
+                          settings.triple.map((each) => (
+                            <th
+                              key={each.displayName}
+                              scope="col"
+                              className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0"
+                            >
+                              {each.displayName}
+                            </th>
+                          ))}
                         <th
                           scope="col"
                           className="relative py-3.5 pl-3 pr-4 sm:pr-0 text-white text-right"
@@ -57,31 +67,54 @@ export default function Table({
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800">
+                    <tbody className={`divide-y divide-gray-800 `}>
                       {data?.map((each) => (
-                        <tr key={each._id}>
+                        <tr
+                          onClick={() => { 
+                            if (openModal) { 
+                              openModal(each._id)
+                            }
+                          }}
+                          className={` ${openModal ? "z-1 hover:border hover:border-gray-400 hover:shadow-sm cursor-pointer transition duration-150 z-0" : ""}`}
+                          key={each._id}
+                        >
                           {settings.fields.map((field) => (
                             <td
                               key={each[field.key]}
                               className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"
                             >
-                              {field.key !== "time" ? each[field.key] : new Date(each[field.key]).toUTCString()}
-
+                              {field.key !== "time"
+                                ? each[field.key]
+                                : new Date(each[field.key]).toUTCString()}
                             </td>
                           ))}
-                          {settings.deepFields && settings.deepFields.map((field) => (
-                            <td
-                              key={each[field.firstKey]}
-                              className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"
-                            >
-                              {each[field.firstKey][field.secondKey]}
-                            </td>
-                          ))}
+                          {settings.deepFields &&
+                            settings.deepFields.map((field) => (
+                              <td
+                                key={each[field.firstKey]}
+                                className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"
+                              >
+                                {each[field.firstKey][field.secondKey]}
+                              </td>
+                            ))}
+                          {settings.triple &&
+                            settings.triple.map((field) => (
+                              <td
+                                key={each[field.firstKey]}
+                                className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"
+                              >
+                                {
+                                  each[field.firstKey][field.secondKey][
+                                    field.thirdKey
+                                  ]
+                                }
+                              </td>
+                            ))}
 
-                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 relative z-20">
                             <button
                               onClick={() => editEntry(each._id)}
-                              className="text-indigo-400 hover:text-indigo-300 me-3"
+                              className="text-indigo-400 hover:text-indigo-300 me-3 relative z-20"
                             >
                               Edit
                             </button>

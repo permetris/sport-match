@@ -32,7 +32,7 @@ export const Home = () => {
         setCityFilter={setCityFilter}
         setDateFilter={setDateFilter}
       />
-      <ReservationList reservations={response?.data} />
+    <ReservationList reservations={response?.data} />
       <Pagination
         totalItems={response?.totalItems}
         page={page}

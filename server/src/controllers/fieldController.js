@@ -21,6 +21,8 @@ const viewAllFields = async (req, res) => {
 
     const dataFound = await FieldModel.find(query, '-createdAt -updatedAt -deletedAt')
         .lean()
+        .populate('city')
+        .populate('owner')
         .skip(skip)
         .limit(size);
 

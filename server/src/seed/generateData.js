@@ -88,7 +88,7 @@ async function generateFakeData () {
     for (let i = 0; i < 10; i++) {
         const field = new FieldModel({
             name: faker.company.name(),
-            city: faker.helpers.arrayElement(cities),
+            city: faker.helpers.arrayElement(cities)._id,
             address: faker.location.streetAddress(),
             owner: faker.helpers.arrayElement(users.filter(user => user.role === 'FIELD_OWNER'))._id,
             maxPlayers: faker.helpers.arrayElement([10, 12, 14, 16])

@@ -68,14 +68,18 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
       },
       {
+        path: "user/:username/history",
+        element: <UserHistory />,
+      },
+      {
         path: "user/:username",
         children: [
-          { path: "history", element: <UserHistory /> },
+          { path: "myhistory", element: <UserHistory /> },
           { path: "", element: <Account /> },
         ],
         element: <UserProfile />,
       },
-     
+
       {
         path: "dashboard",
         element: <Dashboard />,

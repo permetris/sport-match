@@ -27,18 +27,13 @@ export function ReservationList({ reservations }) {
   return (
     <div>
       <ul role="list" className="divide-y divide-white-800 mt-5">
-        {reservations.map((reservation) => (
+        {reservations?.map((reservation) => (
           <li
             onClick={() => openReservation(reservation._id)}
             key={reservation._id}
             className="flex justify-between gap-x-6 py-3 hover:bg-sky-700 cursor-pointer"
           >
             <div className="flex min-w-0 gap-x-4 pl-3">
-              <img
-                className="h-12 w-12 flex-none rounded-full bg-gray-800"
-                src="https://placehold.co/400x400"
-                alt=""
-              />
               <div className="min-w-0 flex-auto">
                 <p className="text-sm font-semibold leading-6 text-white">
                   {reservation.field.city.name}
@@ -56,7 +51,7 @@ export function ReservationList({ reservations }) {
                 {reservation.openEntry ? "FREE ENTRY" : "ALL RANDOM"}
               </p>
               <div className="mt-1 flex items-center gap-x-1.5">
-                <p className="text-s leading-5 text-gray-400">{`Capacity:${formatCapacityString(reservation)} `}</p>
+                <p className="text-s leading-5 text-gray-400">{`Capacity: ${formatCapacityString(reservation)} `}</p>
               </div>
               <div className="mt-1 flex items-center gap-x-1.5">
                 <p className="text-s leading-5 text-gray-400">{`Id ${reservation.num}`}</p>

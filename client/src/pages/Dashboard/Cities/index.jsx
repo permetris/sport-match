@@ -58,6 +58,7 @@ export default function Cities() {
           setIsAddCity={setIsAddCity}
           getCities={getCities}
           city={updateCity}
+          setCity={ setUpdateCity}
         />
       )}
     </>

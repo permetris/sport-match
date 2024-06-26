@@ -19,7 +19,7 @@ export const Login = () => {
       if (user.role === ROLES.USER) {
         return navigate("/");
       }
-      if (user.role === ROLES.ADMIN) {
+      if (user.role === ROLES.ADMIN || user.role === ROLES.OWNER) {
         return navigate("/dashboard");
       }
     }

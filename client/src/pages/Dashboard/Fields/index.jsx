@@ -13,13 +13,15 @@ import { useAuth } from "../../../context/AuthContext";
 export default function Fields() {
   const [page, setPage] = useState(1);
   const { user } = useAuth();
+  const [field, setField] = useState();
 
   const [isAddField, setIsAddField] = useState(false);
   const [getFields, { data }] = useLazyGetFieldsQuery();
   const [deleteField] = useDeleteFieldMutation();
 
-  const editEntry = () => {
-    console.log("editing");
+  const editEntry = (id) => {
+    setField(data?.data?.find((each) => each._id === id));
+    setIsAddField(true);
   };
 
   const deleteEntry = async (id) => {
@@ -38,8 +40,8 @@ export default function Fields() {
     setIsAddField(true);
   };
 
-  useEffect(() => {
-    getFields({
+  useEffect( () => {
+     getFields({
       page,
       size: 10,
       isDeleted: false,
@@ -65,6 +67,8 @@ export default function Fields() {
         <AddFieldModal
           getFields={getFields}
           setIsAddField={setIsAddField}
+          field={field}
+          setField={setField}
         ></AddFieldModal>
       )}
     </>
