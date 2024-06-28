@@ -11,9 +11,10 @@ const options = {
   theme: 'light'
 };
 
-export const useToastifyError = (err) => {
-  if (err.response) {
-    const errors = err.response.data.message;
+export const toastError = (err) => {
+  if (typeof err === "string"){ toast.error(err, options)}
+  if (err.data) {
+    const errors = err.data.message;
     if (errors instanceof Array) {
       for (const error of errors) {
         toast.error(error, options);
@@ -23,10 +24,10 @@ export const useToastifyError = (err) => {
   }
 };
 
-export const useToastifySuccess = (message) => {
+export const toastSuccess = (message) => {
   toast.success(message, options);
 };
 
-export const useToastifyWarning = (message) => {
+export const toastWarning = (message) => {
   toast.warning(message, options);
 };

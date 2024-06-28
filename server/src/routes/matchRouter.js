@@ -40,7 +40,7 @@ router.get('/',
     }
   }
 */
-  callbackErrorHandler(matchController.viewAllMacthes));
+    callbackErrorHandler(matchController.viewAllMacthes));
 router.get('/:id',
 /* #swagger.tags = ['Match']
   #swagger.summary = 'Retrieve a single Match'
@@ -85,7 +85,7 @@ router.get('/:id',
   }
 
 */
-  validateId, callbackErrorHandler(matchController.viewSingleMatch));
+    validateId, callbackErrorHandler(matchController.viewSingleMatch));
 router.put('/:id',
 /* #swagger.tags = ['Match']
   #swagger.summary = 'Update a single Match'
@@ -157,7 +157,7 @@ router.put('/:id',
       }
     }
   } */
-  validateId, isLoggedIn, isAdmin, validateMatch, callbackErrorHandler(matchController.updateMatch));
+    validateId, isLoggedIn, isAdmin, validateMatch, callbackErrorHandler(matchController.updateMatch));
 router.delete('/:id',
 /* #swagger.tags = ['Match']
   #swagger.summary = 'Delete a single Match'
@@ -230,9 +230,9 @@ router.delete('/:id',
     }
   } */
 
-  validateId, isLoggedIn, isAdmin, callbackErrorHandler(matchController.deleteMatch));
+    validateId, isLoggedIn, isAdmin, callbackErrorHandler(matchController.deleteMatch));
 router.put('/:id/result/:resId',
-  /* #swagger.tags = ['Match']
+    /* #swagger.tags = ['Match']
 
     #swagger.summary = 'Update Result'
         #swagger.responses[200] = {
@@ -296,9 +296,9 @@ router.put('/:id/result/:resId',
       }
     }
   */
-  isLoggedIn, isAdmin, validateResult, callbackErrorHandler(matchController.updateResult));
+    isLoggedIn, isAdmin, validateResult, callbackErrorHandler(matchController.updateResult));
 router.put('/:id/result',
-  /* #swagger.tags = ['Match']
+    /* #swagger.tags = ['Match']
 
     #swagger.summary = 'Add a new Result'
         #swagger.responses[201] = {
@@ -362,9 +362,9 @@ router.put('/:id/result',
       }
     }
   */
-  validateId, isLoggedIn, isAdmin, validateResult, callbackErrorHandler(matchController.addResult));
+    validateId, isLoggedIn, isAdmin, validateResult, callbackErrorHandler(matchController.addResult));
 router.delete('/:id/result/:resId',
-  /* #swagger.tags = ['Match']
+    /* #swagger.tags = ['Match']
     #swagger.summary = 'Delete Result'
         #swagger.responses[200] = {
               description: 'Responds with success flag',
@@ -408,6 +408,6 @@ router.delete('/:id/result/:resId',
       }
     }
   */
-  isLoggedIn, isAdmin, callbackErrorHandler(matchController.deleteResult));
+    isLoggedIn, isAdmin, callbackErrorHandler(matchController.deleteResult));
 
 module.exports = router;

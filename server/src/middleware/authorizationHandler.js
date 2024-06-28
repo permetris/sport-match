@@ -2,35 +2,52 @@ const jwt = require('jsonwebtoken');
 const { callbackErrorHandler } = require('./errorMiddlewareHandler');
 const { ErrorMessages } = require('../errors/ErrorMessages');
 const { AuthenticationError, AuthorizationError } = require('../errors/Errors');
+const { ROLES } = require('../constants/roles');
 
 const isLoggedIn = callbackErrorHandler(async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) throw new AuthenticationError(ErrorMessages.notLoggedIn);
-
-  const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
-  req.user = decoded;
-
-  return next();
+    const authHeader = req.headers.authorization;
+    console.log('is here');
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) throw new AuthenticationError(ErrorMessages.notLoggedIn);
+    const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
+    req.user = decoded;
+    return next();
 });
-
 const isAdmin = callbackErrorHandler(async (req, res, next) => {
-  if (req.user.role !== 'ADMIN') throw new AuthorizationError(ErrorMessages.unauthorized);
-
-  next();
+    if (req.user.role !== ROLES.ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
+    next();
 });
+const isFieldAdmin = callbackErrorHandler(async (req, res, next) => {
+    if (req.user.role !== ROLES.FILED_ADMIN) throw new AuthorizationError(ErrorMessages.unauthorized);
 
+    next();
+});
+const isAnyAdmin = callbackErrorHandler(async (req, res, next) => {
+    console.log('before');
+    if (req.user.role === ROLES.USER) throw new AuthorizationError(ErrorMessages.unauthorized);
+    console.log('after');
+    next();
+});
 const isProfileOwner = callbackErrorHandler(async (req, res, next) => {
-  const id = req.params.playerId ? req.params.playerId : req.params.id;
+    const id = req.params.playerId ? req.params.playerId : req.params.id;
 
-  if ((id !== req.user.id)) throw new AuthorizationError(ErrorMessages.unauthorized);
+    if ((id !== req.user.id)) throw new AuthorizationError(ErrorMessages.unauthorized);
 
-  return next();
+    return next();
+});
+const isProfileOwnerOrAdmin = callbackErrorHandler(async (req, res, next) => {
+    const id = req.params.playerId ? req.params.playerId : req.params.id;
+    if (req.user.role === 'ADMIN') return next();
+    if ((id !== req.user.id)) throw new AuthorizationError(ErrorMessages.unauthorized);
+
+    return next();
 });
 
 module.exports = {
-  isLoggedIn,
-  isAdmin,
-  isProfileOwner
+    isLoggedIn,
+    isAdmin,
+    isProfileOwner,
+    isAnyAdmin,
+    isFieldAdmin,
+    isProfileOwnerOrAdmin
 };
