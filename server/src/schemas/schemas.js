@@ -9,7 +9,9 @@ const idSchema = Joi.object({
 
 const passwordSchema = Joi.object({
     password: Joi.string().min(8).max(20).required(),
-    newPassword: Joi.string().min(8).max(20).required()
+    repeatPassword: Joi.string().min(8).max(20).required(),
+    id: Joi.string().min(24).max(24).hex().required(),
+    emailToken: Joi.string().min(64).max(64).hex().required()
 });
 
 const emailSchema = Joi.object({
@@ -18,7 +20,8 @@ const emailSchema = Joi.object({
 
 const resetParamsSchema = Joi.object({
     id: Joi.string().min(24).max(24).hex().required(),
-    emailToken: Joi.string().min(128).max(128).hex().required()
+    emailToken: Joi.string().min(64).max(64).hex().required()
+
 });
 
 const doubleIdSchema = Joi.object({
@@ -55,7 +58,7 @@ const matchSchema = Joi.object({
 }).options({ abortEarly: false });
 
 const reservationSchema = Joi.object({
-    field: fieldSchema,
+    field: Joi.string().min(24).max(24).hex().required(),
     time: Joi.string().isoDate().required(),
     match: Joi.string(),
     isCanceled: Joi.boolean(),

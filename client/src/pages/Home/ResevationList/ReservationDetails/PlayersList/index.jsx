@@ -13,7 +13,8 @@ export function PlayersList({
   action,
   capacity,
   registered,
-  closeModal
+  closeModal,
+  status,
 }) {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -45,16 +46,14 @@ export function PlayersList({
             >
               <span
                 className="cursor-pointer z-50"
-                onClick={() =>
-                {
+                onClick={() => {
                   closeModal();
-                  navigate(`/user/${player.username}/history`)
-                }
-                }
+                  navigate(`/user/${player.username}/history`);
+                }}
               >
                 {player.username}{" "}
               </span>
-              {user?.role !== "USER" && (
+              {user?.role !== "USER" && status !== "done" && (
                 <button
                   className="text-red-800 hover:text-red-300"
                   onClick={() => removePlayer(player, action)}
@@ -70,7 +69,8 @@ export function PlayersList({
       {user &&
         user.role === ROLES.USER &&
         players?.lenght !== capacity &&
-        !isJoined && (
+        !isJoined &&
+        status !== "done" && (
           <button
             className="bg-blue-500 hover:bg-blue-700 mt-3 text-white font-bold py-1 px-4 rounded-full transition duration-300 ease-in-out transform  "
             onClick={() => addPlayer(user, action)}
@@ -79,7 +79,7 @@ export function PlayersList({
           </button>
         )}
 
-      {isJoined && (
+      {isJoined && status !== "done" && (
         <button
           className="bg-red-500 hover:bg-red-700 mt-3 text-white font-bold py-1 px-4 rounded-full transition duration-300 ease-in-out transform  "
           onClick={() => removePlayer(user, action)}

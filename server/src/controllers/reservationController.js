@@ -4,9 +4,31 @@ const { ReservationModel } = require('../models/Reservation');
 const { ErrorMessages } = require('../errors/ErrorMessages');
 const { NotFoundError, AuthorizationError } = require('../errors/Errors');
 const { HTTP_STATUS } = require('../constants/httpCodes');
+const { checkConditionsAndNotify } = require('../utils/checkEligibleReservations');
 
 const createReservation = async (req, res) => {
     await createOne(ReservationModel, req, res);
+};
+
+const check = async (req, res) => {
+    const { id } = req.params;
+    const reservatio = await ReservationModel.findOne({ num: id }).populate('registeredPlayers').populate('field').populate({
+        path: 'match',
+        populate: [{
+            path: 'blackTeam',
+            populate: 'players'
+        }, {
+            path: 'whiteTeam',
+            populate: 'players'
+        }]
+    }).lean();
+    try {
+        checkConditionsAndNotify(reservatio);
+    } catch (error) {
+        console.log(error);
+    }
+
+    res.status(200).json({ success: true });
 };
 
 const viewAllReservations = async (req, res) => {
@@ -140,5 +162,6 @@ module.exports = {
     cancelReservation,
     addPlayerToReservation,
     removePlayerFromReservation,
-    filterReservation
+    filterReservation,
+    check
 };

@@ -16,9 +16,11 @@ export default function Reservations() {
   const [getReservations, { data }] = useLazyGetReservationsQuery();
   const [deleteReservation] = useDeleteReservationMutation();
   const [reservationId, setReservationId] = useState("");
+  const [reservation, setReservation] = useState(null);
 
-  const editEntry = (event) => {
-    console.log("editing");
+  const editEntry = (id) => {
+    setIsAddReservation(true);
+    setReservation(data?.data?.find((el) => el._id === id));
   };
   const deleteEntry = async (id) => {
     try {
@@ -33,6 +35,7 @@ export default function Reservations() {
   };
   const addEntry = () => {
     setIsAddReservation(true);
+    setReservation(null)
   };
   useEffect(() => {
     getReservations({ page });
@@ -59,11 +62,13 @@ export default function Reservations() {
         <AddReservationModal
           setIsAddReservation={setIsAddReservation}
           getReservations={getReservations}
+          reservation={reservation}
         />
       )}
       <Modal
         reservationId={reservationId}
         setReservationId={setReservationId}
+       
       />
     </>
   );

@@ -22,6 +22,20 @@ export const apiSlice = createApi({
   reducerPath: "apiSlice",
   baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
+    sendEmailForPassword: builder.mutation({
+      query: (body) => ({
+        url: `/forgotten-password`,
+        method: 'POST',
+        body
+      }),
+    }),
+    resetPasswordWithToken: builder.mutation({
+      query: (body) => ({
+        url: `/reset-password`,
+        method: 'PATCH',
+        body
+      }),
+    }),
     getUser: builder.query({
       query: (username) => ({
         url: `/user/${username}`,
@@ -196,5 +210,7 @@ export const {
   useUpdateCityMutation,
   useGetUserHistoryQuery,
   useLazyGetUserHistoryQuery,
-  useUpdateFieldMutation
+  useUpdateFieldMutation,
+  useSendEmailForPasswordMutation,
+useResetPasswordWithTokenMutation
 } = apiSlice;

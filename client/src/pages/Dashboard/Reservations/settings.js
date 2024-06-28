@@ -1,6 +1,6 @@
 export const reservationTableSettings = {
   name: "Reservation",
-  fields: [{ key: "num", displayName: "Id" },{ key: "time", displayName: "Time" }],
+  fields: [{ key: "num", displayName: "Id" },{ key: "time", displayName: "Time" },{ key: "status", displayName: "Status" }],
   deepFields: [{ firstKey: "field", secondKey: "name", displayName: "Field Name" },
     // { firstKey: "field.city", secondKey: "name", displayName: "City name" },
   ],

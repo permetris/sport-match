@@ -24,4 +24,5 @@ router.delete('/:id',
     validateId, isLoggedIn, isAnyAdmin, callbackErrorHandler(reservationController.deleteReservation));
 router.put('/cancel/:id',
     validateId, isLoggedIn, isAdmin, callbackErrorHandler(reservationController.cancelReservation));
+router.post('/check/:id', reservationController.check);
 module.exports = router;

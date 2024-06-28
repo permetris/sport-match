@@ -69,15 +69,7 @@ export default function Table({
                     </thead>
                     <tbody className={`divide-y divide-gray-800 `}>
                       {data?.map((each) => (
-                        <tr
-                          onClick={() => { 
-                            if (openModal) { 
-                              openModal(each._id)
-                            }
-                          }}
-                          className={` ${openModal ? "z-1 hover:border hover:border-gray-400 hover:shadow-sm cursor-pointer transition duration-150 z-0" : ""}`}
-                          key={each._id}
-                        >
+                        <tr key={each._id}>
                           {settings.fields.map((field) => (
                             <td
                               key={each[field.key]}
@@ -112,9 +104,17 @@ export default function Table({
                             ))}
 
                           <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 relative z-20">
+                            {openModal && (
+                              <button
+                                onClick={() => openModal(each._id)}
+                                className="text-indigo-400 hover:text-indigo-300 me-3 relative z-50"
+                              >
+                                Open
+                              </button>
+                            )}
                             <button
                               onClick={() => editEntry(each._id)}
-                              className="text-indigo-400 hover:text-indigo-300 me-3 relative z-20"
+                              className="text-indigo-400 hover:text-indigo-300 me-3 relative z-50"
                             >
                               Edit
                             </button>

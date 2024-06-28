@@ -46,8 +46,9 @@ const forgottenPassword = async (req, res) => {
 };
 
 const resetPasswordWithLink = async (req, res) => {
-    const { id, emailToken } = req.params;
-    const { password } = req.body;
+    const { password, repeatPassword, id, emailToken } = req.body;
+
+    if (password !== repeatPassword) throw new ValidationError('Passwords do not match!');
 
     const token = await Token.findOne({
         userId: id,

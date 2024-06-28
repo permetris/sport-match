@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/',
     isLoggedIn, isAdmin, callbackErrorHandler(userController.viewAllUsers));
 router.get('/:id/history',
-    validateId, isLoggedIn, callbackErrorHandler(userController.viewHistory));
+    isLoggedIn, callbackErrorHandler(userController.viewHistory));
 router.post('/',
     validateUser, callbackErrorHandler(userController.registerUser));
 router.get('/:username',

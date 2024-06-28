@@ -12,7 +12,11 @@ function Navigation() {
   const { user, logout } = useAuth();
 
   const navigation = [
-    { name: "Dashboard", href: "/dashboard", roles: [ROLES.ADMIN, ROLES.OWNER] },
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      roles: [ROLES.ADMIN, ROLES.OWNER],
+    },
   ];
   const onLogoutHandler = () => {
     try {
@@ -33,14 +37,18 @@ function Navigation() {
           className="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8"
           aria-label="Global"
         >
-          <div className="flex lg:flex-1">
+          <div className="flex lg:flex-1 align-center items-center">
             <Link to="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">GameFinder</span>
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                alt=""
-              />
+              <div className="flex align-center items-center"> 
+                <img
+                  className="h-8 w-auto"
+                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                  alt=""
+                />
+                <span className="text-white text-xxl text-center ms-4">
+                  Game Finder
+                </span>
+              </div>
             </Link>
           </div>
           <div className="lg:flex lg:gap-x-12">

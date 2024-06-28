@@ -70,10 +70,14 @@ const deleteUser = async (req, res) => {
 
 const viewHistory = async (req, res) => {
     const { id } = req.params;
+    console.log(id);
 
-    const playerId = mongoose.Types.ObjectId(id);
+    const user = await UserModel.findOne({ username: id }).lean();
+    console.log(user);
 
-    const exclude = ' -isScheduled -isCanceled -isFinished -registeredPlayers';
+    const playerId = mongoose.Types.ObjectId(user._id);
+
+    const exclude = ' -isScheduled -isCanceled -isFinished ';
     const query = {
         $or: [
             { registeredPlayers: { $in: [playerId] } },
@@ -82,9 +86,15 @@ const viewHistory = async (req, res) => {
     };
 
     const userHistory = await ReservationModel.find(query, exclude)
-        .populate('field')
-        .lean();
+        .populate({
+            path: 'field',
+            populate: {
+                path: 'city'
+            }
+        })
 
+        .lean();
+    console.log(userHistory);
     if (!userHistory.length) throw new NotFoundError(ErrorMessages.dataNotFound);
 
     res.status(HTTP_STATUS.OK).json(userHistory);

@@ -14,7 +14,7 @@ const matchSchema = mongoose.Schema({
     },
     result: {
         type: resultSchema,
-        ref: 'Result'
+        default: () => ({ })
     }
 }, {
     timestamps: true,

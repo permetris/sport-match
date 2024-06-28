@@ -5,10 +5,11 @@ const formatCapacityString = (reservation) => {
   if (reservation.openEntry) {
     return `${reservation.match.blackTeam.players.length + reservation.match.whiteTeam.players.length}/${reservation.field.maxPlayers}`;
   }
-  return `${reservation.registeredPlayers.length}/${reservation.field.maxPlayers}`;
+  return `${reservation.registeredPlayers?.length}/${reservation.field.maxPlayers}`;
 };
 
 export function ReservationList({ reservations }) {
+  console.log(reservations);
   const [reservationId, setReservationId] = useState(undefined);
 
   if (!reservations || reservations.length == 0) {
@@ -36,7 +37,7 @@ export function ReservationList({ reservations }) {
             <div className="flex min-w-0 gap-x-4 pl-3">
               <div className="min-w-0 flex-auto">
                 <p className="text-sm font-semibold leading-6 text-white">
-                  {reservation.field.city.name}
+                  {reservation.field.city.name + " : " + reservation.field.name}
                 </p>
                 <p className="text-sm font-semibold leading-6 text-white">
                   {new Date(reservation.time).toUTCString()}

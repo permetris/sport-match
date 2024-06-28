@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   useAddReservationMutation,
   useGetFieldsQuery,
+  useUpdateReservationMutation,
 } from "../../../../slices/apiSlice";
 import { toastError, toastSuccess } from "../../../../hooks/useToastify";
 import SelectBox from "../../../../components/SelectBox";
@@ -12,16 +13,18 @@ import { useAuth } from "../../../../context/AuthContext";
 export const AddReservationModal = ({
   setIsAddReservation,
   getReservations,
+  reservation,
 }) => {
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const [dateTime, setDateTime] = useState("");
   const [isAllRandom, setIsAllRandom] = useState();
   const { data: fields, isSuccess } = useGetFieldsQuery({
     page: 1,
     size: 100,
     isDeleted: false,
-    owner: user?.role === "FIELD_OWNER" ? user._id : undefined
+    owner: user?.role === "FIELD_OWNER" ? user._id : undefined,
   });
+  const [updateReservation] = useUpdateReservationMutation();
   const [selectedField, setSelectedField] = useState(null);
   const [addReservation] = useAddReservationMutation();
   const changeDateTime = (e) => {
@@ -29,15 +32,29 @@ export const AddReservationModal = ({
   };
 
   useEffect(() => {
+    // Set the initial default dateTime value
+    const now = reservation?.time
+      ? new Date(reservation.time)
+      : new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate() + 1).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    setDateTime(formattedDateTime);
+  }, []);
+  useEffect(() => {
     if (isSuccess) {
       setSelectedField(fields.data[0]);
     }
-  },[isSuccess]);
+  }, [isSuccess]);
+
   const handleAddReservation = async () => {
     try {
       const result = await addReservation({
         time: new Date(dateTime).toISOString(),
-        field: selectedField,
+        field: selectedField._id,
         openEntry: !isAllRandom,
       }).unwrap();
       if (result.success) {
@@ -49,10 +66,29 @@ export const AddReservationModal = ({
       toastError(error);
     }
   };
-  if (!isSuccess) { 
-    return <h1>Loading</h1>
-  }
 
+  const handleSaveReservation = async () => {
+    try {
+      const result = await updateReservation({
+        ...reservation,
+        time: new Date(dateTime).toISOString(),
+        field: selectedField._id,
+        openEntry: !isAllRandom,
+      }).unwrap();
+      if (result.success) {
+        toastSuccess("Updated reservation");
+        setIsAddReservation(false);
+        getReservations({ page: 1 });
+      }
+    } catch (error) {
+      toastError(error);
+    }
+  };
+
+  if (!isSuccess) {
+    return <h1>Loading</h1>;
+  }
+  console.log(reservation);
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -100,19 +136,34 @@ export const AddReservationModal = ({
                 title={"All random"}
                 description={"Reservation type is Free Entry by default"}
               ></Toggle>
+              {reservation ? (
+                <div>
+                  <button
+                    type="button"
+                    onClick={handleSaveReservation}
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Save
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <button
+                    type="button"
+                    onClick={handleAddReservation}
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Add
+                  </button>
+                </div>
+              )}
               <div>
                 <button
                   type="button"
-                  onClick={handleAddReservation}
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Add
-                </button>
-              </div>
-              <div>
-                <button
-                  type="button"
-                  onClick={() => setIsAddReservation(false)}
+                  onClick={() => {
+                    setIsAddReservation(null);
+                    setIsAddReservation(false);
+                  }}
                   className="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                 >
                   Close
