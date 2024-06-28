@@ -42,8 +42,7 @@ const checkConditionsAndNotify = async (reservation) => {
     if (reservation.openEntry) {
         const amountRegistered = reservation.match.blackTeam.players.length + reservation.match.whiteTeam.players.length;
         if (amountRegistered !== reservation.field.maxPlayers) {
-            const res = await ReservationModel.findByIdAndUpdate(reservation._id, { status: 'canceled' }, { new: true });
-            console.log(res);
+            await ReservationModel.findByIdAndUpdate(reservation._id, { status: 'canceled' }, { new: true });
             notifyPlayersOpenEntry(reservation, mailContexts.notEnoughPlayers);
             return;
         }
@@ -58,6 +57,7 @@ const checkConditionsAndNotify = async (reservation) => {
 
     if (!reservation.field.isOutdoor) {
         if (reservation.openEntry) {
+            await ReservationModel.findByIdAndUpdate(reservation._id, { status: 'done' }, { new: true });
             notifyPlayersOpenEntry(reservation, mailContexts.scheduled);
         } else {
             await createMatchForReservation(reservation._id);
@@ -67,6 +67,7 @@ const checkConditionsAndNotify = async (reservation) => {
         const isWeatherGood = await fetchWeather(reservation.field.city);
         if (isWeatherGood) {
             if (reservation.openEntry) {
+                await ReservationModel.findByIdAndUpdate(reservation._id, { status: 'done' }, { new: true });
                 notifyPlayersOpenEntry(reservation, mailContexts.scheduled);
             } else {
                 await createMatchForReservation(reservation._id);

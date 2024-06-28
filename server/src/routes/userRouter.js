@@ -3,12 +3,12 @@ const express = require('express');
 const userController = require('../controllers/userController');
 const { callbackErrorHandler } = require('../middleware/errorMiddlewareHandler');
 const { validateId, validateUser } = require('../middleware/requestValidationHandler');
-const { isLoggedIn, isAdmin, isProfileOwnerOrAdmin } = require('../middleware/authorizationHandler');
+const { isLoggedIn, isAnyAdmin, isProfileOwnerOrAdmin } = require('../middleware/authorizationHandler');
 
 const router = express.Router();
 
 router.get('/',
-    isLoggedIn, isAdmin, callbackErrorHandler(userController.viewAllUsers));
+    isLoggedIn, isAnyAdmin, callbackErrorHandler(userController.viewAllUsers));
 router.get('/:id/history',
     isLoggedIn, callbackErrorHandler(userController.viewHistory));
 router.post('/',

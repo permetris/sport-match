@@ -51,11 +51,12 @@ const check = async (req, res) => {
 
 const viewAllReservations = async (req, res) => {
     const { city, date, page = 1, size = 10, status } = req.query;
-
+    console.log(city);
     const query = {};
+    let match = {};
 
     if (city !== 'undefined' && city !== undefined && city !== '') {
-        query['field.city.name'] = city;
+        match = { city: { name: city } };
     }
     if (status) {
         query.status = status;
@@ -73,7 +74,10 @@ const viewAllReservations = async (req, res) => {
     const skip = (page - 1) * size;
     const totalItems = await ReservationModel.countDocuments(query);
 
-    const foundReservations = await ReservationModel.find(query)
+    const foundReservations = await ReservationModel.find(query).populate({
+        path: 'field',
+        match
+    })
         .sort({ time: 1 })
         .skip(skip)
         .limit(size)

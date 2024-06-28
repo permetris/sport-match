@@ -81,6 +81,9 @@ export default function ReservationDetails({ reservationId, closeModal }) {
       if (
         reservation.match.blackTeam.players.filter(
           (each) => each._id === player._id
+        ).length !== 0 ||
+        reservation.match.whiteTeam.players.filter(
+          (each) => each._id === player._id
         ).length !== 0
       ) {
         toastError("Player already registered!");

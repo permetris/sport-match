@@ -88,7 +88,7 @@ export function PlayersList({
         </button>
       )}
 
-      {user && user?.role === ROLES.ADMIN && registered !== capacity && (
+      {user && user?.role !== ROLES.ADMIN && registered !== capacity && (
         <SearchBox
           data={users?.data}
           selectedItem={selectedUser}

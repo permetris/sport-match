@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
         maxLength: 50,
         trim: true,
         lowercase: true,
-        unique: false
+        unique: true
     },
     name: {
         type: String,
@@ -43,9 +43,6 @@ const userSchema = mongoose.Schema({
     phone: {
         type: String,
         required: true
-
-        // match: [/^\+(?:\d\s?){6,14}\d$/, 'Please enter a valid phone number'] Remove for seeding fake data
-
     },
     role: {
         type: String,
