@@ -70,10 +70,8 @@ const deleteUser = async (req, res) => {
 
 const viewHistory = async (req, res) => {
     const { id } = req.params;
-    console.log(id);
 
     const user = await UserModel.findOne({ username: id }).lean();
-    console.log(user);
 
     const playerId = mongoose.Types.ObjectId(user._id);
 
@@ -82,7 +80,9 @@ const viewHistory = async (req, res) => {
         $or: [
             { registeredPlayers: { $in: [playerId] } },
             { 'match.whiteTeam.players': { $in: [playerId] } },
-            { 'match.blackTeam.players': { $in: [playerId] } }]
+            { 'match.blackTeam.players': { $in: [playerId] } }
+        ],
+        status: 'done'
     };
 
     const userHistory = await ReservationModel.find(query, exclude)

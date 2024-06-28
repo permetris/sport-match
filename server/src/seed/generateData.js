@@ -73,21 +73,26 @@ async function generateFakeData () {
     }
     console.log(users);
 
+    const cityNames = ['Split', 'Dubrovnik', 'Rijeka', 'Zagreb', 'Ploce'];
+
     // Generate cities
     const cities = [];
     for (let i = 0; i < 5; i++) {
         const city = new CityModel({
-            name: faker.location.city()
+            name: cityNames[i]
         });
         cities.push(city);
         await city.save();
     }
 
+    const fieldNames = ['Jadran', 'Maksimir', 'Poljud', 'Stadion', 'Dvorana 2',
+        'Dvorana 1', 'Dubrovacki teren', 'Dvorana - Mosor', 'Igraliste Velebit', 'SC Bara'];
+
     // Generate fields
     const fields = [];
     for (let i = 0; i < 10; i++) {
         const field = new FieldModel({
-            name: faker.company.name(),
+            name: fieldNames[i],
             city: faker.helpers.arrayElement(cities)._id,
             address: faker.location.streetAddress(),
             owner: faker.helpers.arrayElement(users.filter(user => user.role === 'FIELD_OWNER'))._id,
@@ -96,40 +101,6 @@ async function generateFakeData () {
         fields.push(field);
         await field.save();
     }
-
-    // Generate results
-    const results = [];
-    for (let i = 0; i < 10; i++) {
-        const result = new ResultModel({
-            whiteTeamScore: faker.number.int({ min: 0, max: 10 }),
-            blackTeamScore: faker.number.int({ min: 0, max: 10 })
-        });
-        results.push(result);
-        await result.save();
-    }
-
-    // Generate teams
-    const teams = [];
-    for (let i = 0; i < 10; i++) {
-        const team = new TeamModel({
-            players: faker.helpers.arrayElements(users.map(each => each._id)),
-            color: faker.helpers.arrayElement(['white', 'black'])
-        });
-        teams.push(team);
-        await team.save();
-    }
-
-    //     // Generate matches
-    //     const matches = [];
-    //     for (let i = 0; i < 10; i++) {
-    //         const match = new MatchModel({
-    //             whiteTeam: faker.helpers.arrayElement(teams),
-    //             blackTeam: faker.helpers.arrayElement(teams),
-    //             result: faker.helpers.arrayElement(results)
-    //         });
-    //         matches.push(match);
-    //         await match.save();
-    //     }
 
     //     // Generate reservations
     //     for (let i = 0; i < 20; i++) {
