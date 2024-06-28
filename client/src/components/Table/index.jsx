@@ -1,4 +1,5 @@
 import React from "react";
+import { toLocaleDate } from "../../utils/toLocaleDate";
 
 export default function Table({
   data,
@@ -77,7 +78,9 @@ export default function Table({
                             >
                               {field.key !== "time"
                                 ? each[field.key]
-                                : new Date(each[field.key]).toUTCString()}
+                                : toLocaleDate(
+                                    new Date(each[field.key]).toUTCString()
+                                  )}
                             </td>
                           ))}
                           {settings.deepFields &&

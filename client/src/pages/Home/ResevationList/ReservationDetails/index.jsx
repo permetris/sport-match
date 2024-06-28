@@ -7,6 +7,7 @@ import {
   useUpdateReservationMutation,
 } from "../../../../slices/apiSlice";
 import { toastError } from "../../../../hooks/useToastify";
+import { toLocaleDate } from "../../../../utils/toLocaleDate";
 
 const statusColors = {
   canceled: "bg-red-50 text-red-700 ring-red-600/20",
@@ -227,38 +228,37 @@ export default function ReservationDetails({ reservationId, closeModal }) {
               </dt>
               <dd className="text-sm leading-6 text-gray-500">
                 <time dateTime="2023-01-31">
-                  {new Date(reservation?.time).toLocaleString()}
+                  {toLocaleDate(reservation?.time)}
                 </time>
               </dd>
             </div>
 
-            {reservation?.openEntry ||
-              (reservation?.status === "done" && (
-                <div className="mt-4 flex center w-full flex-none gap-x-4 px-6">
-                  <PlayersList
-                    players={reservation?.match?.blackTeam?.players}
-                    title={"Black Team"}
-                    removePlayer={removePlayer}
-                    addPlayer={addPlayer}
-                    action={"blackTeam"}
-                    registered={reservation?.match?.blackTeam?.players.length}
-                    capacity={reservation?.field.maxPlayers / 2}
-                    closeModal={closeModal}
-                    status={reservation?.status}
-                  />
-                  <PlayersList
-                    players={reservation?.match?.whiteTeam?.players}
-                    title={"White Team"}
-                    removePlayer={removePlayer}
-                    addPlayer={addPlayer}
-                    action={"whiteTeam"}
-                    registered={reservation?.match?.whiteTeam?.players.length}
-                    capacity={reservation?.field.maxPlayers / 2}
-                    closeModal={closeModal}
-                    status={reservation?.status}
-                  />
-                </div>
-              ))}
+            {(reservation?.openEntry || reservation?.status === "done") && (
+              <div className="mt-4 flex center w-full flex-none gap-x-4 px-6">
+                <PlayersList
+                  players={reservation?.match?.blackTeam?.players}
+                  title={"Black Team"}
+                  removePlayer={removePlayer}
+                  addPlayer={addPlayer}
+                  action={"blackTeam"}
+                  registered={reservation?.match?.blackTeam?.players.length}
+                  capacity={reservation?.field.maxPlayers / 2}
+                  closeModal={closeModal}
+                  status={reservation?.status}
+                />
+                <PlayersList
+                  players={reservation?.match?.whiteTeam?.players}
+                  title={"White Team"}
+                  removePlayer={removePlayer}
+                  addPlayer={addPlayer}
+                  action={"whiteTeam"}
+                  registered={reservation?.match?.whiteTeam?.players.length}
+                  capacity={reservation?.field.maxPlayers / 2}
+                  closeModal={closeModal}
+                  status={reservation?.status}
+                />
+              </div>
+            )}
             {!reservation?.openEntry && reservation?.status !== "done" && (
               <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
                 <PlayersList

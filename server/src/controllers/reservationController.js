@@ -1,13 +1,31 @@
-const { deleteOne, createOne, updateOne } = require('./crudController');
+const { deleteOne, updateOne } = require('./crudController');
 const mongoose = require('mongoose');
 const { ReservationModel } = require('../models/Reservation');
 const { ErrorMessages } = require('../errors/ErrorMessages');
-const { NotFoundError, AuthorizationError } = require('../errors/Errors');
+const { NotFoundError, AuthorizationError, ValidationError } = require('../errors/Errors');
 const { HTTP_STATUS } = require('../constants/httpCodes');
 const { checkConditionsAndNotify } = require('../utils/checkEligibleReservations');
 
 const createReservation = async (req, res) => {
-    await createOne(ReservationModel, req, res);
+    const targetDate = new Date(req.body.time);
+
+    const lowerBound = new Date(targetDate.getTime() - 1.5 * 60 * 60 * 1000); // 1.5 hours before
+    const upperBound = new Date(targetDate.getTime() + 1.5 * 60 * 60 * 1000); // 1.5 hours after
+
+    const reservations = await ReservationModel.find({
+        time: {
+            $gte: lowerBound,
+            $lte: upperBound
+        },
+        field: req.body.field
+    });
+
+    console.log(reservations);
+    if (reservations.length) throw new ValidationError('There is already a reservation going on for that time window!');
+
+    const dataCreated = await ReservationModel.create(req.body);
+
+    res.status(HTTP_STATUS.CREATED).json({ success: true, data: dataCreated });
 };
 
 const check = async (req, res) => {

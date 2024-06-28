@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
+import { toLocaleDate } from "../../../utils/toLocaleDate";
 
 const formatCapacityString = (reservation) => {
   if (reservation.openEntry) {
@@ -9,7 +10,6 @@ const formatCapacityString = (reservation) => {
 };
 
 export function ReservationList({ reservations }) {
-  console.log(reservations);
   const [reservationId, setReservationId] = useState(undefined);
 
   if (!reservations || reservations.length == 0) {
@@ -40,7 +40,7 @@ export function ReservationList({ reservations }) {
                   {reservation.field.city.name + " : " + reservation.field.name}
                 </p>
                 <p className="text-sm font-semibold leading-6 text-white">
-                  {new Date(reservation.time).toUTCString()}
+                  {toLocaleDate(new Date(reservation.time).toUTCString())}
                 </p>
                 <p className="mt-1 truncate text-xs leading-5 text-gray-400">
                   {reservation.field.address}
